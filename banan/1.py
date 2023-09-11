@@ -123,7 +123,7 @@ def top_coin():
 
                             try:
                                 sell_qty = float(balance["free"])
-                                order_sell = client.create_order(symbol=i, side='SELL', type='MARKET', quantity=sell_qty)
+                                order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
                                 telebot.TeleBot(telega_token).send_message(-695765690,
                                                                            f"Продажа в минус, за {order_sell['price']}\n"
                                                                            f"Покупал за {buyprice}")

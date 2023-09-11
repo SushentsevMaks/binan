@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Основная страница</title>
+</head>
+<body style="background-color: #1c2128">
+        <h1 style="text-align: center; height: 50px; color: #fcd535"> Тестовый запуск торгового ботыча на банане </h1>
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            {% if buys >= 0 %}
+            <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{buys}} USDT</span></h2></div>
+            {% elif buys < 0 %}
+            <div><h2>Суммарная прибыль аккаунта: <span style="color: #f6465d">{{buys}} USDT</span></h2></div>
+            {% endif %}
+        </div>
+        <main>
+            <div>
+                <table style="width: 900px; min-width: 70%; table-layout: auto;">
+                    <colgroup>
+                        <col style="width: 16%;">
+                        <col style="width: 11%;">
+                        <col style="width: 8%;">
+                        <col style="width: 11%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                    </colgroup>
+                    <thead class="bn-table-thead">
+                    <tr>
+                        <th class="bn-table-cell time" style="color: #747d8a">Время создания</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Валютная пара</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Сторона</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Цена</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Количество</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Общая стоимость</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bn-table-tbody">
+                    {% for p in orders %}
+                    <tr class="bn-table-measure-row" aria-hidden="true" style="height: 0px; font-size: 0px;">
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+
+                    <tr class="bn-table-row bn-table-row-level-0 hasExtend selected" data-row-key="294436889">
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.time}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">
+                            <a href="https://www.binance.com/ru/trade/IDEX_USDT?_from=markets&theme=dark&type=grid" target="_blank" style="text-align: center; color: #4792db">{{p.name_cript}}/USDT</a>
+                        </td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">
+                            {% if p.side == "Купить" %}
+                            <div class="bebra" style="color: #0ecb81">{{p.side}}</div>
+                            {% elif p.side == "Продать" %}
+                            <div class="sho" style="color: #f6465d">{{p.side}}
+                            {% endif %}
+                            </div>
+                        </td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.count}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.all_cost}} USDT</td>
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+</body>
+</html>

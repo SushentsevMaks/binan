@@ -11,7 +11,8 @@ client = Client(keys.api_key, keys.api_secret)
 
 def sql_req(i):
     try:
-        orders = client.get_all_orders(symbol=i, limit=2)
+        orders = client.get_all_orders(symbol=i, limit=5)
+        orders = [i for i in orders if i["status"] == "FILLED"][-2:]
         for b in orders:
             times = time.localtime(int((str(b["time"]))[:-3]))
             formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
@@ -20,7 +21,7 @@ def sql_req(i):
                 side = "Продать"
             elif b["side"] == "BUY":
                 side = "Купить"
-            price = float(b['cummulativeQuoteQty']) / float(b["origQty"])
+            price = round(float(b['cummulativeQuoteQty']) / float(b["origQty"]), 7)
             count = float(b["origQty"])
             all_cost = float(b['cummulativeQuoteQty'])
             link_cript = f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"

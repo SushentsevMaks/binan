@@ -27,7 +27,7 @@ def top_coin():
     for i in trading_pairs:
         if i not in ex:
             try:
-                # print(i)
+                #print(i)
                 # print(last_data(i, "3m", "300"))
                 data_token_price = last_data(i, "1m", "1440")
                 d = data_token_price[1][900:]
@@ -122,6 +122,7 @@ def top_coin():
                                 client.cancel_order(symbol=i, orderId=ordId)
 
                             try:
+                                balance = client.get_asset_balance(asset=i[:-4])
                                 sell_qty = float(balance["free"])
                                 order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
                                 telebot.TeleBot(telega_token).send_message(-695765690,
@@ -137,10 +138,8 @@ def top_coin():
 
                         time.sleep(5)
                     sql_req(i)
-            except Exception as e:
-                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                            f"Глобальная ошибка!\n"
-                                                            f"{e}")
+            except:
+                pass
 
 
 def last_data(symbol, interval, lookback):

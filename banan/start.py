@@ -153,6 +153,7 @@ def top_coin():
                                 client.cancel_order(symbol=i, orderId=ordId)
 
                             try:
+                                balance = client.get_asset_balance(asset=i[:-4])
                                 sell_qty = float(balance["free"])
                                 order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
                                 telebot.TeleBot(telega_token).send_message(chat_id,
@@ -168,10 +169,8 @@ def top_coin():
 
                         time.sleep(5)
                     sql_req(i)
-            except Exception as e:
-                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                           f"Глобальная ошибка!\n"
-                                                           f"{e}")
+            except:
+                pass
 
 
 def last_data(symbol, interval, lookback):

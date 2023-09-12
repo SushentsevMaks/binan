@@ -170,19 +170,10 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 # y = time.time()
 # print(y-x)
 a = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT', 'WOOUSDT']
-x = {}
-
-# while len(x) != 0:
-y = time.time()
-for i, j in list(x.items()):
-    if y - j > 60:
-        x.pop(i)
-    print(x)
-
-
-# for i in a:
-#     x[i] = time.time()
-#     time.sleep(3)
-# print(x)
+i = "SLPUSDT"
+balance = client.get_asset_balance(asset=i[:-4])
+sell_qty = float(balance["free"])
+print(sell_qty)
+#order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
 
 

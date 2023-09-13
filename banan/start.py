@@ -56,7 +56,6 @@ trading_pairs = ['1INCHUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAU
 ex = []
 
 def top_coin():
-
     for i in trading_pairs:
         if i not in ex:
             try:
@@ -68,7 +67,7 @@ def top_coin():
                 volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
                 price_change_in_5min = 100 - (prices_token[-5] / prices_token[-1]) * 100
 
-                price_change_percent_10h = 100 - ((data_token_price[0][600] / data_token_price[0][-22]) * 100)
+                price_change_percent_10h = 100 - ((data_token_price[0][840] / data_token_price[0][-22]) * 100)
 
                 # if price_change_percent_24h > 100:
                 #     price_change_percent_24h = round(price_change_percent_24h - 100, 2)
@@ -156,8 +155,10 @@ def top_coin():
                                 balance = client.get_asset_balance(asset=i[:-4])
                                 sell_qty = float(balance["free"])
                                 order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
+                                orders = client.get_all_orders(symbol="LOOMUSDT", limit=1)
+                                price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
                                 telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                           f"Продажа в минус, за {order_sell['price']}\n"
+                                                                           f"Продажа в минус за {price}\n"
                                                                            f"Покупал за {buyprice}")
                                 open_position = False
                             except Exception as e:

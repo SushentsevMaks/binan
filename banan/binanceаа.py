@@ -8,7 +8,7 @@ from sql_request import sql_req
 import keys
 import pandas as pd
 import telebot
-from tradingview_ta import TA_Handler, Interval, Exchange
+
 
 import re
 telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
@@ -170,10 +170,5 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 # y = time.time()
 # print(y-x)
 a = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT', 'WOOUSDT']
-i = "SLPUSDT"
-balance = client.get_asset_balance(asset=i[:-4])
-sell_qty = float(balance["free"])
-print(sell_qty)
-#order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
 
 

@@ -77,7 +77,7 @@ def top_coin():
                 #     price_change_percent_24h = 0
                 #print(i)
                 #and sum(volumes_token[:-5]) / len(volumes_token[:-5]) * 9.5 < volumes_token[-2] \
-                if price_change_in_5min > 3.46 \
+                if price_change_in_5min > 3 \
                         and prices_token[-3:] == sorted(prices_token[-3:]) \
                         and prices_token[-1] > sum(prices_token[:-5]) / len(prices_token[:-5]) \
                         and price_change_percent_10h < 7:
@@ -155,7 +155,7 @@ def top_coin():
                                 balance = client.get_asset_balance(asset=i[:-4])
                                 sell_qty = float(balance["free"])
                                 order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
-                                orders = client.get_all_orders(symbol="LOOMUSDT", limit=1)
+                                orders = client.get_all_orders(symbol=i, limit=1)
                                 price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
                                 telebot.TeleBot(telega_token).send_message(chat_id,
                                                                            f"Продажа в минус за {price}\n"

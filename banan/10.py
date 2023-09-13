@@ -4,8 +4,6 @@ from decimal import Decimal
 #from decimal import Decimal, ROUND_FLOOR
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
-
-
 import keys
 import pandas as pd
 import telebot
@@ -17,7 +15,7 @@ telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 client = Client(keys.api_key, keys.api_secret)
 # futures_exchange_info = client.futures_exchange_info()
 # trading_pairs = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
-trading_pairs = ['1INCHUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
+trading_pairs = ['NEOUSDT', 'NEXOUSDT', 'NKNUSDT', 'NMRUSDT', 'NULSUSDT', 'OAXUSDT', 'OCEANUSDT', 'OGNUSDT', 'OGUSDT', 'OMGUSDT', 'OMUSDT', 'ONEUSDT', 'ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT', 'OSMOUSDT', 'OXTUSDT', 'PAXGUSDT', 'PENDLEUSDT', 'PEOPLEUSDT']
 
 ex = []
 
@@ -30,9 +28,9 @@ def top_coin():
                 #print(i)
                 # print(last_data(i, "3m", "300"))
                 data_token_price = last_data(i, "1m", "1440")
-                #d = data_token_price[1][900:]
+                d = data_token_price[1][900:]
                 prices_token = data_token_price[0][300:]
-                #volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
+                volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
                 price_change_in_5min = 100 - (prices_token[-3] / prices_token[-1]) * 100
 
                 price_change_percent_10h = 100 - ((data_token_price[0][840] / data_token_price[0][-22]) * 100)

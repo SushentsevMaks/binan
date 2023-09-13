@@ -77,7 +77,7 @@ def top_coin():
                 #     price_change_percent_24h = 0
                 #print(i)
                 #and sum(volumes_token[:-5]) / len(volumes_token[:-5]) * 9.5 < volumes_token[-2] \
-                if price_change_in_5min > 3 \
+                if price_change_in_5min > 3.46 \
                         and prices_token[-3:] == sorted(prices_token[-3:]) \
                         and prices_token[-1] > sum(prices_token[:-5]) / len(prices_token[:-5]) \
                         and price_change_percent_10h < 7:
@@ -85,7 +85,7 @@ def top_coin():
                     buy_qty = round(11 / prices_token[-1], 1)
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {i}\n"
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}, Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 10ч - {price_change_percent_10h}")
+                                                                        f"Изменение цены за 10ч - {round(price_change_percent_10h, 2)}")
 
                     try:
                         order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)

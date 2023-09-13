@@ -9,20 +9,36 @@
         <h1 style="text-align: center; height: 50px; color: #fcd535"> Тестовый запуск торгового ботыча на банане </h1>
         <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
             {% if buys >= 0 %}
-            <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{buys}} USDT</span></h2></div>
+            <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{buys}} USDT - {{percent_change}}%</span></h2></div>
             {% elif buys < 0 %}
             <div><h2>Суммарная прибыль аккаунта: <span style="color: #f6465d">{{buys}} USDT</span></h2></div>
             {% endif %}
         </div>
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            <h2>Результат по дням:</h2>
+        </div>
+        {% for key, value in percent_change_for_day.items %}
+        {% if value >= 0 %}
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            <h2><span style="color: #0ecb81">{{key}} - {{value}}%</span></h2>
+
+        </div>
+        {% elif value < 0 %}
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            <h2><span style="color: #f6465d">{{key}} - {{value}}%</span></h2>
+        </div>
+        {% endif %}
+        {% endfor %}
         <main>
             <div>
-                <table style="width: 900px; min-width: 70%; table-layout: auto;">
+                <table style="width: 900px; min-width: 80%; table-layout: auto;">
                     <colgroup>
-                        <col style="width: 16%;">
+                        <col style="width: 13%;">
                         <col style="width: 11%;">
                         <col style="width: 8%;">
                         <col style="width: 11%;">
                         <col style="width: 10%;">
+                        <col style="width: 13%;">
                         <col style="width: 10%;">
                     </colgroup>
                     <thead class="bn-table-thead">
@@ -33,6 +49,7 @@
                         <th class="bn-table-cell" style="color: #747d8a">Цена</th>
                         <th class="bn-table-cell" style="color: #747d8a">Количество</th>
                         <th class="bn-table-cell" style="color: #747d8a">Общая стоимость</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Процент прибыли</th>
                     </tr>
                     </thead>
                     <tbody class="bn-table-tbody">
@@ -60,6 +77,7 @@
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.count}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.all_cost}} USDT</td>
+                        <td class="bn-table-cell" rowspan="2" style="text-align: center; color: #eaecef">{{percent_change}}</td>
                         {% endfor %}
                     </tr>
                     </tbody>

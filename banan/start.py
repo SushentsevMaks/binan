@@ -62,9 +62,9 @@ def top_coin():
                 # print(i)
                 # print(last_data(i, "3m", "300"))
                 data_token_price = last_data(i, "1m", "1440")
-                d = data_token_price[1][900:]
+                #d = data_token_price[1][900:]
                 prices_token = data_token_price[0][300:]
-                volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
+                #volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
                 price_change_in_5min = 100 - (prices_token[-5] / prices_token[-1]) * 100
 
                 price_change_percent_10h = 100 - ((data_token_price[0][840] / data_token_price[0][-22]) * 100)

@@ -27,13 +27,13 @@ def top_coin():
     for i in trading_pairs:
         if i not in ex:
             try:
-                #print(i)
+                # print(i)
                 # print(last_data(i, "3m", "300"))
                 data_token_price = last_data(i, "1m", "1440")
                 d = data_token_price[1][900:]
                 prices_token = data_token_price[0][300:]
                 volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
-                price_change_in_5min = 100 - (prices_token[-3] / prices_token[-1]) * 100
+                price_change_in_5min = 100 - (prices_token[-5] / prices_token[-1]) * 100
 
                 price_change_percent_10h = 100 - ((data_token_price[0][840] / data_token_price[0][-22]) * 100)
 
@@ -50,21 +50,20 @@ def top_coin():
                         and prices_token[-1] > sum(prices_token[:-5]) / len(prices_token[:-5]) \
                         and price_change_percent_10h < 7:
 
-                    buy_qty = round(85 / prices_token[-1], 1)
+                    buy_qty = round(11 / prices_token[-1], 1)
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {i}\n"
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}, Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 10ч - {price_change_percent_10h}")
+                                                                        f"Изменение цены за 10ч - {round(price_change_percent_10h, 2)}")
 
                     try:
                         order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
-                            buy_qty = int(round(85 / prices_token[-1], 1))
+                            buy_qty = int(round(11 / prices_token[-1], 1))
                             order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                         else:
                             telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
-                                                                               f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}\n"
-                                                                                f"{i}")
+                                                                               f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}")
                             time.sleep(30)
                             break
 
@@ -97,10 +96,9 @@ def top_coin():
                                 order_sell = client.order_limit_sell(symbol=i, quantity=sell_qty, price=Decimal(str(round((buyprice / 100) * 101, max([len(str(i).split(".")[1]) for i in data_token_price[0][-5:]])))))
 
                             except Exception as e:
-
                                 telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
                                                                                        f"Количество продаваемого - {sell_qty}, Цена - {round((buyprice / 100) * 101, len(str(prices_token[-1]).split('.')[1]))}\n"
-                                                                                     f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
+                                                                                       f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
                                 time.sleep(30)
                         sell_qty = float(balance["free"])
                         #sell_qty = Decimal(sell_qty).quantize(Decimal(okr), ROUND_FLOOR)
@@ -116,27 +114,34 @@ def top_coin():
                             bot.send_message(chat_id, message)
 
                         if int(last_time-start_time) > 2500:
-                            orders = client.get_open_orders(symbol=i)
-                            for order in orders:
-                                ordId = order["orderId"]
-                                client.cancel_order(symbol=i, orderId=ordId)
+                            data_token_price = last_data(i, "1m", "1440")
+                            prices_token = data_token_price[0][300:]
+                            orders = client.get_all_orders(symbol=i, limit=2)[0]
+                            price = round(float(orders['cummulativeQuoteQty']) / float(orders["origQty"]), 7)
+                            if 100*((price / prices_token[-1])-1) > 5:
+                                time.sleep(20000)
+                            else:
+                                orders = client.get_open_orders(symbol=i)
+                                for order in orders:
+                                    ordId = order["orderId"]
+                                    client.cancel_order(symbol=i, orderId=ordId)
 
-                            try:
-                                balance = client.get_asset_balance(asset=i[:-4])
-                                sell_qty = float(balance["free"])
-                                order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
-                                orders = client.get_all_orders(symbol=i, limit=1)
-                                price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
-                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                           f"Продажа в минус, за {price}\n"
-                                                                           f"Покупал за {buyprice}")
-                                open_position = False
-                            except Exception as e:
-                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                           f"Ошибка продажи в минус, Нужен хелп!\n"
-                                                                           f"{e}")
-                                time.sleep(30)
-                                break
+                                try:
+                                    balance = client.get_asset_balance(asset=i[:-4])
+                                    sell_qty = float(balance["free"])
+                                    order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
+                                    orders = client.get_all_orders(symbol=i, limit=1)
+                                    price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
+                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                               f"Продажа в минус за {price}\n"
+                                                                               f"Покупал за {buyprice}")
+                                    open_position = False
+                                except Exception as e:
+                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                               f"Ошибка продажи в минус, Нужен хелп!\n"
+                                                                               f"{e}")
+                                    time.sleep(30)
+                                    break
 
                         time.sleep(5)
                     sql_req(i)

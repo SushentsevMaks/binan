@@ -172,3 +172,8 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 a = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT', 'WOOUSDT']
 
 
+
+i = "HIFIUSDT"
+orders = client.get_all_orders(symbol=i, limit=2)[0]
+price = round(float(orders['cummulativeQuoteQty']) / float(orders["origQty"]), 7)
+print(price)

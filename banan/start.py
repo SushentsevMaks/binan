@@ -146,27 +146,34 @@ def top_coin():
                             bot.send_message(chat_id, message)
 
                         if int(last_time-start_time) > 2500:
-                            orders = client.get_open_orders(symbol=i)
-                            for order in orders:
-                                ordId = order["orderId"]
-                                client.cancel_order(symbol=i, orderId=ordId)
+                            data_token_price = last_data(i, "1m", "1440")
+                            prices_token = data_token_price[0][300:]
+                            orders = client.get_all_orders(symbol=i, limit=2)[0]
+                            price = round(float(orders['cummulativeQuoteQty']) / float(orders["origQty"]), 7)
+                            if 100*((price / prices_token[-1])-1) > 5:
+                                time.sleep(3600)
+                            else:
+                                orders = client.get_open_orders(symbol=i)
+                                for order in orders:
+                                    ordId = order["orderId"]
+                                    client.cancel_order(symbol=i, orderId=ordId)
 
-                            try:
-                                balance = client.get_asset_balance(asset=i[:-4])
-                                sell_qty = float(balance["free"])
-                                order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
-                                orders = client.get_all_orders(symbol=i, limit=1)
-                                price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
-                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                           f"Продажа в минус за {price}\n"
-                                                                           f"Покупал за {buyprice}")
-                                open_position = False
-                            except Exception as e:
-                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                           f"Ошибка продажи в минус, Нужен хелп!\n"
-                                                                           f"{e}")
-                                time.sleep(30)
-                                break
+                                try:
+                                    balance = client.get_asset_balance(asset=i[:-4])
+                                    sell_qty = float(balance["free"])
+                                    order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
+                                    orders = client.get_all_orders(symbol=i, limit=1)
+                                    price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
+                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                               f"Продажа в минус за {price}\n"
+                                                                               f"Покупал за {buyprice}")
+                                    open_position = False
+                                except Exception as e:
+                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                               f"Ошибка продажи в минус, Нужен хелп!\n"
+                                                                               f"{e}")
+                                    time.sleep(30)
+                                    break
 
                         time.sleep(5)
                     sql_req(i)

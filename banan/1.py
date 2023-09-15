@@ -53,7 +53,7 @@ def top_coin():
                     buy_qty = round(90 / prices_token[-1], 1)
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {i}\n"
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}, Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 10ч - {round(price_change_percent_10h, 2)}")
+                                                                        f"Изменение цены за 10ч  {round(price_change_percent_10h, 2)}%")
 
                     try:
                         order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
@@ -135,7 +135,7 @@ def top_coin():
                                     telebot.TeleBot(telega_token).send_message(chat_id,
                                                                                f"Продажа в минус за {price}\n"
                                                                                f"Покупал за {buyprice}\n"
-                                                                               f"Разница {round(100 - 100*(buyprice/price)), 2 }%")
+                                                                               f"Разница {round(100 - 100*(buyprice/price)), 2}%")
                                     open_position = False
                                 except Exception as e:
                                     telebot.TeleBot(telega_token).send_message(chat_id,

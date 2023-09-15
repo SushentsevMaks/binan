@@ -123,7 +123,7 @@ def top_coin():
                         sell_qty = float(balance["free"])
                         #sell_qty = Decimal(sell_qty).quantize(Decimal(okr), ROUND_FLOOR)
 
-                        if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and int(last_time-start_time) < 2500:
+                        if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and int(last_time-start_time) < 3300:
                             try:
                                 order_sell = client.order_limit_sell(symbol=i, quantity=sell_qty, price=Decimal(str(round((buyprice / 100) * 101, max([len(str(i).split(".")[1]) for i in data_token_price[0][-5:]])))))
 
@@ -134,7 +134,7 @@ def top_coin():
                                 time.sleep(30)
                         sell_qty = float(balance["free"])
                         #sell_qty = Decimal(sell_qty).quantize(Decimal(okr), ROUND_FLOOR)
-                        if float(sell_qty) < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and int(last_time-start_time) < 2500:
+                        if float(sell_qty) < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and int(last_time-start_time) < 3300:
                             open_position = False
 
                             bot = telebot.TeleBot(telega_token)
@@ -145,7 +145,7 @@ def top_coin():
                                       f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"
                             bot.send_message(chat_id, message)
 
-                        if int(last_time-start_time) > 2500:
+                        if int(last_time-start_time) > 3300:
                             data_token_price = last_data(i, "1m", "1440")
                             prices_token = data_token_price[0][300:]
                             orders = client.get_all_orders(symbol=i, limit=2)[0]
@@ -166,7 +166,8 @@ def top_coin():
                                     price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
                                     telebot.TeleBot(telega_token).send_message(chat_id,
                                                                                f"Продажа в минус за {price}\n"
-                                                                               f"Покупал за {buyprice}")
+                                                                               f"Покупал за {buyprice}\n"
+                                                                               f"Разница {round(100 - 100 * (buyprice / price)), 2}%")
                                     open_position = False
                                 except Exception as e:
                                     telebot.TeleBot(telega_token).send_message(chat_id,

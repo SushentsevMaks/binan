@@ -11,7 +11,7 @@
             {% if buys >= 0 %}
             <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{buys}} USDT - {{percent_change}}%</span></h2></div>
             {% elif buys < 0 %}
-            <div><h2>Суммарная прибыль аккаунта: <span style="color: #f6465d">{{buys}} USDT</span></h2></div>
+            <div><h2>Суммарная прибыль аккаунта: <span style="color: #f6465d">{{buys}} USDT - {{percent_change}}%</span></h2></div>
             {% endif %}
         </div>
         <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">

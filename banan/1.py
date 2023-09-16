@@ -17,7 +17,7 @@ telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 client = Client(keys.api_key, keys.api_secret)
 # futures_exchange_info = client.futures_exchange_info()
 # trading_pairs = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
-trading_pairs = ['1INCHUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
+trading_pairs = ['1INCHUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT', 'APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'ARUSDT', 'ASRUSDT', 'ASTRUSDT', 'ASTUSDT', 'ATAUSDT', 'ATMUSDT']
 
 ex = []
 
@@ -50,7 +50,7 @@ def top_coin():
                         and prices_token[-1] > sum(prices_token[:-5]) / len(prices_token[:-5]) \
                         and price_change_percent_10h < 7:
 
-                    buy_qty = round(90 / prices_token[-1], 1)
+                    buy_qty = round(18 / prices_token[-1], 1)
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {i}\n"
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}, Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
                                                                         f"Изменение цены за 10ч  {round(price_change_percent_10h, 2)}%")
@@ -59,7 +59,7 @@ def top_coin():
                         order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
-                            buy_qty = int(round(90 / prices_token[-1], 1))
+                            buy_qty = int(round(18 / prices_token[-1], 1))
                             order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                         else:
                             telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
@@ -118,7 +118,7 @@ def top_coin():
                             prices_token = data_token_price[0][300:]
                             orders = client.get_all_orders(symbol=i, limit=2)[0]
                             price = round(float(orders['cummulativeQuoteQty']) / float(orders["origQty"]), 7)
-                            if 100*((price / prices_token[-1])-1) > 5:
+                            if 100*((price / prices_token[-1])-1) > 4:
                                 time.sleep(20000)
                             else:
                                 orders = client.get_open_orders(symbol=i)

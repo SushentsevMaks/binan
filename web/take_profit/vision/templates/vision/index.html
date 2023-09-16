@@ -18,14 +18,14 @@
             <h2>Результат по дням:</h2>
         </div>
         {% for key, value in percent_change_for_day.items %}
-        {% if value >= 0 %}
+        {% if value.0 >= 0 %}
         <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
-            <h2><span style="color: #0ecb81">{{key}} - {{value}}%</span></h2>
+            <h2><span style="color: #0ecb81">{{key}} - {{value.0}}% (Всего сделок: {{value.1}})</span></h2>
 
         </div>
-        {% elif value < 0 %}
+        {% elif value.0 < 0 %}
         <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
-            <h2><span style="color: #f6465d">{{key}} - {{value}}%</span></h2>
+            <h2><span style="color: #f6465d">{{key}} - {{value.0}}% (Всего сделок: {{value.1}})</span></h2>
         </div>
         {% endif %}
         {% endfor %}

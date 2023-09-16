@@ -116,7 +116,7 @@ def top_coin():
                             prices_token = data_token_price[0][300:]
                             orders = client.get_all_orders(symbol=i, limit=2)[0]
                             price = round(float(orders['cummulativeQuoteQty']) / float(orders["origQty"]), 7)
-                            if 100*((price / prices_token[-1])-1) > 5:
+                            if 100*((price / prices_token[-1])-1) > 4:
                                 time.sleep(20000)
                             else:
                                 orders = client.get_open_orders(symbol=i)

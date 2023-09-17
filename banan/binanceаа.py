@@ -36,7 +36,7 @@ def last_data(symbol, interval, lookback):
     frame = frame.astype(float)
     # frame.to_csv('file1.csv')
     # print(frame["Volume"].sum())
-    return [i.High for i in frame.itertuples()], [i.Volume for i in frame.itertuples()]
+    return [i.High for i in frame.itertuples()], [i.Volume for i in frame.itertuples()], [i.Low for i in frame.itertuples()]
 
 
 
@@ -134,5 +134,16 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 
 
 
-details = [i for i in client.get_account()["balances"] if float(i["free"]) > 0 or float(i["locked"]) > 0]
-print(details)
+# b = last_data("WTCUSDT", "15m", "30")
+# print(b)
+# print(round(100*(b[0][1]/b[2][1])-100, 2))
+
+r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'FORTH', 'AMP', 'FIDA', 'VITE', 'MTL', 'BLZ', 'YGG', 'TWT', 'AKRO', 'MDX', 'NMR', 'LOOM', 'JST', 'VTHO',
+     'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ', 'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
+
+
+print(len(r))
+
+for i in r:
+    if i + "USDT" in trading_pairs_fut:
+        print(i)

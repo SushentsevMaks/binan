@@ -38,6 +38,7 @@ def index(request):
                                                    orders_qnt_per_day,
                                                    profit_per_day]
 
+    print(list(set([i.name_cript for i in orders])))
     d = 0
     for i in range(len(sells)):
         d += float(sells[i].all_cost) - float(buys[i].all_cost)

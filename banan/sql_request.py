@@ -14,7 +14,7 @@ def sql_req(i):
         orders = client.get_all_orders(symbol=i, limit=5)
         orders = [i for i in orders if i["status"] == "FILLED"][-2:]
         for b in orders:
-            times = time.localtime(int((str(b["time"]))[:-3]))
+            times = time.localtime(int((str(b["updateTime"]))[:-3]))
             formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
             name_cript = b["symbol"][:-4]
             if b["side"] == "SELL":

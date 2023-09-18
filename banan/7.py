@@ -66,7 +66,7 @@ def top_coin():
                 #     price_change_percent_24h = 0
                 #print(i)
                 #and sum(volumes_token[:-5]) / len(volumes_token[:-5]) * 9.5 < volumes_token[-2] \
-                if price_change_in_5min > 3 \
+                if price_change_in_5min > 4.5 \
                         and prices_token[-3:] == sorted(prices_token[-3:]) \
                         and prices_token[-1] > sum(prices_token[:-5]) / len(prices_token[:-5]) \
                         and price_change_percent_10h < 7:

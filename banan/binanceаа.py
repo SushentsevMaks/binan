@@ -141,9 +141,3 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'FORTH', 'AMP', 'FIDA', 'VITE', 'MTL', 'BLZ', 'YGG', 'TWT', 'AKRO', 'MDX', 'NMR', 'LOOM', 'JST', 'VTHO',
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ', 'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-
-print(len(r))
-
-for i in r:
-    if i + "USDT" in trading_pairs_fut:
-        print(i)

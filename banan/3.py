@@ -132,7 +132,8 @@ def top_coin():
                             bot = telebot.TeleBot(telega_token)
                             message = f"СДЕЛКА ЗАВЕРШЕНА - {i}\n" \
                                       f"{prices_token[-3:]}\n" \
-                                      f"ЗАСЕК НА РОСТЕ ЦЕНЫ В {round(price_change_in_5min, 2)}%\n" \
+                                      f"ЗАСЕК НА РОСТЕ ЦЕНЫ В {round(price_change_in_5min, 2)}%\n"\
+                                      f"ЗА 2 МИНУТЫ РОСТ {round(100 - (prices_token[-2] / prices_token[-1]) * 100, 2)}"\
                                       f"\n" \
                                       f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"
                             bot.send_message(chat_id, message)

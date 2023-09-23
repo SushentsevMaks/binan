@@ -50,7 +50,7 @@ def top_coin():
             try:
                 # print(i)
                 # print(last_data(i, "3m", "300"))
-                data_token_price = last_data(i, "1m", "1440")
+                data_token_price = last_data(i, "1m", "720")
                 d = data_token_price[1][900:]
                 prices_token = data_token_price[0][300:]
                 #volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
@@ -58,7 +58,7 @@ def top_coin():
                 price_change_in_2min = (prices_token[-1] / prices_token[-2]) * 100 - 100
                 price_change_in_3min = (prices_token[-1] / prices_token[-3]) * 100 - 100
                 price_change_in_4min = (prices_token[-1] / prices_token[-4]) * 100 - 100
-                price_change_percent_10h = 100 - ((data_token_price[0][840] / data_token_price[0][-40]) * 100)
+                price_change_percent_10h = 100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100)
 
                 prices_pivot = data_token_price[2][:-7]
                 mmax = max(prices_pivot)
@@ -202,7 +202,7 @@ def top_coin():
 
                         time.sleep(5)
                     sql_req(i)
-                    time.sleep(180)
+                    time.sleep(600)
             except:
                 pass
 

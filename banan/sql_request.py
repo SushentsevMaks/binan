@@ -14,8 +14,10 @@ def sql_req(i):
         orders = client.get_all_orders(symbol=i, limit=5)
         orders = [i for i in orders if i["status"] == "FILLED"][-2:]
         for b in orders:
-            times = time.localtime(int((str(b["updateTime"]))[:-3]))
+            times = time.localtime(int((str(b["time"]))[:-3]))
             formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
+            times_update = time.localtime(int((str(b["updateTime"]))[:-3]))
+            formatted_time_update = time.strftime("%Y-%m-%d %H:%M:%S", times_update)
             name_cript = b["symbol"][:-4]
             if b["side"] == "SELL":
                 side = "Продать"
@@ -26,7 +28,7 @@ def sql_req(i):
             all_cost = float(b['cummulativeQuoteQty'])
             link_cript = f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"
 
-            values = (formatted_time, name_cript, side, price, count, all_cost, link_cript)
+            values = (formatted_time, formatted_time_update, name_cript, side, price, count, all_cost, link_cript)
 
             try:
                 connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -34,7 +36,7 @@ def sql_req(i):
                                              cursorclass=pymysql.cursors.DictCursor)
                 try:
                     with connection.cursor() as cursor:
-                        insert_query = "INSERT INTO `vision_orders` (time, name_cript, side, price, count, all_cost, link_cript) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        insert_query = "INSERT INTO `vision_orders` (time, update_time, name_cript, side, price, count, all_cost, link_cript) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                         cursor.execute(insert_query, (values))
                         connection.commit()
                 finally:

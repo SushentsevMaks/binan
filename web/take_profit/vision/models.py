@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class Orders(models.Model):
     time = models.CharField(max_length=30)
+    update_time = models.CharField(max_length=30)
     name_cript = models.CharField(verbose_name="Название крипты", max_length=15)
     side = models.CharField(verbose_name="Сторона", max_length=15)
     price = models.CharField(verbose_name="Цена за шт.", max_length=20)

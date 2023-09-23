@@ -27,6 +27,8 @@ def index(request):
     buys = Orders.objects.filter(side="Купить")[::-1]
     sells = Orders.objects.filter(side="Продать")[::-1]
 
+
+
     percent_change = round(sum([100 - 100*(float(orders[i+1].all_cost) + ((float(orders[i].all_cost) + float(orders[i+1].all_cost))/100*0.075)) / (float(orders[i].all_cost)) for i in range(0, len(orders), 2)]), 2)
     percent_change_for_day = {}
     for daytime in sorted(set([i.time[:10] for i in orders])):

@@ -15,7 +15,7 @@ telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 client = Client(keys.api_key, keys.api_secret)
 # futures_exchange_info = client.futures_exchange_info()
 # trading_pairs = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
-trading_pairs = ['GHSTUSDT', 'GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT', 'GNOUSDT', 'GNSUSDT', 'GRTUSDT', 'GTCUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT', 'HIFIUSDT', 'HIGHUSDT', 'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT', 'ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT', 'INJUSDT', 'IOSTUSDT', 'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT', 'JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT', 'KDAUSDT']
+trading_pairs = ['DGBUSDT', 'DIAUSDT', 'DOCKUSDT', 'DODOUSDT', 'DOGEUSDT', 'DOTUSDT', 'DREPUSDT', 'DUSKUSDT', 'DYDXUSDT', 'EDUUSDT', 'EGLDUSDT', 'ELFUSDT', 'ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ERNUSDT', 'ETCUSDT', 'EURUSDT', 'FARMUSDT', 'FDUSDUSDT', 'FETUSDT', 'FIDAUSDT']
 
 ex = []
 
@@ -56,8 +56,16 @@ def top_coin():
                 #volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
                 price_change_in_5min = (prices_token[-1] / prices_token[-5]) * 100 - 100
                 price_change_in_2min = (prices_token[-1] / prices_token[-2]) * 100 - 100
-
+                price_change_in_3min = (prices_token[-1] / prices_token[-3]) * 100 - 100
+                price_change_in_4min = (prices_token[-1] / prices_token[-4]) * 100 - 100
                 price_change_percent_10h = 100 - ((data_token_price[0][840] / data_token_price[0][-40]) * 100)
+
+                prices_pivot = data_token_price[2][:-7]
+                mmax = max(prices_pivot)
+                mmin = min(prices_pivot)
+                close = prices_pivot[-1]
+                pivot = (mmax + mmin + close) / 3
+                r1 = pivot * 2 - mmin
 
                 # if price_change_percent_24h > 100:
                 #     price_change_percent_24h = round(price_change_percent_24h - 100, 2)
@@ -67,13 +75,28 @@ def top_coin():
                 #     price_change_percent_24h = 0
                 #print(i)
                 #and sum(volumes_token[:-5]) / len(volumes_token[:-5]) * 9.5 < volumes_token[-2] \
-                if price_change_in_5min > 4.5 \
-                        and prices_token[-3:] == sorted(prices_token[-3:]) \
-                        and prices_token[-1] > sum(prices_token[:-5]) / len(prices_token[:-5]) \
-                        and price_change_percent_10h < 7\
-                        and price_change_in_2min > 0.98:
 
-                    buy_qty = round(110 / prices_token[-1], 1)
+                if price_change_in_3min > 3 \
+                        and prices_token[-3:] == sorted(prices_token[-3:]) \
+                        and price_change_percent_10h < 10:
+                    if i in trading_pairs_fut:
+                        fut_yes = "Фьючерсная"
+                    else:
+                        fut_yes = "НЕ Фьючерсная"
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"БЕЗ ПИВОТ - {i}\n"
+                                                                        f"Цены {prices_token[-8:]}\n"
+                                                                        f"Объемы {[int((i*prices_token[-1])/1000) for i in d[-8:]]}"
+                                                                        f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"    
+                                                                        f"Изменение цены за 10ч  {round(price_change_percent_10h, 2)}%\n"
+                                                                        f"Сколько % до 1 уровня поддержки  {round(((r1 / prices_token[-1]) * 100 - 100), 2)}%\n"
+                                                                        f"{fut_yes}")
+
+                if price_change_in_3min > 3 and ((r1 / prices_token[-1]) * 100 - 100) > 3:
+
+                    buy_qty = round(100 / prices_token[-1], 1)
                     if i in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
                     else:
@@ -81,20 +104,22 @@ def top_coin():
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {i}\n"
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
-                                                                        f"Объемы {[round(i, 2) for i in d[-8:]]}"
+                                                                        f"Объемы {[int((i*prices_token[-1])/1000) for i in d[-8:]]}"
                                                                         f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)}%\n"
-                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min)}%\n"    
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"    
                                                                         f"Изменение цены за 10ч  {round(price_change_percent_10h, 2)}%\n"
+                                                                        f"Сколько % до 1 уровня поддержки  {round(((r1 / prices_token[-1]) * 100 - 100), 2)}%\n"
                                                                         f"{fut_yes}")
 
-                    ex.append(i)
+
 
                     try:
                         order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
-                            buy_qty = int(round(110 / prices_token[-1], 1))
+                            buy_qty = int(round(100 / prices_token[-1], 1))
                             order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                         else:
                             telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
@@ -177,9 +202,9 @@ def top_coin():
 
                         time.sleep(5)
                     sql_req(i)
+                    time.sleep(180)
             except:
                 pass
-
 
 
 def last_data(symbol, interval, lookback):
@@ -191,8 +216,7 @@ def last_data(symbol, interval, lookback):
     frame = frame.astype(float)
     # frame.to_csv('file1.csv')
     # print(frame["Volume"].sum())
-    return [i.High for i in frame.itertuples()], [i.Volume for i in frame.itertuples()]
-
+    return [i.High for i in frame.itertuples()], [i.Volume for i in frame.itertuples()], [i.Close for i in frame.itertuples()]
 
 def btc_anal(data):
     if round(data[0][-1] / (sum(data[0][:-1]) / len(data[0][:-1])) - 1, 3) > 0.5:

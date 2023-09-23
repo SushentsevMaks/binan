@@ -36,7 +36,7 @@ def last_data(symbol, interval, lookback):
     frame = frame.astype(float)
     # frame.to_csv('file1.csv')
     # print(frame["Volume"].sum())
-    return [i.High for i in frame.itertuples()], [i.Volume for i in frame.itertuples()], [i.Close for i in frame.itertuples()]
+    return [i.High for i in frame.itertuples()], [i.Low for i in frame.itertuples()], [i.Close for i in frame.itertuples()]
 
 
 
@@ -141,21 +141,18 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'FORTH', 'AMP', 'FIDA', 'VITE', 'MTL', 'BLZ', 'YGG', 'TWT', 'AKRO', 'MDX', 'NMR', 'LOOM', 'JST', 'VTHO',
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ', 'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-i = "WTCUSDT"
+i = "PNTUSDT"
 data_token_price = last_data(i, "1m", "720")
-ddd = last_data(i, "15m", "1440")
-prices_token = data_token_price[2][:-7]
-mmax = max(prices_token)
-mmin = min(prices_token)
-close = prices_token[-1]
-pivot = (mmax + mmin + close) / 3
-r1 = pivot*2 - mmin
 
-print(mmax)
-print(mmin)
-print(close)
-print(pivot)
+prices_pivot = data_token_price[2][:-7]
+mmax = max(prices_pivot)
+mmin = min(prices_pivot)
+close = prices_pivot[-1]
+pivot = (mmax + mmin + close) / 3
+r1 = pivot * 2 - mmin
 print(r1, data_token_price[0][-1])
+
 print(round(((r1 / data_token_price[0][-1]) * 100 - 100), 2))
+
 
 

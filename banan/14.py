@@ -78,7 +78,7 @@ def top_coin():
 
                 if price_change_in_3min > 3 \
                         and prices_token[-3:] == sorted(prices_token[-3:]) \
-                        and price_change_percent_10h < 10:
+                        and price_change_percent_10h < 7:
                     if i in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
                     else:
@@ -93,8 +93,10 @@ def top_coin():
                                                                         f"Изменение цены за 10ч  {round(price_change_percent_10h, 2)}%\n"
                                                                         f"Сколько % до 1 уровня поддержки  {round(((r1 / prices_token[-1]) * 100 - 100), 2)}%\n"
                                                                         f"{fut_yes}")
+                    time.sleep(60)
 
-                if price_change_in_3min > 3 and ((r1 / prices_token[-1]) * 100 - 100) > 3:
+                if price_change_in_3min > 2.4 and ((r1 / prices_token[-1]) * 100 - 100) > 3\
+                        and (100 - (prices_token[-1] / mmax)*100) < 3:
 
                     buy_qty = round(100 / prices_token[-1], 1)
                     if i in trading_pairs_fut:
@@ -202,7 +204,7 @@ def top_coin():
 
                         time.sleep(5)
                     sql_req(i)
-                    time.sleep(600)
+                    time.sleep(1800)
             except:
                 pass
 

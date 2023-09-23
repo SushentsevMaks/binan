@@ -31,8 +31,8 @@ def index(request):
     for daytime in sorted(set([i.time[:10] for i in orders])):
         for order in orders:
             if daytime == order.time[:10]:
-                day_percent_profit = round(sum([orders[i].percent_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime]), 2)
-                day_volume_profit = round(sum([orders[i].volume_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime]), 2)
+                day_percent_profit = sum([orders[i].percent_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime])
+                day_volume_profit = sum([orders[i].volume_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime])
                 ers_qnt_per_day = len([i for i in range(len(orders)) if orders[i].time[:10] == daytime])
                 percent_change_for_day[daytime] = [day_percent_profit,
                                                    day_volume_profit,

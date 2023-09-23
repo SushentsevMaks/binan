@@ -8,9 +8,9 @@ class Orders(models.Model):
     price_buy = models.FloatField(verbose_name="Цена за шт.")
     price_sell = models.FloatField(verbose_name="Цена за штnn.")
     count = models.CharField(verbose_name="Количество монет", max_length=20)
-    all_volume = models.FloatField(verbose_name="Общая стоимость")
-    percent_profit = models.FloatField(verbose_name="Прибыль")
-    volume_profit = models.FloatField(verbose_name="Прибыль")
+    all_volume = models.DecimalField(verbose_name="Общая стоимость", max_digits=7, decimal_places=2)
+    percent_profit = models.DecimalField(max_digits=5, decimal_places=2)
+    volume_profit = models.DecimalField(max_digits=5, decimal_places=2)
     link_cript = models.CharField(verbose_name="Ссылка на валюту", max_length=100)
 
 

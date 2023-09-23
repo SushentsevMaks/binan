@@ -10,44 +10,35 @@ from vision.serializers import OrdersSerializer
 
 # Create your views here.
 class OrdersViewSet(viewsets.ModelViewSet):
-    queryset = Orders.objects.filter(side="Купить")[::-1]
-    d = 0
-    for i in queryset:
-        d += float(i.price)
-    permission_classes = [
-        permissions.AllowAny
-    ]
-    serializer_class = OrdersSerializer
+    pass
+    # queryset = Orders.objects.filter(side="Купить")[::-1]
+    # d = 0
+    # for i in queryset:
+    #     d += float(i.price)
+    # permission_classes = [
+    #     permissions.AllowAny
+    # ]
+    # serializer_class = OrdersSerializer
 
 
 
 def index(request):
     sort_orders = Orders.objects.order_by("time")[::-1]
-    orders = Orders.objects.all()[::-1]
-    buys = Orders.objects.filter(side="Купить")[::-1]
-    sells = Orders.objects.filter(side="Продать")[::-1]
+    orders = Orders.objects.all()
 
-
-
-    percent_change = round(sum([100 - 100*(float(orders[i+1].all_cost) + ((float(orders[i].all_cost) + float(orders[i+1].all_cost))/100*0.075)) / (float(orders[i].all_cost)) for i in range(0, len(orders), 2)]), 2)
     percent_change_for_day = {}
+
     for daytime in sorted(set([i.time[:10] for i in orders])):
         for order in orders:
             if daytime == order.time[:10]:
-                day_percent = round(sum([100 - 100 * (float(orders[i+1].all_cost) + ((float(orders[i].all_cost) + float(orders[i+1].all_cost))/100*0.075)) / (float(orders[i].all_cost)) for i in range(0, len(orders), 2) if orders[i].time[:10] == daytime]), 2)
-                orders_qnt_per_day = len([i for i in range(len(buys)) if buys[i].time[:10] == daytime])
-                profit_per_day = round((sum([float(sells[i].all_cost) for i in range(len(sells)) if sells[i].time[:10] == daytime]) - sum([float(buys[i].all_cost) for i in range(len(buys)) if buys[i].time[:10] == daytime])) - ((sum([float(sells[i].all_cost) for i in range(len(sells)) if sells[i].time[:10] == daytime]) + sum([float(buys[i].all_cost) for i in range(len(buys)) if buys[i].time[:10] == daytime]))/100)*0.075, 2)
-                percent_change_for_day[daytime] = [day_percent,
-                                                   orders_qnt_per_day,
-                                                   profit_per_day]
+                day_percent_profit = round(sum([orders[i].percent_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime]), 2)
+                day_volume_profit = round(sum([orders[i].volume_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime]), 2)
+                ers_qnt_per_day = len([i for i in range(len(orders)) if orders[i].time[:10] == daytime])
+                percent_change_for_day[daytime] = [day_percent_profit,
+                                                   day_volume_profit,
+                                                   ers_qnt_per_day]
 
-    d = 0
-    for i in range(len(sells)):
-        d += float(sells[i].all_cost) - float(buys[i].all_cost)
+    all_profit = [sum([i[0] for i in percent_change_for_day.values()]), sum([i[1] for i in percent_change_for_day.values()])]
 
-    d = d - (sum([float(sells[i].all_cost) for i in range(len(sells))]) + sum([float(buys[i].all_cost) for i in range(len(buys))]))/100 * 0.075
-    return render(request, "vision/index.html", {"orders": sort_orders, "buys": round(d, 2), "percent_change": percent_change, "percent_change_for_day": percent_change_for_day})
+    return render(request, "vision/index.html", {"orders": sort_orders, "percent_change_for_day": percent_change_for_day, "all_profit": all_profit})
 
-
-def definite_day(request):
-    pass

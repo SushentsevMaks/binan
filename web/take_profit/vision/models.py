@@ -5,10 +5,12 @@ class Orders(models.Model):
     time = models.CharField(max_length=30)
     update_time = models.CharField(max_length=30)
     name_cript = models.CharField(verbose_name="Название крипты", max_length=15)
-    side = models.CharField(verbose_name="Сторона", max_length=15)
-    price = models.CharField(verbose_name="Цена за шт.", max_length=20)
+    price_buy = models.FloatField(verbose_name="Цена за шт.")
+    price_sell = models.FloatField(verbose_name="Цена за штnn.")
     count = models.CharField(verbose_name="Количество монет", max_length=20)
-    all_cost = models.CharField(verbose_name="Общая стоимость", max_length=20)
+    all_volume = models.FloatField(verbose_name="Общая стоимость")
+    percent_profit = models.FloatField(verbose_name="Прибыль")
+    volume_profit = models.FloatField(verbose_name="Прибыль")
     link_cript = models.CharField(verbose_name="Ссылка на валюту", max_length=100)
 
 

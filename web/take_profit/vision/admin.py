@@ -5,6 +5,6 @@ from vision.models import Orders
 
 # Register your models here.
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ["name_cript", "side", "id"]
+    list_display = ["name_cript", "id"]
 
 admin.site.register(Orders, OrdersAdmin)

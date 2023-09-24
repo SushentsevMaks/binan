@@ -33,10 +33,10 @@ def index(request):
             if daytime == order.time[:10]:
                 day_percent_profit = sum([orders[i].percent_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime])
                 day_volume_profit = sum([orders[i].volume_profit for i in range(0, len(orders)) if orders[i].time[:10] == daytime])
-                ers_qnt_per_day = len([i for i in range(len(orders)) if orders[i].time[:10] == daytime])
+                orders_qnt_per_day = len([i for i in range(len(orders)) if orders[i].time[:10] == daytime])
                 percent_change_for_day[daytime] = [day_percent_profit,
                                                    day_volume_profit,
-                                                   ers_qnt_per_day]
+                                                   orders_qnt_per_day]
 
     all_profit = [sum([i[0] for i in percent_change_for_day.values()]), sum([i[1] for i in percent_change_for_day.values()])]
 

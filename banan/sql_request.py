@@ -46,5 +46,3 @@ def sql_req(i):
 
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL OSHIBKA: {e}\n")
-
-sql_req(i)

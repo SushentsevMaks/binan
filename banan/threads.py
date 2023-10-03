@@ -1,9 +1,11 @@
+import asyncio
 import time
 from decimal import Decimal
 
 #from decimal import Decimal, ROUND_FLOOR
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
+import threading
 import keys
 import pandas as pd
 import telebot
@@ -15,7 +17,39 @@ telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 client = Client(keys.api_key, keys.api_secret)
 # futures_exchange_info = client.futures_exchange_info()
 # trading_pairs = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
-trading_pairs = ['GNOUSDT', 'GNSUSDT', 'GRTUSDT', 'GTCUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT', 'HIFIUSDT', 'HIGHUSDT', 'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT', 'ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT', 'INJUSDT', 'IOSTUSDT', 'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT']
+trading_pairss = ['1INCHUSDT', "CREAMUSDT", "GFTUSDT", 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
+
+
+one = ['1INCHUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
+
+two = ['APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'ARUSDT', 'ASRUSDT', 'ASTRUSDT', 'ASTUSDT', 'ATAUSDT', 'ATMUSDT', 'ATOMUSDT', 'AUCTIONUSDT', 'AUDIOUSDT', 'AVAUSDT', 'AVAXUSDT', 'AXSUSDT', 'BADGERUSDT', 'BAKEUSDT', 'BALUSDT', 'BANDUSDT', 'BARUSDT', 'BATUSDT']
+
+three = ['BCHUSDT', 'BELUSDT', 'BETAUSDT', 'BETHUSDT', 'BICOUSDT', 'BIFIUSDT', 'BLZUSDT', 'BNTUSDT', 'BNXUSDT', 'BONDUSDT', 'BSWUSDT', 'BTSUSDT', 'YGGUSDT', 'ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT', 'BURGERUSDT', 'BUSDUSDT', 'C98USDT', 'CAKEUSDT', 'CELOUSDT', 'CELRUSDT', 'CFXUSDT', 'CHESSUSDT', 'CHRUSDT', 'CHZUSDT']
+
+four = ['CITYUSDT', 'CKBUSDT', 'CLVUSDT', 'COMBOUSDT', 'COMPUSDT', 'COSUSDT', 'COTIUSDT', 'CRVUSDT', 'CTKUSDT', 'CTSIUSDT', 'CTXCUSDT', 'CVCUSDT', 'CVPUSDT', 'CVXUSDT', 'CYBERUSDT', 'DARUSDT', 'DASHUSDT', 'DATAUSDT', 'DCRUSDT', 'DEGOUSDT', 'DENTUSDT', 'DEXEUSDT', 'DFUSDT']
+
+five = ['DGBUSDT', 'DIAUSDT', 'DOCKUSDT', 'DODOUSDT', 'DOGEUSDT', 'DOTUSDT', 'DREPUSDT', 'DUSKUSDT', 'DYDXUSDT', 'EDUUSDT', 'EGLDUSDT', 'ELFUSDT', 'ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ERNUSDT', 'ETCUSDT', 'EURUSDT', 'FARMUSDT', 'FDUSDUSDT', 'FETUSDT', 'FIDAUSDT']
+
+six = ['FILUSDT', 'FIOUSDT', 'FIROUSDT', 'FISUSDT', 'FLMUSDT', 'FLOKIUSDT', 'FLOWUSDT', 'FLUXUSDT', 'FORTHUSDT', 'FORUSDT', 'FRONTUSDT', 'FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT', 'GASUSDT', 'GBPUSDT', 'GHSTUSDT', 'GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT']
+
+seven = ['GNOUSDT', 'GNSUSDT', 'GRTUSDT', 'GTCUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT', 'HIFIUSDT', 'HIGHUSDT', 'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT', 'ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT', 'INJUSDT', 'IOSTUSDT', 'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT']
+
+eight = ['JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT', 'KDAUSDT', 'KEYUSDT', 'KLAYUSDT', 'KMDUSDT', 'KNCUSDT', 'KP3RUSDT', 'KSMUSDT', 'LAZIOUSDT', 'LDOUSDT', 'LEVERUSDT', 'LINAUSDT', 'LINKUSDT', 'LITUSDT', 'LOKAUSDT', 'LOOMUSDT', 'LPTUSDT', 'LQTYUSDT', 'LRCUSDT']
+
+nine = ['LSKUSDT', 'LTCUSDT', 'LTOUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT', 'MASKUSDT', 'MATICUSDT', 'MAVUSDT', 'MBLUSDT', 'MBOXUSDT', 'MCUSDT', 'MDTUSDT', 'MDXUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT', 'MOVRUSDT', 'MTLUSDT', 'MULTIUSDT', 'NEARUSDT']
+
+ten = ['NEOUSDT', 'NEXOUSDT', 'NKNUSDT', 'NMRUSDT', 'NULSUSDT', 'OAXUSDT', 'OCEANUSDT', 'OGNUSDT', 'OGUSDT', 'OMGUSDT', 'OMUSDT', 'ONEUSDT', 'ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT', 'OSMOUSDT', 'OXTUSDT', 'PAXGUSDT', 'PENDLEUSDT', 'PEOPLEUSDT']
+
+eleven = ['PERLUSDT', 'PERPUSDT', 'PHAUSDT', 'PHBUSDT', 'PLAUSDT', 'PNTUSDT', 'POLSUSDT', 'POLYXUSDT', 'PONDUSDT', 'PORTOUSDT', 'POWRUSDT', 'PROMUSDT', 'PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'QIUSDT', 'QKCUSDT', 'QNTUSDT', 'QTUMUSDT', 'QUICKUSDT', 'RADUSDT', 'RAREUSDT']
+
+twelve = ['RAYUSDT', 'RDNTUSDT', 'REEFUSDT', 'REIUSDT', 'RENUSDT', 'REQUSDT', 'RIFUSDT', 'RLCUSDT', 'RNDRUSDT', 'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT', 'RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT', 'SEIUSDT', 'SFPUSDT', 'SHIBUSDT', 'SKLUSDT', 'SLPUSDT']
+
+thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSDT', 'STGUSDT', 'STMXUSDT', 'STORJUSDT', 'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT', 'SUNUSDT', 'SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT', 'SYSUSDT', 'TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT']
+
+fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'TUSDUSDT', 'TVKUSDT', 'TWTUSDT', 'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'UNIUSDT', 'USDCUSDT', 'USDPUSDT', 'USTCUSDT', 'UTKUSDT', 'VETUSDT', 'VGXUSDT', 'VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT']
+
+fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT', 'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT', 'XVGUSDT', 'XVSUSDT', 'YFIUSDT']
+
 
 ex = []
 
@@ -44,13 +78,11 @@ trading_pairs_fut = ['LEVERUSDT', 'USDCUSDT', 'AVAXUSDT', 'ATAUSDT', 'ACHUSDT', 
                      'MANAUSDT', 'XVSUSDT', 'FXSUSDT', 'SUIUSDT', 'KSMUSDT', 'JOEUSDT', 'KEYUSDT', 'ETHUSDT', 'QTUMUSDT']
 
 
-keks = []
-
-def top_coin():
+async def top_coin(trading_pairs):
     for i in trading_pairs:
         if i not in ex:
             try:
-                # print(i)
+
                 # print(last_data(i, "3m", "300"))
                 data_token_price = last_data(i, "1m", "1440")
                 d = data_token_price[1][900:]
@@ -62,6 +94,7 @@ def top_coin():
                 price_change_in_4min = (prices_token[-1] / prices_token[-4]) * 100 - 100
                 price_change_percent_24h = 100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100)
                 volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][720:-5]]) / len(data_token_price[1][720:-5])
+                print(i)
                 # if price_change_percent_24h > 100:
                 #     price_change_percent_24h = round(price_change_percent_24h - 100, 2)
                 # elif price_change_percent_24h < 100:
@@ -71,8 +104,9 @@ def top_coin():
                 #print(i)
                 #and sum(volumes_token[:-5]) / len(volumes_token[:-5]) * 9.5 < volumes_token[-2] \
 
-                if (price_change_in_3min > 3 or price_change_in_2min > 3)\
-                        and prices_token[-3:] == sorted(prices_token[-3:]) and i not in keks:
+                if price_change_in_3min > 3 \
+                        and prices_token[-3:] == sorted(prices_token[-3:]) \
+                        and (volume_per_10h < 3200 or volume_per_10h > 30200):
 
                     if i in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
@@ -81,18 +115,18 @@ def top_coin():
                     telebot.TeleBot(telega_token).send_message(chat_id, f"ОБЪЕМЫ МЕНЬШЕ 3200 - {i}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
-                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
-                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"{fut_yes}")
-                    keks.append(i)
+                    ex.append(i)
 
-                if price_change_in_2min > 2.4 and price_change_in_3min-price_change_in_2min > 0.49 and price_change_in_4min-price_change_in_3min > 0.2\
+                if price_change_in_3min > 3 and price_change_in_4min > 4 and price_change_in_4min-price_change_in_3min > 0.4\
                         and prices_token[-3:] == sorted(prices_token[-3:]) \
                         and 8 > price_change_percent_24h\
-                        and volume_per_10h > 1000:
+                        and 30200 > volume_per_10h > 3200:
 
                     buy_qty = round(11 / prices_token[-1], 1)
                     if i in trading_pairs_fut:
@@ -103,10 +137,10 @@ def top_coin():
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
-                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
-                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
-                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"    
                                                                         f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"{fut_yes}")
 
@@ -239,7 +273,19 @@ def btc_anal(data):
 #     return activiti
 
 
-while True:
-    #btc_differ = btc_anal(last_data('BTCUSDT', "15m", "300"))
 
-    top_coin()
+x = {0: one, 1: two, 2: three, 3: four, 4: five, 5: six, 6: seven, 7: eight, 8: nine, 9: ten, 10: eleven, 11: twelve, 12: thirteenth, 13: fourteenth, 14: fifteenth}
+
+
+async def asynchronous():
+    start = time.time()
+    futures = [top_coin(x[i]) for i in range(15)]
+
+    for future in asyncio.as_completed(futures):
+        result = await future
+
+
+
+ioloop = asyncio.get_event_loop()
+ioloop.run_until_complete(asynchronous())
+ioloop.close()

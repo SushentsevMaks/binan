@@ -45,6 +45,7 @@ trading_pairs_fut = ['LEVERUSDT', 'USDCUSDT', 'AVAXUSDT', 'ATAUSDT', 'ACHUSDT', 
                      'HFTUSDT', 'STXUSDT', 'IOTXUSDT', 'ANTUSDT', 'C98USDT', 'AXSUSDT', 'AAVEUSDT', 'ENJUSDT', 'RVNUSDT',
                      'MANAUSDT', 'XVSUSDT', 'FXSUSDT', 'SUIUSDT', 'KSMUSDT', 'JOEUSDT', 'KEYUSDT', 'ETHUSDT', 'QTUMUSDT']
 
+keks = []
 
 def top_coin():
     for i in trading_pairs:
@@ -52,7 +53,7 @@ def top_coin():
             try:
                 # print(i)
                 # print(last_data(i, "3m", "300"))
-                data_token_price = last_data(i, "1m", "720")
+                data_token_price = last_data(i, "1m", "1440")
                 d = data_token_price[1][900:]
                 prices_token = data_token_price[0][300:]
                 #volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
@@ -60,9 +61,8 @@ def top_coin():
                 price_change_in_2min = (prices_token[-1] / prices_token[-2]) * 100 - 100
                 price_change_in_3min = (prices_token[-1] / prices_token[-3]) * 100 - 100
                 price_change_in_4min = (prices_token[-1] / prices_token[-4]) * 100 - 100
-                price_change_percent_10h = 100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100)
-                volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][:-5]]) / len(data_token_price[1][:-5])
-
+                price_change_percent_24h = 100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100)
+                volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-5]]) / len(data_token_price[1][1140:-5])
                 # if price_change_percent_24h > 100:
                 #     price_change_percent_24h = round(price_change_percent_24h - 100, 2)
                 # elif price_change_percent_24h < 100:
@@ -72,32 +72,31 @@ def top_coin():
                 #print(i)
                 #and sum(volumes_token[:-5]) / len(volumes_token[:-5]) * 9.5 < volumes_token[-2] \
 
-                if price_change_in_3min > 3 \
-                        and prices_token[-3:] == sorted(prices_token[-3:]) \
-                        and price_change_percent_10h < 7\
-                        and volume_per_10h < 4001:
+                if (price_change_in_3min > 3 or price_change_in_2min > 3)\
+                        and prices_token[-3:] == sorted(prices_token[-3:]) and i not in keks:
 
                     if i in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
                     else:
                         fut_yes = "НЕ Фьючерсная"
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"ОБЪЕМЫ МЕНЬШЕ 4000 - {i}\n"
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"ОБЪЕМЫ МЕНЬШЕ 3200 - {i}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
-                                                                        f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
-                                                                        f"Изменение цены за 10ч  {round(price_change_percent_10h, 2)}%\n"
+                                                                        f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"{fut_yes}")
-                    time.sleep(20)
+                    keks.append(i)
 
-                if price_change_in_3min > 3 \
+                if (price_change_in_2min > 2.4 and price_change_in_3min-price_change_in_2min > 0.49 and price_change_in_4min-price_change_in_3min > 0.2)\
+                        or (price_change_in_3min > 3 and price_change_in_2min > 0.90 and price_change_in_4min-price_change_in_3min > 0.2)\
                         and prices_token[-3:] == sorted(prices_token[-3:]) \
-                        and 8 > price_change_percent_10h > -8\
-                        and volume_per_10h > 4000:
+                        and 8 > price_change_percent_24h\
+                        and volume_per_10h > 500:
 
-                    buy_qty = round(85 / prices_token[-1], 1)
+                    buy_qty = round(11 / prices_token[-1], 1)
                     if i in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
                     else:
@@ -106,18 +105,20 @@ def top_coin():
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
-                                                                        f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
-                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"    
-                                                                        f"Изменение цены за 10ч  {round(price_change_percent_10h, 2)}%\n"
+                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"{fut_yes}")
+
+                    ex.append(i)
 
                     try:
                         order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
-                            buy_qty = int(round(85 / prices_token[-1], 1))
+                            buy_qty = int(round(11 / prices_token[-1], 1))
                             order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                         else:
                             telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
@@ -135,7 +136,7 @@ def top_coin():
                         break
 
                     #start_time = time.time()
-                    ex.append(i)
+
 
                     while open_position:
                         #last_time = time.time()

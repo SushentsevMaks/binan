@@ -143,6 +143,15 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
 
 i = "DATAUSDT"
 data_token_price = last_data(i, "1m", "1440")
-volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-20]]) / len(data_token_price[1][1140:-20])
-
-print(volume_per_10h)
+price_change_in_4min = 4.98
+price_change_in_3min = 4.37
+price_change_in_2min = 3.42
+price_change_percent_24h = 12
+volume_per_10h = 500
+if (price_change_in_2min > 2.4 and price_change_in_3min-price_change_in_2min > 0.49 and price_change_in_4min-price_change_in_3min != 0
+                        and 8 > price_change_percent_24h > -8
+                        and volume_per_10h > 450) \
+                        or (price_change_in_2min > 0.8 and price_change_in_3min-price_change_in_2min > 2.6 and price_change_in_4min-price_change_in_3min != 0
+                        and 8 > price_change_percent_24h > -8
+                        and volume_per_10h > 450):
+    print("yes")

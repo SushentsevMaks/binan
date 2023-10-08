@@ -57,12 +57,12 @@ def top_coin():
                 d = data_token_price[1][900:]
                 prices_token = data_token_price[0][300:]
                 #volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
-                price_change_in_5min = (prices_token[-1] / prices_token[-5]) * 100 - 100
-                price_change_in_2min = (prices_token[-1] / prices_token[-2]) * 100 - 100
-                price_change_in_3min = (prices_token[-1] / prices_token[-3]) * 100 - 100
-                price_change_in_4min = (prices_token[-1] / prices_token[-4]) * 100 - 100
-                price_change_percent_24h = 100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100)
-                volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-5]]) / len(data_token_price[1][1140:-5])
+                price_change_in_5min = round((prices_token[-1] / prices_token[-5]) * 100 - 100, 2)
+                price_change_in_2min = round((prices_token[-1] / prices_token[-2]) * 100 - 100, 2)
+                price_change_in_3min = round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)
+                price_change_in_4min = round((prices_token[-1] / prices_token[-4]) * 100 - 100, 2)
+                price_change_percent_24h = round(100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100), 2)
+                volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-25]]) / len(data_token_price[1][1140:-25])
                 # if price_change_percent_24h > 100:
                 #     price_change_percent_24h = round(price_change_percent_24h - 100, 2)
                 # elif price_change_percent_24h < 100:
@@ -90,11 +90,12 @@ def top_coin():
                                                                         f"{fut_yes}")
                     keks.append(i)
 
-                if (price_change_in_2min > 2.4 and price_change_in_3min-price_change_in_2min > 0.49 and price_change_in_4min-price_change_in_3min > 0.2)\
-                        or (price_change_in_3min > 3 and price_change_in_2min > 0.90 and price_change_in_4min-price_change_in_3min > 0.2)\
-                        and prices_token[-3:] == sorted(prices_token[-3:]) \
-                        and 8 > price_change_percent_24h\
-                        and volume_per_10h > 500:
+                if (price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.49 and price_change_in_4min - price_change_in_3min != 0
+                        and 8 > price_change_percent_24h > -8
+                        and volume_per_10h > 450) \
+                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.6 and price_change_in_4min - price_change_in_3min != 0
+                        and 8 > price_change_percent_24h > -8
+                        and volume_per_10h > 450):
 
                     buy_qty = round(11 / prices_token[-1], 1)
                     if i in trading_pairs_fut:
@@ -200,7 +201,7 @@ def top_coin():
                         #             break
 
                         time.sleep(10)
-                    sql_req(i)
+                    sql_req(i, price_change_percent_24h, price_change_in_2min, price_change_in_3min, price_change_in_4min, price_change_in_5min, volume_per_10h)
             except:
                 pass
 

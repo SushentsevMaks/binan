@@ -1,24 +1,20 @@
-import asyncio
 import time
 from decimal import Decimal
 
 #from decimal import Decimal, ROUND_FLOOR
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
-import threading
 import keys
 import pandas as pd
 import telebot
 from sql_request import sql_req
+from threading import Thread
 
 telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
-
 
 client = Client(keys.api_key, keys.api_secret)
 # futures_exchange_info = client.futures_exchange_info()
 # trading_pairs = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
-trading_pairss = ['1INCHUSDT', "CREAMUSDT", "GFTUSDT", 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
-
 
 one = ['1INCHUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
 
@@ -78,35 +74,26 @@ trading_pairs_fut = ['LEVERUSDT', 'USDCUSDT', 'AVAXUSDT', 'ATAUSDT', 'ACHUSDT', 
                      'MANAUSDT', 'XVSUSDT', 'FXSUSDT', 'SUIUSDT', 'KSMUSDT', 'JOEUSDT', 'KEYUSDT', 'ETHUSDT', 'QTUMUSDT']
 
 
-async def top_coin(trading_pairs):
+keks = []
+
+def top_coin(trading_pairs):
     for i in trading_pairs:
         if i not in ex:
             try:
-
+                # print(i)
                 # print(last_data(i, "3m", "300"))
                 data_token_price = last_data(i, "1m", "1440")
-                d = data_token_price[1][900:]
                 prices_token = data_token_price[0][300:]
-                #volumes_token = [round(d[i] + d[i + 1] + d[i + 2], 2) for i in range(0, len(d), 3)]
-                price_change_in_5min = (prices_token[-1] / prices_token[-5]) * 100 - 100
-                price_change_in_2min = (prices_token[-1] / prices_token[-2]) * 100 - 100
-                price_change_in_3min = (prices_token[-1] / prices_token[-3]) * 100 - 100
-                price_change_in_4min = (prices_token[-1] / prices_token[-4]) * 100 - 100
-                price_change_percent_24h = 100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100)
-                volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][720:-5]]) / len(data_token_price[1][720:-5])
-                print(i)
-                # if price_change_percent_24h > 100:
-                #     price_change_percent_24h = round(price_change_percent_24h - 100, 2)
-                # elif price_change_percent_24h < 100:
-                #     price_change_percent_24h = round(100 - price_change_percent_24h, 2)
-                # else:
-                #     price_change_percent_24h = 0
+                price_change_in_5min = round((prices_token[-1] / prices_token[-5]) * 100 - 100, 2)
+                price_change_in_2min = round((prices_token[-1] / prices_token[-2]) * 100 - 100, 2)
+                price_change_in_3min = round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)
+                price_change_in_4min = round((prices_token[-1] / prices_token[-4]) * 100 - 100, 2)
+                price_change_percent_24h = round(100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100), 2)
+                volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-25]]) / len(data_token_price[1][1140:-25])
                 #print(i)
-                #and sum(volumes_token[:-5]) / len(volumes_token[:-5]) * 9.5 < volumes_token[-2] \
 
-                if price_change_in_3min > 3 \
-                        and prices_token[-3:] == sorted(prices_token[-3:]) \
-                        and (volume_per_10h < 3200 or volume_per_10h > 30200):
+                if (price_change_in_3min > 3 or price_change_in_2min > 3)\
+                        and prices_token[-3:] == sorted(prices_token[-3:]) and i not in keks:
 
                     if i in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
@@ -115,18 +102,20 @@ async def top_coin(trading_pairs):
                     telebot.TeleBot(telega_token).send_message(chat_id, f"ОБЪЕМЫ МЕНЬШЕ 3200 - {i}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
-                                                                        f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"{fut_yes}")
-                    ex.append(i)
+                    keks.append(i)
 
-                if price_change_in_3min > 3 and price_change_in_4min > 4 and price_change_in_4min-price_change_in_3min > 0.4\
-                        and prices_token[-3:] == sorted(prices_token[-3:]) \
-                        and 8 > price_change_percent_24h\
-                        and 30200 > volume_per_10h > 3200:
+                if (price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.49 and price_change_in_4min - price_change_in_3min != 0
+                        and 8 > price_change_percent_24h > -8
+                        and volume_per_10h > 450) \
+                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.6 and price_change_in_4min - price_change_in_3min != 0
+                        and 8 > price_change_percent_24h > -8
+                        and volume_per_10h > 450):
 
                     buy_qty = round(11 / prices_token[-1], 1)
                     if i in trading_pairs_fut:
@@ -137,10 +126,10 @@ async def top_coin(trading_pairs):
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
-                                                                        f"Изменение цены за 5 мин - {round(price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%\n"
-                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"    
+                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"{fut_yes}")
 
@@ -232,7 +221,7 @@ async def top_coin(trading_pairs):
                         #             break
 
                         time.sleep(10)
-                    sql_req(i)
+                    sql_req(i, price_change_percent_24h, price_change_in_2min, price_change_in_3min, price_change_in_4min, price_change_in_5min, volume_per_10h)
             except:
                 pass
 
@@ -273,19 +262,14 @@ def btc_anal(data):
 #     return activiti
 
 
+while True:
+    threads = [Thread(target=top_coin, args=([one])), Thread(target=top_coin, args=([two])), Thread(target=top_coin, args=([three])),
+               Thread(target=top_coin, args=([four])), Thread(target=top_coin, args=([five])), Thread(target=top_coin, args=([six])),
+               Thread(target=top_coin, args=([seven])), Thread(target=top_coin, args=([eight])), Thread(target=top_coin, args=([nine])),
+               Thread(target=top_coin, args=([ten])), Thread(target=top_coin, args=([eleven])), Thread(target=top_coin, args=([twelve])),
+               Thread(target=top_coin, args=([thirteenth])), Thread(target=top_coin, args=([fourteenth])), Thread(target=top_coin, args=([fifteenth]))]
 
-x = {0: one, 1: two, 2: three, 3: four, 4: five, 5: six, 6: seven, 7: eight, 8: nine, 9: ten, 10: eleven, 11: twelve, 12: thirteenth, 13: fourteenth, 14: fifteenth}
+    start_threads = [i.start() for i in threads]
 
+    stop_threads = [i.join() for i in threads]
 
-async def asynchronous():
-    start = time.time()
-    futures = [top_coin(x[i]) for i in range(15)]
-
-    for future in asyncio.as_completed(futures):
-        result = await future
-
-
-
-ioloop = asyncio.get_event_loop()
-ioloop.run_until_complete(asynchronous())
-ioloop.close()

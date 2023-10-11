@@ -88,7 +88,7 @@ def top_coin(trading_pairs):
                 price_change_in_2min = round((prices_token[-1] / prices_token[-2]) * 100 - 100, 2)
                 price_change_in_3min = round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)
                 price_change_in_4min = round((prices_token[-1] / prices_token[-4]) * 100 - 100, 2)
-                price_change_percent_24h = round(100 - ((data_token_price[0][0] / data_token_price[0][-40]) * 100), 2)
+                price_change_percent_24h = round(100 - ((data_token_price[0][0] / data_token_price[0][-15]) * 100), 2)
                 volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-25]]) / len(data_token_price[1][1140:-25])
                 #print(i)
 
@@ -110,12 +110,15 @@ def top_coin(trading_pairs):
                                                                         f"{fut_yes}")
                     keks.append(i)
 
-                if (price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.49 and price_change_in_4min - price_change_in_3min != 0
+                if (price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.40 and abs(price_change_in_4min - price_change_in_3min) > 0.07
                         and 8 > price_change_percent_24h > -8
-                        and volume_per_10h > 450) \
-                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.6 and price_change_in_4min - price_change_in_3min != 0
+                        and volume_per_10h > 250) \
+                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.3 and abs(price_change_in_4min - price_change_in_3min) > 0.07
                         and 8 > price_change_percent_24h > -8
-                        and volume_per_10h > 450):
+                        and volume_per_10h > 250) \
+                        or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25 and price_change_in_4min - price_change_in_3min > 0.2
+                        and 8 > price_change_percent_24h > -8
+                        and volume_per_10h > 250):
 
                     buy_qty = round(11 / prices_token[-1], 1)
                     if i in trading_pairs_fut:

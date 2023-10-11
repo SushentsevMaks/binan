@@ -143,15 +143,31 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
 
 i = "DATAUSDT"
 data_token_price = last_data(i, "1m", "1440")
-price_change_in_4min = 4.98
-price_change_in_3min = 4.37
-price_change_in_2min = 3.42
-price_change_percent_24h = 12
-volume_per_10h = 500
-if (price_change_in_2min > 2.4 and price_change_in_3min-price_change_in_2min > 0.49 and price_change_in_4min-price_change_in_3min != 0
-                        and 8 > price_change_percent_24h > -8
-                        and volume_per_10h > 450) \
-                        or (price_change_in_2min > 0.8 and price_change_in_3min-price_change_in_2min > 2.6 and price_change_in_4min-price_change_in_3min != 0
-                        and 8 > price_change_percent_24h > -8
-                        and volume_per_10h > 450):
-    print("yes")
+import time
+
+from binance import ThreadedWebsocketManager
+
+def main():
+
+    symbol = 'DATAUSDT'
+
+    twm = ThreadedWebsocketManager(api_key=keys.api_key, api_secret=keys.api_secret)
+    # start is required to initialise its internal loop
+    twm.start()
+
+    def handle_socket_message(msg):
+        print(f"message type: {msg['e']}")
+        print(msg)
+
+    twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
+
+    # multiple sockets can be started
+    twm.start_depth_socket(callback=handle_socket_message, symbol=symbol)
+
+
+
+    twm.join()
+
+
+if __name__ == "__main__":
+   main()

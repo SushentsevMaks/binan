@@ -106,7 +106,8 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
-                                                                        f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Волатильность за последние 7ч  {round(sum([i[0]/i[1] * 100 - 100 for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0]), 2)}%\n"
                                                                         f"{fut_yes}")
                     keks.append(i)
 
@@ -116,7 +117,7 @@ def top_coin(trading_pairs):
                         or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.3 and abs(price_change_in_4min - price_change_in_3min) > 0.07
                         and 8 > price_change_percent_24h > -8
                         and volume_per_10h > 250) \
-                        or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25 and price_change_in_4min - price_change_in_3min > 0.2
+                        or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25 and abs(price_change_in_4min - price_change_in_3min) > 0.2
                         and 8 > price_change_percent_24h > -8
                         and volume_per_10h > 250):
 
@@ -133,7 +134,8 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
-                                                                        f"Изменение цены за 10ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Волатильность за последние 7ч  {round(sum([i[0]/i[1] * 100 - 100 for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0]), 2)}%\n"
                                                                         f"{fut_yes}")
 
                     ex.append(i)

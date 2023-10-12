@@ -141,33 +141,10 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'FORTH', 'AMP', 'FIDA', 'VITE', 'MTL', 'BLZ', 'YGG', 'TWT', 'AKRO', 'MDX', 'NMR', 'LOOM', 'JST', 'VTHO',
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ', 'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-i = "DATAUSDT"
-data_token_price = last_data(i, "1m", "1440")
+i = "HFTUSDT"
+data_token_price = last_data(i, "15m", "440")
 import time
-
-from binance import ThreadedWebsocketManager
-
-def main():
-
-    symbol = 'DATAUSDT'
-
-    twm = ThreadedWebsocketManager(api_key=keys.api_key, api_secret=keys.api_secret)
-    # start is required to initialise its internal loop
-    twm.start()
-
-    def handle_socket_message(msg):
-        print(f"message type: {msg['e']}")
-        print(msg)
-
-    twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
-
-    # multiple sockets can be started
-    twm.start_depth_socket(callback=handle_socket_message, symbol=symbol)
-
-
-
-    twm.join()
-
-
-if __name__ == "__main__":
-   main()
+print(len(str(data_token_price[0][0])))
+print(list(zip(data_token_price[0], data_token_price[2])))
+x = sum([round(i[0]/i[1] * 100 - 100, 2) for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0])
+print(round(sum([i[0]/i[1] * 100 - 100 for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0]), 2))

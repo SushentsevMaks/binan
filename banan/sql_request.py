@@ -22,12 +22,12 @@ def sql_req(i, price_change_percent_24h, price_in_2min, price_in_3min, price_in_
         price_sell = round(float(orders[1]['cummulativeQuoteQty']) / float(orders[1]["origQty"]), 7)
         count = float(orders[0]["origQty"])
         all_volume = float(orders[0]['cummulativeQuoteQty']) + float(orders[1]['cummulativeQuoteQty'])
-        percent_profit = round(100 - (float(orders[0]['cummulativeQuoteQty']) / (float(orders[1]['cummulativeQuoteQty'])-(float(all_volume)*0.075)/100)) * 100,
-                       2)
+        percent_profit = round(100 - (float(orders[0]['cummulativeQuoteQty']) / (float(orders[1]['cummulativeQuoteQty'])-(float(all_volume)*0.075)/100)) * 100, 2)
         volume_profit = round(float(orders[1]['cummulativeQuoteQty']) - float(orders[0]['cummulativeQuoteQty']) - (float(all_volume)*0.075)/100, 2)
         link_cript = f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"
 
-        values = (formatted_time, formatted_time_update, name_cript, price_buy, price_sell, count, all_volume, percent_profit, volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_10h)
+        values = (formatted_time, formatted_time_update, name_cript, price_buy, price_sell, count, all_volume, percent_profit, volume_profit, link_cript,
+                  price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_10h)
 
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -35,7 +35,9 @@ def sql_req(i, price_change_percent_24h, price_in_2min, price_in_3min, price_in_
                                              cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO `vision_orders` (time, update_time, name_cript, price_buy, price_sell, count, all_volume, percent_profit, volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_10h) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    insert_query = "INSERT INTO `vision_orders` (time, update_time, name_cript, price_buy, price_sell, count, all_volume, percent_profit, " \
+                                   "volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_10h) " \
+                                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
             finally:

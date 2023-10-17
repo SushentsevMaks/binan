@@ -141,10 +141,9 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'FORTH', 'AMP', 'FIDA', 'VITE', 'MTL', 'BLZ', 'YGG', 'TWT', 'AKRO', 'MDX', 'NMR', 'LOOM', 'JST', 'VTHO',
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ', 'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-i = "HFTUSDT"
-data_token_price = last_data(i, "15m", "440")
-import time
-print(len(str(data_token_price[0][0])))
-print(list(zip(data_token_price[0], data_token_price[2])))
-x = sum([round(i[0]/i[1] * 100 - 100, 2) for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0])
-print(round(sum([i[0]/i[1] * 100 - 100 for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0]), 2))
+i = "QIUSDT"
+data_token_price = last_data(i, "1m", "1440")
+x = [data_token_price[0][i] for i in range(0, len(data_token_price[0]), 15)]
+y = [data_token_price[2][i] for i in range(0, len(data_token_price[2]), 15)]
+
+print(max(list(zip(x, y))))

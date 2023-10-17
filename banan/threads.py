@@ -1,6 +1,6 @@
 import time
 from decimal import Decimal
-
+from datetime import datetime
 #from decimal import Decimal, ROUND_FLOOR
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
@@ -44,7 +44,7 @@ thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSD
 
 fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'TUSDUSDT', 'TVKUSDT', 'TWTUSDT', 'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'UNIUSDT', 'USDCUSDT', 'USDPUSDT', 'USTCUSDT', 'UTKUSDT', 'VETUSDT', 'VGXUSDT', 'VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT']
 
-fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT', 'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT', 'XVGUSDT', 'XVSUSDT', 'YFIUSDT']
+fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT', 'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT', 'XVGUSDT', 'XVSUSDT', 'YFIUSDT']
 
 
 ex = []
@@ -88,9 +88,11 @@ def top_coin(trading_pairs):
                 price_change_in_2min = round((prices_token[-1] / prices_token[-2]) * 100 - 100, 2)
                 price_change_in_3min = round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)
                 price_change_in_4min = round((prices_token[-1] / prices_token[-4]) * 100 - 100, 2)
-                price_change_percent_24h = round(100 - ((data_token_price[0][0] / data_token_price[0][-15]) * 100), 2)
+                price_change_percent_24h = round(((data_token_price[2][-15] / data_token_price[2][0]) * 100) - 100, 2)
                 volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-25]]) / len(data_token_price[1][1140:-25])
                 #print(i)
+                now = datetime.now()
+                frame = now.strftime("%H:%M:%S")
 
                 if (price_change_in_3min > 3 or price_change_in_2min > 3)\
                         and prices_token[-3:] == sorted(prices_token[-3:]) and i not in keks:
@@ -99,6 +101,7 @@ def top_coin(trading_pairs):
                         fut_yes = "Фьючерсная"
                     else:
                         fut_yes = "НЕ Фьючерсная"
+
                     telebot.TeleBot(telega_token).send_message(chat_id, f"ОБЪЕМЫ МЕНЬШЕ 3200 - {i}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
@@ -107,19 +110,24 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Волатильность за последние 7ч  {round(sum([i[0]/i[1] * 100 - 100 for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0]), 2)}%\n"
+                                                                        f"Время засечки  {frame}%\n"
                                                                         f"{fut_yes}")
                     keks.append(i)
 
-                if (price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.40 and abs(price_change_in_4min - price_change_in_3min) > 0.07
-                        and 8 > price_change_percent_24h > -8
-                        and volume_per_10h > 250) \
-                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.3 and abs(price_change_in_4min - price_change_in_3min) > 0.07
-                        and 8 > price_change_percent_24h > -8
-                        and volume_per_10h > 250) \
-                        or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25 and abs(price_change_in_4min - price_change_in_3min) > 0.2
-                        and 8 > price_change_percent_24h > -8
-                        and volume_per_10h > 250):
+
+
+                if ((price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.40
+                            and price_change_in_4min - price_change_in_3min >= 0.03
+                            and abs(price_change_in_4min - price_change_in_3min) != abs(price_change_in_5min - price_change_in_4min))
+                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.3
+                            and price_change_in_4min - price_change_in_3min >= 0.03
+                            and abs(price_change_in_4min - price_change_in_3min) != abs(price_change_in_5min - price_change_in_4min))
+                        or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25
+                            and price_change_in_4min - price_change_in_3min >= 0.03
+                            and abs(price_change_in_4min - price_change_in_3min) != abs(price_change_in_5min - price_change_in_4min))) \
+                        and price_change_in_5min < 10 \
+                        and 10 > price_change_percent_24h > -8 \
+                        and volume_per_10h > 250:
 
                     buy_qty = round(11 / prices_token[-1], 1)
                     if i in trading_pairs_fut:
@@ -135,7 +143,7 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Волатильность за последние 7ч  {round(sum([i[0]/i[1] * 100 - 100 for i in zip(data_token_price[0], data_token_price[2])]) / len(data_token_price[0]), 2)}%\n"
+                                                                        f"Время замечки  {frame}%\n"
                                                                         f"{fut_yes}")
 
                     ex.append(i)

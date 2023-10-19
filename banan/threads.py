@@ -91,7 +91,7 @@ def top_coin(trading_pairs):
                 price_change_in_4min = round((prices_token[-1] / prices_token[-4]) * 100 - 100, 2)
                 price_change_percent_24h = round(((data_token_price[2][-15] / data_token_price[2][0]) * 100) - 100, 2)
                 price_change_percent_min_10h = round(((data_token_price[2][-15] / min([i for i in data_token_price[2][840:]])) * 100) - 100, 2)
-                price_change_percent_max_24h = round(((data_token_price[2][-15] / max([i for i in data_token_price[0]])) * 100) - 100, 2)
+                price_change_percent_max_10h = round(((data_token_price[2][-15] / max([i for i in data_token_price[0][840:]])) * 100) - 100, 2)
                 volume_per_5h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-25]]) / len(data_token_price[1][1140:-25])
                 #print(i)
                 now = datetime.now()
@@ -115,16 +115,16 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
-                                                                        f"Изменение цены от максимальной за 14ч  {round(price_change_percent_max_24h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_10h, 2)}%\n"
                                                                         f"Время засечки  {frame}%\n"
                                                                         f"{fut_yes}")
                     keks.append(i)
 
                 # and price_change_percent_min_10h < 20 \
-                # and price_change_percent_max_24h < 20
-                if ((price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.40
+                # and price_change_percent_max_10h < 20
+                if ((price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.85
                             and price_change_in_4min - price_change_in_3min >= 0.03)
-                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.3
+                        or (price_change_in_2min > 0.85 and price_change_in_3min - price_change_in_2min > 2.3
                             and price_change_in_4min - price_change_in_3min >= 0.03)
                         or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25
                             and price_change_in_4min - price_change_in_3min >= 0.03)) \
@@ -148,7 +148,7 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
-                                                                        f"Изменение цены от максимальной за 14ч  {round(price_change_percent_max_24h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_10h, 2)}%\n"
                                                                         f"Время заcечки  {frame}%\n"
                                                                         f"{fut_yes}")
 
@@ -259,12 +259,12 @@ def last_data(symbol, interval, lookback):
 
 def btc_anal(data):
     price_change_percent_5min = round(((data[0][-1] / data[0][0]) * 100) - 100, 2)
-    if price_change_percent_5min > 0.5:
+    if price_change_percent_5min > 1.5:
         bot = telebot.TeleBot(telega_token)
         message = f"БИТОК РАСТЕТ НА {price_change_percent_5min}%"
         bot.send_message(chat_id, message)
         return False
-    elif price_change_percent_5min < -0.5:
+    elif price_change_percent_5min < -1.5:
         bot = telebot.TeleBot(telega_token)
         message = f"БИТОК ПАДАЕТ НА {abs(price_change_percent_5min)}%"
         bot.send_message(chat_id, message)

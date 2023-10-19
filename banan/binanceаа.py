@@ -145,4 +145,4 @@ i = "OOKIUSDT"
 data_token_price = last_data(i, "1m", "1440")
 price_change_percent_max_24h = round(((data_token_price[2][-15] / max([i for i in data_token_price[0]])) * 100) - 100, 2)
 print(max([i for i in data_token_price[0]]))
-print(price_change_percent_min_10h)
+print(abs(0) != abs(0.21))

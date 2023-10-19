@@ -141,9 +141,8 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
 r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'FORTH', 'AMP', 'FIDA', 'VITE', 'MTL', 'BLZ', 'YGG', 'TWT', 'AKRO', 'MDX', 'NMR', 'LOOM', 'JST', 'VTHO',
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ', 'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-i = "QIUSDT"
+i = "OOKIUSDT"
 data_token_price = last_data(i, "1m", "1440")
-x = [data_token_price[0][i] for i in range(0, len(data_token_price[0]), 15)]
-y = [data_token_price[2][i] for i in range(0, len(data_token_price[2]), 15)]
-
-print(max(list(zip(x, y))))
+price_change_percent_max_24h = round(((data_token_price[2][-15] / max([i for i in data_token_price[0]])) * 100) - 100, 2)
+print(max([i for i in data_token_price[0]]))
+print(price_change_percent_min_10h)

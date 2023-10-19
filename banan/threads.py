@@ -89,6 +89,8 @@ def top_coin(trading_pairs):
                 price_change_in_3min = round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)
                 price_change_in_4min = round((prices_token[-1] / prices_token[-4]) * 100 - 100, 2)
                 price_change_percent_24h = round(((data_token_price[2][-15] / data_token_price[2][0]) * 100) - 100, 2)
+                price_change_percent_min_10h = round(((data_token_price[2][-15] / min([i for i in data_token_price[2][840:]])) * 100) - 100, 2)
+                price_change_percent_max_24h = round(((data_token_price[2][-15] / max([i for i in data_token_price[0]])) * 100) - 100, 2)
                 volume_per_10h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-25]]) / len(data_token_price[1][1140:-25])
                 #print(i)
                 now = datetime.now()
@@ -110,12 +112,14 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 14ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время засечки  {frame}%\n"
                                                                         f"{fut_yes}")
                     keks.append(i)
 
-
-
+                # and price_change_percent_min_10h < 20 \
+                # and price_change_percent_max_24h < 20
                 if ((price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.40
                             and price_change_in_4min - price_change_in_3min >= 0.03
                             and abs(price_change_in_4min - price_change_in_3min) != abs(price_change_in_5min - price_change_in_4min))
@@ -143,7 +147,9 @@ def top_coin(trading_pairs):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Время замечки  {frame}%\n"
+                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 14ч  {round(price_change_percent_max_24h, 2)}%\n"
+                                                                        f"Время заcечки  {frame}%\n"
                                                                         f"{fut_yes}")
 
                     ex.append(i)

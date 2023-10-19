@@ -84,6 +84,7 @@ def top_coin(trading_pairs):
                 # print(last_data(i, "3m", "300"))
                 data_token_price = last_data(i, "1m", "1440")
                 prices_token = data_token_price[0][300:]
+                price_change_in_6min = round((prices_token[-1] / prices_token[-6]) * 100 - 100, 2)
                 price_change_in_5min = round((prices_token[-1] / prices_token[-5]) * 100 - 100, 2)
                 price_change_in_2min = round((prices_token[-1] / prices_token[-2]) * 100 - 100, 2)
                 price_change_in_3min = round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)
@@ -107,6 +108,7 @@ def top_coin(trading_pairs):
                     telebot.TeleBot(telega_token).send_message(chat_id, f"ОБЪЕМЫ МЕНЬШЕ 3200 - {i}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
+                                                                        f"Изменение цены за 6 мин {round(price_change_in_6min, 2)}%  {round(price_change_in_6min-price_change_in_5min, 2)}%\n"
                                                                         f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
                                                                         f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
@@ -121,14 +123,11 @@ def top_coin(trading_pairs):
                 # and price_change_percent_min_10h < 20 \
                 # and price_change_percent_max_24h < 20
                 if ((price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.40
-                            and price_change_in_4min - price_change_in_3min >= 0.03
-                            and abs(price_change_in_4min - price_change_in_3min) != abs(price_change_in_5min - price_change_in_4min))
+                            and price_change_in_4min - price_change_in_3min >= 0.03)
                         or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.3
-                            and price_change_in_4min - price_change_in_3min >= 0.03
-                            and abs(price_change_in_4min - price_change_in_3min) != abs(price_change_in_5min - price_change_in_4min))
+                            and price_change_in_4min - price_change_in_3min >= 0.03)
                         or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25
-                            and price_change_in_4min - price_change_in_3min >= 0.03
-                            and abs(price_change_in_4min - price_change_in_3min) != abs(price_change_in_5min - price_change_in_4min))) \
+                            and price_change_in_4min - price_change_in_3min >= 0.03)) \
                         and price_change_in_5min < 10 \
                         and 10 > price_change_percent_24h > -8 \
                         and volume_per_10h > 250:
@@ -142,6 +141,7 @@ def top_coin(trading_pairs):
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}\n"
                                                                         f"Цены {prices_token[-8:]}\n"
                                                                         f"Объемы {int(volume_per_10h)}\n"
+                                                                        f"Изменение цены за 6 мин {round(price_change_in_6min, 2)}%  {round(price_change_in_6min-price_change_in_5min, 2)}%\n"
                                                                         f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
                                                                         f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"

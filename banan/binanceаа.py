@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from decimal import Decimal, ROUND_FLOOR
 
 import pymysql
@@ -142,7 +143,182 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ', 'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
 i = "OOKIUSDT"
-data_token_price = last_data(i, "1m", "1440")
-price_change_percent_max_24h = round(((data_token_price[2][-15] / max([i for i in data_token_price[0]])) * 100) - 100, 2)
-print(max([i for i in data_token_price[0]]))
-print(abs(0) != abs(0.21))
+data_token_price = last_data(i, "1m", "5")
+
+chat_id = -695765690
+ex = []
+keks = []
+
+def top_coin(trading_pairs):
+    for i in trading_pairs:
+        if i not in ex:
+            try:
+                # print(i)
+                # print(last_data(i, "3m", "300"))
+                data_token_price = last_data(i, "1m", "1440")
+                prices_token = data_token_price[0][300:]
+                price_change_in_6min = round((prices_token[-1] / prices_token[-6]) * 100 - 100, 2)
+                price_change_in_5min = round((prices_token[-1] / prices_token[-5]) * 100 - 100, 2)
+                price_change_in_2min = round((prices_token[-1] / prices_token[-2]) * 100 - 100, 2)
+                price_change_in_3min = round((prices_token[-1] / prices_token[-3]) * 100 - 100, 2)
+                price_change_in_4min = round((prices_token[-1] / prices_token[-4]) * 100 - 100, 2)
+                price_change_percent_24h = round(((data_token_price[2][-15] / data_token_price[2][0]) * 100) - 100, 2)
+                price_change_percent_min_10h = round(((data_token_price[2][-15] / min([i for i in data_token_price[2][840:]])) * 100) - 100, 2)
+                price_change_percent_max_24h = round(((data_token_price[2][-15] / max([i for i in data_token_price[0]])) * 100) - 100, 2)
+                volume_per_5h = sum([int(i * data_token_price[0][-1]) for i in data_token_price[1][1140:-25]]) / len(data_token_price[1][1140:-25])
+                #print(i)
+                now = datetime.now()
+                frame = now.strftime("%H:%M:%S")
+
+                if (price_change_in_3min > 3 or price_change_in_2min > 3)\
+                        and prices_token[-3:] == sorted(prices_token[-3:]) and i not in keks:
+
+                    if i in trading_pairs_fut:
+                        fut_yes = "Фьючерсная"
+                    else:
+                        fut_yes = "НЕ Фьючерсная"
+
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"ОБЪЕМЫ МЕНЬШЕ 250 - {i}\n"
+                                                                        f"Цены {prices_token[-8:]}\n"
+                                                                        f"Объемы {int(volume_per_5h)}\n"
+                                                                        f"Изменение цены за 6 мин {round(price_change_in_6min, 2)}%  {round(price_change_in_6min-price_change_in_5min, 2)}%\n"
+                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 14ч  {round(price_change_percent_max_24h, 2)}%\n"
+                                                                        f"Время засечки  {frame}%\n"
+                                                                        f"{fut_yes}")
+                    keks.append(i)
+
+                # and price_change_percent_min_10h < 20 \
+                # and price_change_percent_max_24h < 20
+                if ((price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.40
+                            and price_change_in_4min - price_change_in_3min >= 0.03)
+                        or (price_change_in_2min > 0.8 and price_change_in_3min - price_change_in_2min > 2.3
+                            and price_change_in_4min - price_change_in_3min >= 0.03)
+                        or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25
+                            and price_change_in_4min - price_change_in_3min >= 0.03)) \
+                        and price_change_in_5min < 10 \
+                        and 10 > price_change_percent_24h > -8 \
+                        and volume_per_5h > 250:
+
+                    buy_qty = round(11 / prices_token[-1], 1)
+                    if i in trading_pairs_fut:
+                        fut_yes = "Фьючерсная"
+                    else:
+                        fut_yes = "НЕ Фьючерсная"
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {i}\n"
+                                                                        f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}\n"
+                                                                        f"Цены {prices_token[-8:]}\n"
+                                                                        f"Объемы {int(volume_per_5h)}\n"
+                                                                        f"Изменение цены за 6 мин {round(price_change_in_6min, 2)}%  {round(price_change_in_6min-price_change_in_5min, 2)}%\n"
+                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min-price_change_in_4min, 2)}%\n"
+                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min-price_change_in_3min, 2)}%\n"
+                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min-price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
+                                                                        f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 14ч  {round(price_change_percent_max_24h, 2)}%\n"
+                                                                        f"Время заcечки  {frame}%\n"
+                                                                        f"{fut_yes}")
+
+                    ex.append(i)
+
+                    try:
+                        order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
+                    except BinanceAPIException as e:
+                        if e.message == "Filter failure: LOT_SIZE":
+                            buy_qty = int(round(11 / prices_token[-1], 1))
+                            order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
+                        else:
+                            telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
+                                                                               f"Количество покупаемого - {buy_qty}, Цена - {prices_token[-1]}")
+                            time.sleep(30)
+                            break
+
+                    try:
+                        buyprice = float(order_buy["fills"][0]["price"])
+                        open_position = True
+
+                    except Exception as e:
+                        telebot.TeleBot(telega_token).send_message(chat_id, f"ERROR: {e}\n")
+                        time.sleep(30)
+                        break
+
+                    #start_time = time.time()
+
+
+                    while open_position:
+                        #last_time = time.time()
+                        all_orders = pd.DataFrame(client.get_all_orders(symbol=i),
+                                                  columns=["orderId", "type", "side", "price", "status"])
+                        balance = client.get_asset_balance(asset=i[:-4])
+                        sell_qty = float(balance["free"])
+                        #sell_qty = Decimal(sell_qty).quantize(Decimal(okr), ROUND_FLOOR)
+
+                        if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
+                            try:
+                                order_sell = client.order_limit_sell(symbol=i, quantity=sell_qty, price=Decimal(str(round((buyprice / 100) * 101, max([len(str(i).split(".")[1]) for i in data_token_price[0][-5:]])))))
+                                time.sleep(10)
+                            except Exception as e:
+                                telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
+                                                                                       f"Количество продаваемого - {sell_qty}, Цена - {round((buyprice / 100) * 101, len(str(prices_token[-1]).split('.')[1]))}\n"
+                                                                                       f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
+                                time.sleep(30)
+                        sell_qty = float(balance["free"])
+
+                        if float(sell_qty) < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
+                            open_position = False
+
+                            bot = telebot.TeleBot(telega_token)
+                            message = f"СДЕЛКА ЗАВЕРШЕНА - {i}\n" \
+                                      f"{prices_token[-3:]}\n" \
+                                      f"ЗАСЕК НА РОСТЕ ЦЕНЫ В {round(price_change_in_5min, 2)}%\n"\
+                                      f"\n" \
+                                      f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"
+                            bot.send_message(chat_id, message)
+
+                        # if int(last_time-start_time) > 3300:
+                        #     data_token_price = last_data(i, "1m", "1440")
+                        #     prices_token = data_token_price[0][300:]
+                        #     orders = client.get_all_orders(symbol=i, limit=2)[0]
+                        #     price = round(float(orders['cummulativeQuoteQty']) / float(orders["origQty"]), 7)
+                        #     if 100*((price / prices_token[-1])-1) > 4:
+                        #         time.sleep(20000)
+                        #     else:
+                        #         orders = client.get_open_orders(symbol=i)
+                        #         for order in orders:
+                        #             ordId = order["orderId"]
+                        #             client.cancel_order(symbol=i, orderId=ordId)
+                        #
+                        #         try:
+                        #             balance = client.get_asset_balance(asset=i[:-4])
+                        #             sell_qty = float(balance["free"])
+                        #             order_sell = client.order_market_sell(symbol=i, quantity=sell_qty)
+                        #             orders = client.get_all_orders(symbol=i, limit=1)
+                        #             price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
+                        #             telebot.TeleBot(telega_token).send_message(chat_id,
+                        #                                                        f"Продажа в минус за {price}\n"
+                        #                                                        f"Покупал за {buyprice}\n"
+                        #                                                        f"Разница {round(100 - 100*(buyprice/price)), 2}%")
+                        #             open_position = False
+                        #         except Exception as e:
+                        #             telebot.TeleBot(telega_token).send_message(chat_id,
+                        #                                                        f"Ошибка продажи в минус, Нужен хелп!\n"
+                        #                                                        f"{e}")
+                        #             time.sleep(30)
+                        #             break
+
+                        time.sleep(10)
+                    sql_req(i, price_change_percent_24h, price_change_in_2min, price_change_in_3min, price_change_in_4min, price_change_in_5min, volume_per_5h)
+            except:
+                pass
+
+while True:
+    start = time.time()
+    top_coin(one)
+    finish = time.time()
+    print(finish-start)

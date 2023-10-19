@@ -258,14 +258,15 @@ def last_data(symbol, interval, lookback):
 
 
 def btc_anal(data):
-    if round(data[0][-1] / (sum(data[0][:-1]) / len(data[0][:-1])) - 1, 3) > 0.5:
+    price_change_percent_5min = round(((data[0][-1] / data[0][0]) * 100) - 100, 2)
+    if price_change_percent_5min > 0.5:
         bot = telebot.TeleBot(telega_token)
-        message = f"БИТОК РАСТЕТ НА {round((sum(data[0][:-1]) / len(data[0][:-1])) / data[0][-1] - 1, 3)}%"
+        message = f"БИТОК РАСТЕТ НА {price_change_percent_5min}%"
         bot.send_message(chat_id, message)
-        return True
-    elif round(data[0][-1] / (sum(data[0][:-1]) / len(data[0][:-1])) - 1, 3) < -0.5:
+        return False
+    elif price_change_percent_5min < -0.5:
         bot = telebot.TeleBot(telega_token)
-        message = f"БИТОК ПАДАЕТ НА {abs(round((sum(data[0][:-1]) / len(data[0][:-1])) / data[0][-1] - 1, 3))}%"
+        message = f"БИТОК ПАДАЕТ НА {abs(price_change_percent_5min)}%"
         bot.send_message(chat_id, message)
         return False
     # print(data)
@@ -282,13 +283,16 @@ def btc_anal(data):
 
 
 while True:
-    threads = [Thread(target=top_coin, args=([one])), Thread(target=top_coin, args=([two])), Thread(target=top_coin, args=([three])),
-               Thread(target=top_coin, args=([four])), Thread(target=top_coin, args=([five])), Thread(target=top_coin, args=([six])),
-               Thread(target=top_coin, args=([seven])), Thread(target=top_coin, args=([eight])), Thread(target=top_coin, args=([nine])),
-               Thread(target=top_coin, args=([ten])), Thread(target=top_coin, args=([eleven])), Thread(target=top_coin, args=([twelve])),
-               Thread(target=top_coin, args=([thirteenth])), Thread(target=top_coin, args=([fourteenth])), Thread(target=top_coin, args=([fifteenth]))]
+    if btc_anal(last_data("BTCUSDT", "1m", "5")):
+        threads = [Thread(target=top_coin, args=([one])), Thread(target=top_coin, args=([two])), Thread(target=top_coin, args=([three])),
+                   Thread(target=top_coin, args=([four])), Thread(target=top_coin, args=([five])), Thread(target=top_coin, args=([six])),
+                   Thread(target=top_coin, args=([seven])), Thread(target=top_coin, args=([eight])), Thread(target=top_coin, args=([nine])),
+                   Thread(target=top_coin, args=([ten])), Thread(target=top_coin, args=([eleven])), Thread(target=top_coin, args=([twelve])),
+                   Thread(target=top_coin, args=([thirteenth])), Thread(target=top_coin, args=([fourteenth])), Thread(target=top_coin, args=([fifteenth]))]
 
-    start_threads = [i.start() for i in threads]
+        start_threads = [i.start() for i in threads]
 
-    stop_threads = [i.join() for i in threads]
+        stop_threads = [i.join() for i in threads]
+    else:
+        time.sleep(1800)
 

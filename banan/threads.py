@@ -123,11 +123,14 @@ def top_coin(trading_pairs):
                 # and price_change_percent_min_10h < 20 \
                 # and price_change_percent_max_10h < 20
                 if ((price_change_in_2min > 2.4 and price_change_in_3min - price_change_in_2min > 0.85
-                            and price_change_in_4min - price_change_in_3min >= 0.03)
+                            and price_change_in_4min - price_change_in_3min >= 0.03
+                            and price_change_in_5min - price_change_in_4min > -0.3)
                         or (price_change_in_2min > 0.85 and price_change_in_3min - price_change_in_2min > 2.3
-                            and price_change_in_4min - price_change_in_3min >= 0.03)
+                            and price_change_in_4min - price_change_in_3min >= 0.03
+                            and price_change_in_5min - price_change_in_4min > -0.3)
                         or (price_change_in_2min > 1.25 and price_change_in_3min - price_change_in_2min > 1.25
-                            and price_change_in_4min - price_change_in_3min >= 0.03)) \
+                            and price_change_in_4min - price_change_in_3min >= 0.03
+                            and price_change_in_5min - price_change_in_4min > -0.3)) \
                         and price_change_in_5min < 10 \
                         and 10 > price_change_percent_24h > -8 \
                         and volume_per_5h > 250:

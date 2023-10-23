@@ -182,7 +182,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
                                                                         f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_10h, 2)}%\n"
-                                                                        f"Время засечки  {frame}%\n")
+                                                                        f"Время засечки  {frame}\n")
 
                 # and price_change_percent_min_10h < 20 \
                 # and price_change_percent_max_10h < 20
@@ -216,7 +216,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
                                                                         f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
                                                                         f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_10h, 2)}%\n"
-                                                                        f"Время заcечки  {frame}%\n"
+                                                                        f"Время покупки {frame}\n"
                                                                         f"{fut_yes}")
 
                     ex.append(name_cript_check)
@@ -267,11 +267,12 @@ def top_coin(trading_pairs: list):
 
                         if float(sell_qty) < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
                             open_position = False
-
+                            frame = now.strftime("%H:%M:%S")
                             bot = telebot.TeleBot(telega_token)
                             message = f"СДЕЛКА ЗАВЕРШЕНА - {name_cript_check}\n" \
                                       f"{data_token.high_price[-3:]}\n" \
                                       f"ЗАСЕК НА РОСТЕ ЦЕНЫ В {round(price_change_in_5min, 2)}%\n" \
+                                      f"Время продажи {frame}\n" \
                                       f"\n" \
                                       f"https://www.binance.com/ru/trade/{name_cript_check[:-4]}_USDT?_from=markets&theme=dark&type=grid"
                             bot.send_message(chat_id, message)

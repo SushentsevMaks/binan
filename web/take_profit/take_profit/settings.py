@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'take_profit.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'banan',
+        'NAME': 'banans',
         'USER': 'banan_user',
         'PASSWORD': 'warlight123',
         'HOST': 'localhost',

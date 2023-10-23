@@ -8,7 +8,7 @@
     <title>Основная страница</title>
 </head>
 <body style="background-color: #1c2128">
-        <h1 style="text-align: center; height: 50px; color: #fcd535"> Тестовый запуск торгового ботыча на банане </h1>
+        <h1 style="text-align: center; height: 50px; color: #fcd535"> Тестовый запуск торгового ботыча на банане 2.0</h1>
         <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
             {% if all_profit.1 >= 0 %}
             <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{all_profit.1}} USDT - {{all_profit.0}}%</span></h2></div>
@@ -79,9 +79,9 @@
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.all_volume}} USDT</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">
                             {% if p.percent_profit >= 0 %}
-                            <div class="bebra" style="color: #0ecb81">{{p.percent_profit}}</div>
+                            <div class="bebra" style="color: #0ecb81">{{p.percent_profit}}%</div>
                             {% elif p.percent_profit <= 0  %}
-                            <div class="sho" style="color: #f6465d">{{p.percent_profit}}
+                            <div class="sho" style="color: #f6465d">{{p.percent_profit}} %
                             {% endif %}
                             </div>
                         </td>

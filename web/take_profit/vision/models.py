@@ -17,7 +17,7 @@ class Orders(models.Model):
     price_in_3min = models.FloatField(verbose_name="Цена за 3 мин")
     price_in_2min = models.FloatField(verbose_name="Цена за 2 мин")
     price_change_percent_24h = models.FloatField(verbose_name="Изменение цены за последние 24 ч.")
-    volume_per_10h = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Объемы за последние 5 часов")
+    volume_per_5h = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Объемы за последние 5 часов")
 
 
     class Meta:

@@ -336,12 +336,12 @@ def last_data(symbol, interval, lookback):
 
 def btc_anal(data: last_data) -> bool:
     price_change_percent_5min = round(((data[0][-1] / data[0][0]) * 100) - 100, 2)
-    if price_change_percent_5min > 1.5:
+    if price_change_percent_5min > 2:
         bot = telebot.TeleBot(telega_token)
         message = f"БИТОК РАСТЕТ НА {price_change_percent_5min}%"
         bot.send_message(chat_id, message)
         return False
-    elif price_change_percent_5min < -1.5:
+    elif price_change_percent_5min < -2:
         bot = telebot.TeleBot(telega_token)
         message = f"БИТОК ПАДАЕТ НА {abs(price_change_percent_5min)}%"
         bot.send_message(chat_id, message)
@@ -377,4 +377,4 @@ while True:
 
         stop_threads = [i.join() for i in threads]
     else:
-        time.sleep(1800)
+        time.sleep(1000)

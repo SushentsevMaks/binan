@@ -4,6 +4,7 @@ from django.db import models
 class Orders(models.Model):
     time = models.CharField(max_length=30)
     update_time = models.CharField(max_length=30)
+    duration_order = models.CharField(max_length=30)
     name_cript = models.CharField(verbose_name="Название крипты", max_length=15)
     price_buy = models.FloatField(verbose_name="Цена за шт.")
     price_sell = models.FloatField(verbose_name="Цена за штnn.")

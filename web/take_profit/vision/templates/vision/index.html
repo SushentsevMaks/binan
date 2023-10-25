@@ -37,6 +37,7 @@
                     <colgroup>
                         <col style="width: 13%;">
                         <col style="width: 11%;">
+                        <col style="width: 10%;">
                         <col style="width: 8%;">
                         <col style="width: 11%;">
                         <col style="width: 10%;">
@@ -47,6 +48,7 @@
                     <tr>
                         <th class="bn-table-cell time" style="color: #747d8a">Время создания</th>
                         <th class="bn-table-cell time" style="color: #747d8a">Время закрытия</th>
+                        <th class="bn-table-cell time" style="color: #747d8a">Длительность сделки</th>
                         <th class="bn-table-cell" style="color: #747d8a">Валютная пара</th>
                         <th class="bn-table-cell" style="color: #747d8a">Цена покупки</th>
                         <th class="bn-table-cell" style="color: #747d8a">Цена продажи</th>
@@ -69,6 +71,7 @@
                     <tr class="bn-table-row bn-table-row-level-0 hasExtend selected" data-row-key="294436889">
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.time}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.update_time}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.duration_order}} sec</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">
                             <a href="https://www.binance.com/ru/trade/IDEX_USDT?_from=markets&theme=dark&type=grid" target="_blank" style="text-align: center; color: #4792db">{{p.name_cript}}/USDT</a>
                         </td>
@@ -89,7 +92,7 @@
                             {% if p.volume_profit >= 0 %}
                             <div class="bebra" style="color: #0ecb81">{{p.volume_profit}} USDT</div>
                             {% elif p.volume_profit <= 0  %}
-                            <div class="sho" style="color: #f6465d">{{p.volume_profit}}</div>
+                            <div class="sho" style="color: #f6465d">{{p.volume_profit}} USDT</div>
                             {% endif %}
                         </td>
                         {% endfor %}

@@ -170,7 +170,7 @@ def top_coin(trading_pairs: list):
                                                                         f"{fut_yes}")
                     keks.append(name_cript_check)
 
-                if price_change_in_5min < -10:
+                if price_change_in_5min < -10 or price_change_in_2min < -10 or price_change_in_3min or price_change_in_4min:
                     telebot.TeleBot(telega_token).send_message(chat_id, f"ПАДЕНИЕ!!!! - {name_cript_check}\n"
                                                                         f"Цены {data_token.high_price[-8:]}\n"
                                                                         f"Объемы {int(volume_per_5h)}\n"

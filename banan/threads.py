@@ -310,7 +310,8 @@ def top_coin(trading_pairs: list):
 
                         time.sleep(10)
                     sql_req(name_cript_check, price_change_percent_24h, price_change_in_2min, price_change_in_3min,
-                            price_change_in_4min, price_change_in_5min, volume_per_5h)
+                            price_change_in_4min, price_change_in_5min, volume_per_5h, price_change_percent_min_10h,
+                            price_change_percent_max_10h)
             except:
                 pass
 
@@ -321,7 +322,7 @@ class Dataset(NamedTuple):
     close_price: list
 
 
-def last_data(symbol, interval, lookback):
+def last_data(symbol: str, interval: str, lookback: str) -> Dataset:
     frame = pd.DataFrame(client.get_historical_klines(symbol, interval, lookback + 'min ago UTC'))
     frame = frame.iloc[:, :6]
     frame.columns = ['Time', 'Open', 'High', 'Low', 'Close', 'Volume']

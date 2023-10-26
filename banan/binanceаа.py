@@ -235,18 +235,7 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ',
      'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-i = "LUNAUSDT"
-#data_token_price = last_data(i, "1m", "5")
+i = "BTCUSDT"
+data_token = last_data(i, "1m", "1440")
 
-orders = client.get_all_orders(symbol=i, limit=5)
-orders = [i for i in orders if i["status"] == "FILLED"][-2:]
-times = time.localtime(int((str(orders[0]["time"]))[:-3]))
-formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
-times_update = time.localtime(int((str(orders[1]["updateTime"]))[:-3]))
-formatted_time_update = time.strftime("%Y-%m-%d %H:%M:%S", times_update)
-name_cript = orders[0]["symbol"][:-4]
-print(times)
-print(times_update)
-d = (times_update.tm_hour - times.tm_hour)*60*60 + (times_update.tm_min - times.tm_min)*60 + (times_update.tm_sec - times.tm_sec)
-print(orders[1]["updateTime"] - orders[0]["time"])
-print(d)
+print(round(((data_token.close_price[-15] / data_token.close_price[0]) * 100) - 100, 2))

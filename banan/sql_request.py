@@ -9,7 +9,8 @@ telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 client = Client(keys.api_key, keys.api_secret)
 i = "HIFIUSDT"
 
-def sql_req(i, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h):
+def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price_in_3min: float, price_in_4min: float,
+            price_in_5min: float, volume_per_5h: float, price_change_percent_min_10h: float, price_change_percent_max_10h: float):
     try:
         orders = client.get_all_orders(symbol=i, limit=5)
         orders = [i for i in orders if i["status"] == "FILLED"][-2:]
@@ -28,7 +29,7 @@ def sql_req(i, price_change_percent_24h, price_in_2min, price_in_3min, price_in_
         link_cript = f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"
 
         values = (formatted_time, formatted_time_update, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, volume_profit, link_cript,
-                  price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h)
+                  price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h, price_change_percent_min_10h, price_change_percent_max_10h)
 
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -37,18 +38,18 @@ def sql_req(i, price_change_percent_24h, price_in_2min, price_in_3min, price_in_
             try:
                 with connection.cursor() as cursor:
                     insert_query = "INSERT INTO `vision_orders` (time, update_time, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, " \
-                                   "volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h) " \
-                                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                   "volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h, price_change_percent_min_10h, price_change_percent_max_10h) " \
+                                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
             finally:
                 connection.close()
 
         except Exception as e:
-            telebot.TeleBot(telega_token).send_message(-695765690, f"SQL OSHIBKA: {e}\n")
+            telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR: {e}\n")
 
     except Exception as e:
-        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL OSHIBKA: {e}\n")
+        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR: {e}\n")
 
 
 #sql_req("LUNCUSDT", 7.21, 1.87, 2.65, 0.92, -0.05, 16078)

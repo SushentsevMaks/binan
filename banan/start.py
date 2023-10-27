@@ -177,7 +177,7 @@ def top_coin():
                                     break
 
                         time.sleep(5)
-                    sql_req(i)
+                    sql_req(i,,,
             except:
                 pass
 

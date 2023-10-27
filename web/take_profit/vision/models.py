@@ -19,8 +19,9 @@ class Orders(models.Model):
     price_in_2min = models.FloatField(verbose_name="Цена за 2 мин")
     price_change_percent_24h = models.FloatField(verbose_name="Изменение цены за последние 24 ч.")
     volume_per_5h = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Объемы за последние 5 часов")
-    price_change_percent_min_10h = models.FloatField(verbose_name="Изменение цены от минимальной за 10ч")
-    price_change_percent_max_10h = models.FloatField(verbose_name="Изменение цены от максимальной за 10ч")
+    price_change_percent_min_24h = models.FloatField(verbose_name="Изменение цены от минимальной за 24ч")
+    price_change_percent_max_24h = models.FloatField(verbose_name="Изменение цены от максимальной за 24ч")
+    max_profit = models.FloatField(verbose_name="Недополученная прибыль")
 
 
 

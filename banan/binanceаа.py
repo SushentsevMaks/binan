@@ -238,4 +238,7 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
 i = "BTCUSDT"
 data_token = last_data(i, "1m", "1440")
 
-print(round(((data_token.close_price[-15] / data_token.close_price[0]) * 100) - 100, 2))
+import time
+
+
+print(max(data_token[0]))

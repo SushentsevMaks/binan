@@ -134,14 +134,17 @@ def top_coin(trading_pairs: list):
                 # print(name_cript_check)
                 # print(last_data(name_cript_check, "3m", "300"))
                 data_token: Dataset = last_data(name_cript_check, "1m", "1440")
+                price_change_in_9min = round((data_token.high_price[-1] / data_token.high_price[-9]) * 100 - 100, 2)
+                price_change_in_8min = round((data_token.high_price[-1] / data_token.high_price[-8]) * 100 - 100, 2)
+                price_change_in_7min = round((data_token.high_price[-1] / data_token.high_price[-7]) * 100 - 100, 2)
                 price_change_in_6min = round((data_token.high_price[-1] / data_token.high_price[-6]) * 100 - 100, 2)
                 price_change_in_5min = round((data_token.high_price[-1] / data_token.high_price[-5]) * 100 - 100, 2)
                 price_change_in_2min = round((data_token.high_price[-1] / data_token.high_price[-2]) * 100 - 100, 2)
                 price_change_in_3min = round((data_token.high_price[-1] / data_token.high_price[-3]) * 100 - 100, 2)
                 price_change_in_4min = round((data_token.high_price[-1] / data_token.high_price[-4]) * 100 - 100, 2)
                 price_change_percent_24h = round(((data_token.close_price[-15] / data_token.close_price[0]) * 100) - 100, 2)
-                price_change_percent_min_10h = round(((data_token.close_price[-15] / min([i for i in data_token.close_price[840:]])) * 100) - 100, 2)
-                price_change_percent_max_10h = round(((data_token.close_price[-15] / max([i for i in data_token.close_price[840:]])) * 100) - 100, 2)
+                price_change_percent_min_24h = round(((data_token.close_price[-15] / min([i for i in data_token.close_price])) * 100) - 100, 2)
+                price_change_percent_max_24h = round(((data_token.close_price[-15] / max([i for i in data_token.close_price])) * 100) - 100, 2)
                 volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[1140:-25]]) / len(data_token.volume[1140:-25])
                 # print(name_cript_check)
                 now = datetime.now()
@@ -164,37 +167,27 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
-                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_10h, 2)}%\n"
+                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_24h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время засечки  {frame}%\n"
                                                                         f"{fut_yes}")
                     keks.append(name_cript_check)
 
-                if price_change_in_5min < -10 or price_change_in_2min < -10 or price_change_in_3min or price_change_in_4min:
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"ПАДЕНИЕ!!!! - {name_cript_check}\n"
-                                                                        f"Цены {data_token.high_price[-8:]}\n"
-                                                                        f"Объемы {int(volume_per_5h)}\n"
-                                                                        f"Изменение цены за 6 мин {round(price_change_in_6min, 2)}%  {round(price_change_in_6min - price_change_in_5min, 2)}%\n"
-                                                                        f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min - price_change_in_4min, 2)}%\n"
-                                                                        f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min - price_change_in_3min, 2)}%\n"
-                                                                        f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
-                                                                        f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
-                                                                        f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
-                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_10h, 2)}%\n"
-                                                                        f"Время засечки  {frame}\n")
 
-                # and price_change_percent_min_10h < 20 \
-                # and price_change_percent_max_10h < 20
+                # and price_change_percent_min_24h < 20 \
+                # and price_change_percent_max_24h < 20
                 if ((4.5 > price_change_in_2min > 2.4 and 4.5 > price_change_in_3min - price_change_in_2min > 0.85
                      and price_change_in_4min - price_change_in_3min >= 0.03
-                     and price_change_in_5min - price_change_in_4min > -0.3)
+                     and price_change_in_5min - price_change_in_4min > -0.3
+                     and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.5 > price_change_in_2min > 0.85 and 4.5 > price_change_in_3min - price_change_in_2min > 2.3
                         and price_change_in_4min - price_change_in_3min >= 0.03
-                        and price_change_in_5min - price_change_in_4min > -0.3)
+                        and price_change_in_5min - price_change_in_4min > -0.3
+                        and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.5 > price_change_in_2min > 1.25 and 4.5 > price_change_in_3min - price_change_in_2min > 1.25
                         and price_change_in_4min - price_change_in_3min >= 0.03
-                        and price_change_in_5min - price_change_in_4min > -0.3)) \
+                        and price_change_in_5min - price_change_in_4min > -0.3
+                        and price_change_in_6min - price_change_in_5min > -0.9)) \
                         and price_change_in_5min < 10 \
                         and 10 > price_change_percent_24h > -8 \
                         and volume_per_5h > 250:
@@ -206,21 +199,24 @@ def top_coin(trading_pairs: list):
                         fut_yes = "НЕ Фьючерсная"
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {name_cript_check}\n"
                                                                         f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}\n"
-                                                                        f"Цены {data_token.high_price[-8:]}\n"
+                                                                        f"Цены {data_token.high_price[-9:]}\n"
                                                                         f"Объемы {int(volume_per_5h)}\n"
+                                                                        f"Изменение цены за 9 мин {round(price_change_in_9min, 2)}%  {round(price_change_in_9min - price_change_in_8min, 2)}%\n"
+                                                                        f"Изменение цены за 8 мин {round(price_change_in_8min, 2)}%  {round(price_change_in_8min - price_change_in_7min, 2)}%\n"
+                                                                        f"Изменение цены за 7 мин {round(price_change_in_7min, 2)}%  {round(price_change_in_7min - price_change_in_6min, 2)}%\n"
                                                                         f"Изменение цены за 6 мин {round(price_change_in_6min, 2)}%  {round(price_change_in_6min - price_change_in_5min, 2)}%\n"
                                                                         f"Изменение цены за 5 мин {round(price_change_in_5min, 2)}%  {round(price_change_in_5min - price_change_in_4min, 2)}%\n"
                                                                         f"Изменение цены за 4 мин {round(price_change_in_4min, 2)}%  {round(price_change_in_4min - price_change_in_3min, 2)}%\n"
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_10h, 2)}%\n"
-                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_10h, 2)}%\n"
+                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_24h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время покупки {frame}\n"
                                                                         f"{fut_yes}")
 
                     ex.append(name_cript_check)
-
+                    start = time.time()
                     try:
                         order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET', quantity=buy_qty)
                     except BinanceAPIException as e:
@@ -242,10 +238,8 @@ def top_coin(trading_pairs: list):
                         time.sleep(30)
                         break
 
-                    # start_time = time.time()
 
                     while open_position:
-                        # last_time = time.time()
                         all_orders = pd.DataFrame(client.get_all_orders(symbol=name_cript_check),
                                                   columns=["orderId", "type", "side", "price", "status"])
                         balance = client.get_asset_balance(asset=name_cript_check[:-4])
@@ -309,9 +303,14 @@ def top_coin(trading_pairs: list):
                         #             break
 
                         time.sleep(10)
+                    time.sleep(600)
+                    finish = time.time()
+                    data_tok: Dataset = last_data(name_cript_check, "1m", str((finish - start)//60 + 1))
+                    max_price = max(data_tok[0])
+
                     sql_req(name_cript_check, price_change_percent_24h, price_change_in_2min, price_change_in_3min,
-                            price_change_in_4min, price_change_in_5min, volume_per_5h, price_change_percent_min_10h,
-                            price_change_percent_max_10h)
+                            price_change_in_4min, price_change_in_5min, volume_per_5h, price_change_percent_min_24h,
+                            price_change_percent_max_24h, max_price)
             except:
                 pass
 

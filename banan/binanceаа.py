@@ -219,26 +219,15 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCU
              'WNXMUSDT', 'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT',
              'XRPUSDT', 'XVGUSDT', 'XVSUSDT', 'YFIUSDT']
 
-# x = time.time()
-# for i in one:
-#     print(last_data(i, "1m", "1440"))
-# y = time.time()
-# print(y-x)
 
 
-# b = last_data("WTCUSDT", "15m", "30")
-# print(b)
-# print(round(100*(b[0][1]/b[2][1])-100, 2))
-
+x = one + two + three + four + five + six + seven + eight + nine + ten + eleven + twelve + thirteenth + fourteenth + fifteenth
 r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'FORTH', 'AMP', 'FIDA', 'VITE', 'MTL',
      'BLZ', 'YGG', 'TWT', 'AKRO', 'MDX', 'NMR', 'LOOM', 'JST', 'VTHO',
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ',
      'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
 i = "BTCUSDT"
-data_token = last_data(i, "1m", "1440")
+data_token = last_data(i, "1m", "11")
 
-import time
-
-
-print(max(data_token[0]))
+print(data_token[0])

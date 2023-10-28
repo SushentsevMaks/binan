@@ -143,8 +143,8 @@ def top_coin(trading_pairs: list):
                 price_change_in_3min = round((data_token.high_price[-1] / data_token.high_price[-3]) * 100 - 100, 2)
                 price_change_in_4min = round((data_token.high_price[-1] / data_token.high_price[-4]) * 100 - 100, 2)
                 price_change_percent_24h = round(((data_token.close_price[-15] / data_token.close_price[0]) * 100) - 100, 2)
-                price_change_percent_min_24h = round(((data_token.close_price[-15] / min([i for i in data_token.close_price])) * 100) - 100, 2)
-                price_change_percent_max_24h = round(((data_token.close_price[-15] / max([i for i in data_token.close_price])) * 100) - 100, 2)
+                price_change_percent_min_24h = round(((data_token.high_price[-15] / min([i for i in data_token.high_price])) * 100) - 100, 2)
+                price_change_percent_max_24h = round(((data_token.high_price[-15] / max([i for i in data_token.high_price])) * 100) - 100, 2)
                 volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[1140:-25]]) / len(data_token.volume[1140:-25])
                 # print(name_cript_check)
                 now = datetime.now()
@@ -167,8 +167,8 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_24h, 2)}%\n"
-                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_24h, 2)}%\n"
+                                                                        f"Изменение цены от минимальной за 24ч  {round(price_change_percent_min_24h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время засечки  {frame}%\n"
                                                                         f"{fut_yes}")
                     keks.append(name_cript_check)
@@ -210,13 +210,13 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                        f"Изменение цены от минимальной за 10ч  {round(price_change_percent_min_24h, 2)}%\n"
-                                                                        f"Изменение цены от максимальной за 10ч  {round(price_change_percent_max_24h, 2)}%\n"
+                                                                        f"Изменение цены от минимальной за 24ч  {round(price_change_percent_min_24h, 2)}%\n"
+                                                                        f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время покупки {frame}\n"
                                                                         f"{fut_yes}")
 
                     ex.append(name_cript_check)
-                    start = time.time()
+                    #start = time.time()
                     try:
                         order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET', quantity=buy_qty)
                     except BinanceAPIException as e:
@@ -304,8 +304,8 @@ def top_coin(trading_pairs: list):
 
                         time.sleep(10)
                     time.sleep(600)
-                    finish = time.time()
-                    data_tok: Dataset = last_data(name_cript_check, "1m", str((finish - start)//60 + 1))
+                    #finish = time.time()
+                    data_tok: Dataset = last_data(name_cript_check, "1m", "11")
                     max_price = max(data_tok[0])
 
                     sql_req(name_cript_check, price_change_percent_24h, price_change_in_2min, price_change_in_3min,

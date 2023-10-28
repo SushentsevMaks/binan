@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from matplotlib import pyplot as plt
 from rest_framework import viewsets
 
 import time
@@ -41,4 +42,5 @@ def index(request):
     all_profit = [sum([i[0] for i in percent_change_for_day.values()]), sum([i[1] for i in percent_change_for_day.values()])]
 
     return render(request, "vision/index.html", {"orders": sort_orders, "percent_change_for_day": percent_change_for_day, "all_profit": all_profit})
+
 

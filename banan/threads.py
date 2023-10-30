@@ -176,24 +176,28 @@ def top_coin(trading_pairs: list):
 
                 # and price_change_percent_min_24h < 20 \
                 # and price_change_percent_max_24h < 20
-                if ((4.5 > price_change_in_2min > 2.4 and 4.5 > price_change_in_3min - price_change_in_2min > 0.85
+                if ((4.7 > price_change_in_2min > 2.4 and 4.7 > price_change_in_3min - price_change_in_2min > 0.85
                      and price_change_in_4min - price_change_in_3min > -0.3
                      and price_change_in_4min - price_change_in_3min != 0
                      and price_change_in_5min - price_change_in_4min > -0.3
                      and price_change_in_6min - price_change_in_5min > -0.9)
-                    or (4.5 > price_change_in_2min > 0.85 and 4.5 > price_change_in_3min - price_change_in_2min > 2.3
+                    or (4.7 > price_change_in_2min > 0.85 and 4.7 > price_change_in_3min - price_change_in_2min > 2.3
                         and price_change_in_4min - price_change_in_3min > -0.3
                         and price_change_in_4min - price_change_in_3min != 0
                         and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)
-                    or (4.5 > price_change_in_2min > 1.25 and 4.5 > price_change_in_3min - price_change_in_2min > 1.25
+                    or (4.7 > price_change_in_2min > 1.25 and 4.7 > price_change_in_3min - price_change_in_2min > 1.25
                         and price_change_in_4min - price_change_in_3min > -0.3
                         and price_change_in_4min - price_change_in_3min != 0
                         and price_change_in_5min - price_change_in_4min > -0.3
+                        and price_change_in_6min - price_change_in_5min > -0.9)
+                    or (4.7 > price_change_in_2min > 1.5 and 4.7 > price_change_in_4min - price_change_in_3min > 1.5
+                        and price_change_in_3min - price_change_in_2min > 0
+                        and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)) \
-                        and price_change_in_5min < 10 \
-                        and 10 > price_change_percent_24h > -8 \
-                        and volume_per_5h > 250:
+                    and price_change_in_5min < 10 \
+                    and 10 > price_change_percent_24h > -8 \
+                    and volume_per_5h > 250:
 
                     buy_qty = round(11 / data_token.high_price[-1], 1)
                     if name_cript_check in trading_pairs_fut:

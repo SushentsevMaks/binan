@@ -27,7 +27,10 @@ def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price
         percent_profit = round(100 - (float(orders[0]['cummulativeQuoteQty']) / (float(orders[1]['cummulativeQuoteQty'])-(float(all_volume)*0.075)/100)) * 100, 3)
         volume_profit = round(float(orders[1]['cummulativeQuoteQty']) - float(orders[0]['cummulativeQuoteQty']) - (float(all_volume)*0.075)/100, 3)
         link_cript = f"https://www.binance.com/ru/trade/{i[:-4]}_USDT?_from=markets&theme=dark&type=grid"
-        max_profit = round(((max_price / price_sell) * 100) - 100, 2) # % от цены продажи (упущенная выгода)
+        if volume_profit > 0:
+            max_profit = round(((max_price / price_sell) * 100) - 100, 2) # % от цены продажи (упущенная выгода)
+        else:
+            max_profit = 0.0
 
         values = (formatted_time, formatted_time_update, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, volume_profit, link_cript,
                   price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h, price_change_percent_min_24h, price_change_percent_max_24h, max_profit)

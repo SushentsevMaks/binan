@@ -177,17 +177,17 @@ def top_coin(trading_pairs: list):
                 # and price_change_percent_min_24h < 20 \
                 # and price_change_percent_max_24h < 20
                 if ((4.7 > price_change_in_2min > 2.4 and 4.7 > price_change_in_3min - price_change_in_2min > 0.85
-                     and price_change_in_4min - price_change_in_3min > -0.3
+                     and (price_change_in_4min - price_change_in_3min > -0.3 or (price_change_in_4min - price_change_in_3min + price_change_in_5min - price_change_in_4min) > 1)
                      and price_change_in_4min - price_change_in_3min != 0
                      and price_change_in_5min - price_change_in_4min > -0.3
                      and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.7 > price_change_in_2min > 0.85 and 4.7 > price_change_in_3min - price_change_in_2min > 2.3
-                        and price_change_in_4min - price_change_in_3min > -0.3
+                        and (price_change_in_4min - price_change_in_3min > -0.3 or (price_change_in_4min - price_change_in_3min + price_change_in_5min - price_change_in_4min) > 1)
                         and price_change_in_4min - price_change_in_3min != 0
                         and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.7 > price_change_in_2min > 1.25 and 4.7 > price_change_in_3min - price_change_in_2min > 1.25
-                        and price_change_in_4min - price_change_in_3min > -0.3
+                        and (price_change_in_4min - price_change_in_3min > -0.3 or (price_change_in_4min - price_change_in_3min + price_change_in_5min - price_change_in_4min) > 1)
                         and price_change_in_4min - price_change_in_3min != 0
                         and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)

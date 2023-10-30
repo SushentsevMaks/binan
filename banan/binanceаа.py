@@ -229,5 +229,6 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
 
 i = "BTCUSDT"
 data_token = last_data(i, "1m", "11")
+seconds = 1698681600000
 
-print(data_token[0])
+print(client.futures_funding_rate(symbol='LOOMUSDT'))

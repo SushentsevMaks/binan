@@ -77,7 +77,7 @@ fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WINGU
              'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT',
              'XVGUSDT', 'XVSUSDT', 'YFIUSDT']
 
-ex = []
+ex = {}
 
 chat_id = -695765690
 
@@ -124,12 +124,13 @@ trading_pairs_fut = ['LEVERUSDT', 'USDCUSDT', 'AVAXUSDT', 'ATAUSDT', 'ACHUSDT', 
                      'MANAUSDT', 'XVSUSDT', 'FXSUSDT', 'SUIUSDT', 'KSMUSDT', 'JOEUSDT', 'KEYUSDT', 'ETHUSDT',
                      'QTUMUSDT']
 
-keks = []
+keks = {}
 
 
 def top_coin(trading_pairs: list):
     for name_cript_check in trading_pairs:
-        if name_cript_check not in ex:
+        start = time.time()
+        if name_cript_check not in ex or start - ex[name_cript_check] > 12000:
             try:
                 # print(name_cript_check)
                 # print(last_data(name_cript_check, "3m", "300"))
@@ -150,8 +151,9 @@ def top_coin(trading_pairs: list):
                 now = datetime.now()
                 frame = now.strftime("%H:%M:%S")
 
-                if (price_change_in_3min > 3 or price_change_in_2min > 3) \
-                        and data_token.high_price[-3:] == sorted(data_token.high_price[-3:]) and name_cript_check not in keks:
+                if ((price_change_in_3min > 3 or price_change_in_2min > 3)
+                        and data_token.high_price[-3:] == sorted(data_token.high_price[-3:])
+                        and (name_cript_check not in keks or start-keks[name_cript_check] > 12000)):
 
                     if name_cript_check in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
@@ -171,8 +173,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время засечки  {frame}%\n"
                                                                         f"{fut_yes}")
-                    keks.append(name_cript_check)
-
+                    keks[name_cript_check] = time.time()
 
                 # and price_change_percent_min_24h < 20 \
                 # and price_change_percent_max_24h < 20
@@ -222,7 +223,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Время покупки {frame}\n"
                                                                         f"{fut_yes}")
 
-                    ex.append(name_cript_check)
+
                     #start = time.time()
                     try:
                         order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET', quantity=buy_qty)
@@ -322,6 +323,8 @@ def top_coin(trading_pairs: list):
                     sql_req(name_cript_check, price_change_percent_24h, price_change_in_2min, price_change_in_3min,
                             price_change_in_4min, price_change_in_5min, volume_per_5h, price_change_percent_min_24h,
                             price_change_percent_max_24h, max_price)
+
+                    ex[name_cript_check] = time.time()
             except:
                 pass
 

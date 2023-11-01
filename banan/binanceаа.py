@@ -232,9 +232,14 @@ data_token = last_data(i, "1m", "11")
 seconds = 1698681600000
 
 
-start = time.time()
-finish = 0
-while finish - start < 5:
-    finish = time.time()
-    print(finish - start)
-print(start, finish, 5)
+tt = {}
+while True:
+    gg = [1, 2, 3, 4, 5]
+    for i in gg:
+        start = time.time()
+        if i not in tt or start - tt[i] > 14:
+            print(i)
+            time.sleep(2)
+            tt[i] = time.time()
+
+    print(tt)

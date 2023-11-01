@@ -33,16 +33,12 @@
         {% endfor %}
         <main>
             <div>
-                <table style="table-layout: auto;">
+                <table style="width: 900px; min-width: 70%; table-layout: auto;">
                     <colgroup>
                         <col style="width: 9%;">
                         <col style="width: 9%;">
                         <col style="width: 6%;">
                         <col style="width: 8%;">
-                        <col style="width: 6%;">
-                        <col style="width: 6%;">
-                        <col style="width: 6%;">
-                        <col style="width: 7%;">
                         <col style="width: 7%;">
                         <col style="width: 7%;">
                         <col style="width: 6%;">
@@ -56,10 +52,6 @@
                         <th class="bn-table-cell time" style="color: #747d8a">Время закрытия</th>
                         <th class="bn-table-cell time" style="color: #747d8a">Длительность сделки</th>
                         <th class="bn-table-cell" style="color: #747d8a">Валютная пара</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Цена покупки</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Цена продажи</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Количество</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Общий объем</th>
                         <th class="bn-table-cell" style="color: #747d8a">Процент прибыли</th>
                         <th class="bn-table-cell" style="color: #747d8a">Объем прибыли</th>
                         <th class="bn-table-cell" style="color: #747d8a">Объем торгов</th>
@@ -86,10 +78,6 @@
                             <a href="https://www.binance.com/ru/trade/{{p.name_cript}}_USDT?_from=markets&theme=dark&type=grid" target="_blank" style="text-align: center; color: #4792db">{{p.name_cript}}/USDT</a>
                         </td>
 
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_buy}}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_sell}}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.count}}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.all_volume}} USDT</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">
                             {% if p.percent_profit >= 0 %}
                             <div class="bebra" style="color: #0ecb81">{{p.percent_profit}}%</div>

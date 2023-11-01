@@ -231,4 +231,10 @@ i = "BTCUSDT"
 data_token = last_data(i, "1m", "11")
 seconds = 1698681600000
 
-print(client.futures_funding_rate(symbol='LOOMUSDT'))
+
+start = time.time()
+finish = 0
+while finish - start < 5:
+    finish = time.time()
+    print(finish - start)
+print(start, finish, 5)

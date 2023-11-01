@@ -233,7 +233,7 @@ def top_coin(trading_pairs: list):
                         else:
                             telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
                                                                                 f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}")
-                            time.sleep(30)
+                            time.sleep(1)
                             break
 
                     try:
@@ -242,7 +242,7 @@ def top_coin(trading_pairs: list):
 
                     except Exception as e:
                         telebot.TeleBot(telega_token).send_message(chat_id, f"ERROR: {e}\n")
-                        time.sleep(30)
+                        time.sleep(1)
                         break
 
 
@@ -263,7 +263,7 @@ def top_coin(trading_pairs: list):
                                 telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
                                                                                     f"Количество продаваемого - {sell_qty}, Цена - {round((buyprice / 100) * 101, len(str(data_token.high_price[-1]).split('.')[1]))}\n"
                                                                                     f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                time.sleep(30)
+                                time.sleep(1)
                         sell_qty = float(balance["free"])
 
                         if float(sell_qty) < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
@@ -309,9 +309,13 @@ def top_coin(trading_pairs: list):
                         #             time.sleep(30)
                         #             break
 
-                        time.sleep(10)
-                    time.sleep(600)
-                    #finish = time.time()
+                        time.sleep(1)
+
+                    start = time.time()
+                    finish = 0
+                    while finish - start < 600:
+                        finish = time.time()
+
                     data_tok: Dataset = last_data(name_cript_check, "1m", "11")
                     max_price = max(data_tok[0])
 

@@ -230,7 +230,13 @@ def top_coin(trading_pairs: list):
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
                             buy_qty = int(round(11 / data_token.high_price[-1], 1))
-                            order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET', quantity=buy_qty)
+                            try:
+                                order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET', quantity=buy_qty)
+                            except:
+                                telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
+                                                                                    f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}")
+                                time.sleep(1)
+                                break
                         else:
                             telebot.TeleBot(telega_token).send_message(chat_id, f"BUY ERROR: {e.message}\n"
                                                                                 f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}")

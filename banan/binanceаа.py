@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
 from decimal import Decimal, ROUND_FLOOR
+from threading import Thread
 
 import pymysql
 from binance.client import Client, AsyncClient
@@ -230,20 +231,13 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
 i = "BTCUSDT"
 data_token = last_data(i, "1m", "11")
 seconds = 1698681600000
+one = [1, 1, 1, 2, 3, 3]
 
+two = [5, 5, 6, 6, 7, 7]
 
-tt = {}
-while True:
-    gg = [1, 2, 3, 4, 5]
-    for i in gg:
-        start = time.time()
-        if i not in tt or start - tt[i] > 14:
-            print(i)
-            time.sleep(2)
-            tt[i] = time.time()
+three = [8, 8, 8, 9, 9, 0, 0]
 
-    print(tt)
+print(-round(((100.5 / 100) * 100) - 100, 2))
 
 
 
-ff

@@ -14,11 +14,17 @@ def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price
     try:
         orders = client.get_all_orders(symbol=i, limit=5)
         orders = [i for i in orders if i["status"] == "FILLED"][-2:]
+
         times = time.localtime(int((str(orders[0]["time"]))[:-3]))
         formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
+
         times_update = time.localtime(int((str(orders[1]["updateTime"]))[:-3]))
         formatted_time_update = time.strftime("%Y-%m-%d %H:%M:%S", times_update)
+
         duration_order = (times_update.tm_hour - times.tm_hour)*60*60 + (times_update.tm_min - times.tm_min)*60 + (times_update.tm_sec - times.tm_sec)
+        if duration_order < 0:
+            duration_order = 86400 - duration_order
+
         name_cript = orders[0]["symbol"][:-4]
         price_buy = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
         price_sell = round(float(orders[1]['cummulativeQuoteQty']) / float(orders[1]["origQty"]), 7)
@@ -30,7 +36,7 @@ def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price
         if volume_profit > 0:
             max_profit = round(((max_price / price_sell) * 100) - 100, 2) # % от цены продажи (упущенная выгода)
         else:
-            max_profit = 0.0
+            max_profit = -round(((max_price / price_buy) * 100) - 100, 2)
 
         values = (formatted_time, formatted_time_update, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, volume_profit, link_cript,
                   price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h, price_change_percent_min_24h, price_change_percent_max_24h, max_profit)

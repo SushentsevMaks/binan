@@ -74,6 +74,7 @@ class Dataset(NamedTuple):
     high_price: list
     volume: list
     close_price: list
+    low_price: list
 
 def last_data(symbol, interval, lookback):
     frame = pd.DataFrame(client.get_historical_klines(symbol, interval, lookback + 'min ago UTC'))
@@ -85,6 +86,7 @@ def last_data(symbol, interval, lookback):
     # frame.to_csv('file1.csv')
     # print(frame["Volume"].sum())
     return Dataset(high_price=[i.High for i in frame.itertuples()], volume=[i.Volume for i in frame.itertuples()], close_price=[i.Close for i in
+                                                                                          frame.itertuples()], low_price=[i.Low for i in
                                                                                           frame.itertuples()])
 
 
@@ -228,16 +230,18 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ',
      'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-i = "BTCUSDT"
-data_token = last_data(i, "1m", "11")
-seconds = 1698681600000
-one = [1, 1, 1, 2, 3, 3]
+i = "WANUSDT"
+data_token = last_data(i, "1m", "600")
+start = time.time()
+for i in one:
+    last_data(i, "1m", "600")
 
-two = [5, 5, 6, 6, 7, 7]
+finish = time.time()
 
-three = [8, 8, 8, 9, 9, 0, 0]
+print(finish - start)
 
-times = time.localtime(time.time())
-formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
-print(times)
+
+
+# x = list(map(lambda x: round(x[0]/x[1]*100 - 100, 2), zip(data_token.high_price, data_token.low_price)))
+# print(sum(x)/len(x))
 

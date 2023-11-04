@@ -22,6 +22,7 @@ class Orders(models.Model):
     price_change_percent_min_24h = models.FloatField(verbose_name="Изменение цены от минимальной за 24ч")
     price_change_percent_max_24h = models.FloatField(verbose_name="Изменение цены от максимальной за 24ч")
     max_profit = models.FloatField(verbose_name="Недополученная прибыль")
+    volatility = models.FloatField(verbose_name="Средняя волатильность за 10ч", null=True)
 
 
 

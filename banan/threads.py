@@ -147,6 +147,8 @@ def top_coin(trading_pairs: list):
                 price_change_percent_min_24h = round(((data_token.high_price[-1] / min([i for i in data_token.high_price])) * 100) - 100, 2)
                 price_change_percent_max_24h = round(((data_token.high_price[-1] / max([i for i in data_token.high_price])) * 100) - 100, 2)
                 volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[1140:-25]]) / len(data_token.volume[1140:-25])
+                volatility_date = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), zip(data_token.high_price, data_token.low_price)))
+                volatility = sum(volatility_date) / len(volatility_date)
                 # print(name_cript_check)
                 now = datetime.now()
                 frame = now.strftime("%H:%M:%S")
@@ -169,6 +171,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Средняя волатильность за 10ч  {volatility}%\n"
                                                                         f"Изменение цены от минимальной за 24ч  {round(price_change_percent_min_24h, 2)}%\n"
                                                                         f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время засечки  {frame}%\n"
@@ -218,6 +221,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                         f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
+                                                                        f"Средняя волатильность за 10ч  {volatility}%\n"
                                                                         f"Изменение цены от минимальной за 24ч  {round(price_change_percent_min_24h, 2)}%\n"
                                                                         f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время покупки {frame}\n"
@@ -328,7 +332,7 @@ def top_coin(trading_pairs: list):
 
                     sql_req(name_cript_check, price_change_percent_24h, price_change_in_2min, price_change_in_3min,
                             price_change_in_4min, price_change_in_5min, volume_per_5h, price_change_percent_min_24h,
-                            price_change_percent_max_24h, max_price)
+                            price_change_percent_max_24h, max_price, volatility)
 
                     ex[name_cript_check] = time.time()
             except:
@@ -339,6 +343,7 @@ class Dataset(NamedTuple):
     high_price: list
     volume: list
     close_price: list
+    low_price: list
 
 
 def last_data(symbol: str, interval: str, lookback: str) -> Dataset:
@@ -351,7 +356,7 @@ def last_data(symbol: str, interval: str, lookback: str) -> Dataset:
     # frame.to_csv('file1.csv')
     # print(frame["Volume"].sum())
     return Dataset(high_price=[i.High for i in frame.itertuples()], volume=[i.Volume for i in frame.itertuples()],
-                   close_price=[i.Close for i in frame.itertuples()])
+                   close_price=[i.Close for i in frame.itertuples()], low_price=[i.Low for i in frame.itertuples()])
 
 
 def btc_anal(data: last_data) -> bool:

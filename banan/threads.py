@@ -130,7 +130,7 @@ keks = {}
 def top_coin(trading_pairs: list):
     for name_cript_check in trading_pairs:
         start = time.time()
-        if name_cript_check not in ex or start - ex[name_cript_check] > 12000:
+        if name_cript_check not in ex or start - ex[name_cript_check] > 7200:
             try:
                 # print(name_cript_check)
                 # print(last_data(name_cript_check, "3m", "300"))
@@ -153,7 +153,7 @@ def top_coin(trading_pairs: list):
 
                 if ((price_change_in_3min > 3 or price_change_in_2min > 3)
                         and data_token.high_price[-3:] == sorted(data_token.high_price[-3:])
-                        and (name_cript_check not in keks or start-keks[name_cript_check] > 12000)):
+                        and (name_cript_check not in keks or start-keks[name_cript_check] > 2000)):
 
                     if name_cript_check in trading_pairs_fut:
                         fut_yes = "Фьючерсная"
@@ -189,7 +189,6 @@ def top_coin(trading_pairs: list):
                         and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.5 > price_change_in_2min > 1.25 and 4.5 > price_change_in_3min - price_change_in_2min > 1.25
                         and (price_change_in_4min - price_change_in_3min > -0.3 or (price_change_in_4min - price_change_in_3min + price_change_in_5min - price_change_in_4min) > 1)
-                        and price_change_in_4min - price_change_in_3min != 0
                         and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.5 > price_change_in_2min > 1.5 and 4.5 > price_change_in_4min - price_change_in_3min > 1.5
@@ -265,8 +264,7 @@ def top_coin(trading_pairs: list):
                         if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
                             try:
                                 order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=sell_qty, price=Decimal(
-                                    str(round((buyprice / 100) * 101,
-                                              max([len(str(i).split(".")[1]) for i in data_token[0][-5:]])))))
+                                    str(round((buyprice / 100) * 101, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]])))))
                                 time.sleep(10)
                             except Exception as e:
                                 telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
@@ -286,46 +284,47 @@ def top_coin(trading_pairs: list):
                                       f"\n" \
                                       f"https://www.binance.com/ru/trade/{name_cript_check[:-4]}_USDT?_from=markets&theme=dark&type=grid"
                             bot.send_message(chat_id, message)
+                            loss_sell = 0
 
                         if int(last_time-start_time) > 10750:
-                            data_token = last_data(name_cript_check, "1m", "1440")
-                            prices_token = data_token[0][300:]
-                            orders = client.get_all_orders(symbol=name_cript_check, limit=2)[0]
-                            price = round(float(orders['cummulativeQuoteQty']) / float(orders["origQty"]), 7)
+                            data_token: Dataset = last_data(name_cript_check, "1m", "1440")
+                            if (buyprice / 100 * 96) < data_token.high_price[-1]:  #Если цена продажи упала меньше чем на 4%
 
-                            orders = client.get_open_orders(symbol=name_cript_check)
-                            for order in orders:
-                                ordId = order["orderId"]
-                                client.cancel_order(symbol=name_cript_check, orderId=ordId)
+                                orders = client.get_open_orders(symbol=name_cript_check)
+                                for order in orders:
+                                    ordId = order["orderId"]
+                                    client.cancel_order(symbol=name_cript_check, orderId=ordId)
 
-                            try:
-                                balance = client.get_asset_balance(asset=name_cript_check[:-4])
-                                sell_qty = float(balance["free"])
-                                order_sell = client.order_market_sell(symbol=name_cript_check, quantity=sell_qty)
-                                orders = client.get_all_orders(symbol=name_cript_check, limit=1)
-                                price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
-                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                               f"Продажа в минус за {price}\n"
-                                                                               f"Покупал за {buyprice}\n"
-                                                                               f"Разница {round(100 - 100*(buyprice/price)), 2}%")
-                                open_position = False
-                            except Exception as e:
-                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                               f"Ошибка продажи в минус, Нужен хелп!\n"
-                                                                               f"{e}")
-                                time.sleep(1)
-                                break
+                                try:
+                                    balance = client.get_asset_balance(asset=name_cript_check[:-4])
+                                    sell_qty = float(balance["free"])
+                                    order_sell = client.order_market_sell(symbol=name_cript_check, quantity=sell_qty)
+                                    orders = client.get_all_orders(symbol=name_cript_check, limit=1)
+                                    price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
+                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                                   f"Продажа в минус за {price}\n"
+                                                                                   f"Покупал за {buyprice}\n"
+                                                                                   f"Разница {round(100 - 100*(buyprice/price), 2)}%")
+                                    loss_sell = 1
+                                    open_position = False
+                                except Exception as e:
+                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                                   f"Ошибка продажи в минус, Нужен хелп!\n"
+                                                                                   f"{e}")
+                                    time.sleep(1)
+                                    break
+                            else:
+                                time.sleep(900)
 
                         time.sleep(1)
 
-                    start = time.time()
-                    finish = 0
-                    while finish - start < 600:
-                        time.sleep(0.5)
-                        finish = time.time()
+                    if loss_sell == 0:
+                        time.sleep(600)
 
-                    data_tok: Dataset = last_data(name_cript_check, "1m", "11")
-                    max_price = max(data_tok[0])
+                        data_tok: Dataset = last_data(name_cript_check, "1m", "11")
+                        max_price = max(data_tok[0])
+                    else:
+                        max_price = max(data_token[0])
 
                     sql_req(name_cript_check, price_change_percent_24h, price_change_in_2min, price_change_in_3min,
                             price_change_in_4min, price_change_in_5min, volume_per_5h, price_change_percent_min_24h,

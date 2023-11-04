@@ -21,9 +21,10 @@ def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price
         times_update = time.localtime(int((str(orders[1]["updateTime"]))[:-3]))
         formatted_time_update = time.strftime("%Y-%m-%d %H:%M:%S", times_update)
 
-        duration_order = (times_update.tm_hour - times.tm_hour)*60*60 + (times_update.tm_min - times.tm_min)*60 + (times_update.tm_sec - times.tm_sec)
-        if duration_order < 0:
-            duration_order = 86400 - duration_order
+        if times_update.tm_mday > times.tm_mday:
+            duration_order = (times_update.tm_hour + 24 - times.tm_hour)*60*60 + (times_update.tm_min - times.tm_min)*60 + (times_update.tm_sec - times.tm_sec)
+        else:
+            duration_order = (times_update.tm_hour - times.tm_hour) * 60 * 60 + (times_update.tm_min - times.tm_min) * 60 + (times_update.tm_sec - times.tm_sec)
 
         name_cript = orders[0]["symbol"][:-4]
         price_buy = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)

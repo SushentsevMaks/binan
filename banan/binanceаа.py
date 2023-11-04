@@ -237,7 +237,7 @@ two = [5, 5, 6, 6, 7, 7]
 
 three = [8, 8, 8, 9, 9, 0, 0]
 
-print(-round(((100.5 / 100) * 100) - 100, 2))
-
-
+times = time.localtime(time.time())
+formatted_time = time.strftime("%Y-%m-%d %H:%M:%S", times)
+print(times)
 

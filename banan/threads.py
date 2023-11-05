@@ -147,8 +147,8 @@ def top_coin(trading_pairs: list):
                 price_change_percent_min_24h = round(((data_token.high_price[-1] / min([i for i in data_token.high_price])) * 100) - 100, 2)
                 price_change_percent_max_24h = round(((data_token.high_price[-1] / max([i for i in data_token.high_price])) * 100) - 100, 2)
                 volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[1140:-25]]) / len(data_token.volume[1140:-25])
-                volatility_date = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), zip(data_token.high_price, data_token.low_price)))
-                volatility = sum(volatility_date) / len(volatility_date)
+                volatility_date = list(map(lambda x: x[0] / x[1] * 100 - 100, zip(data_token.high_price, data_token.low_price)))
+                volatility = round(sum(volatility_date) / len(volatility_date), 2)
                 # print(name_cript_check)
                 now = datetime.now()
                 frame = now.strftime("%H:%M:%S")
@@ -177,7 +177,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Время засечки  {frame}%\n"
                                                                         f"{fut_yes}")
                     keks[name_cript_check] = time.time()
-
+                # and price_change_in_5min < 10 \
                 # and price_change_percent_min_24h < 20 \
                 # and price_change_percent_max_24h < 20
                 if ((4.5 > price_change_in_2min > 2.4 and 4.5 > price_change_in_3min - price_change_in_2min > 0.85
@@ -198,7 +198,6 @@ def top_coin(trading_pairs: list):
                         and price_change_in_3min - price_change_in_2min > 0
                         and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)) \
-                    and price_change_in_5min < 10 \
                     and 12 > price_change_percent_24h > -10 \
                     and volume_per_5h > 250 \
                     and price_change_percent_max_24h >= 0:

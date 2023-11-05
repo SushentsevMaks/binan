@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'vision/css/style.css' %}">
+    <title>Основная страница</title>
+</head>
+<body style="background-color: #1c2128">
+        <h1 style="text-align: center; height: 50px; color: #fcd535"> Тестовый запуск торгового ботыча на банане 2.0 (СТРАТЕГИЯ HIGH)</h1>
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            {% if all_profit.1 >= 0 %}
+            <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{all_profit.1}} USDT => {{all_profit.0}}%</span></h2></div>
+            {% elif all_profit.1 <= 0 %}
+            <div><h2>Суммарная прибыль аккаунта: <span style="color: #f6465d">{{all_profit.1}} USDT => {{all_profit.0}}%</span></h2></div>
+            {% endif %}
+        </div>
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            <h2>Результат по дням:</h2>
+        </div>
+        {% for key, value in percent_change_for_day.items %}
+        {% if value.0 >= 0 %}
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            <h2><a class="change-color-link" style="color: #0ecb81;" href="{% url 'day' key %}">{{key}} => {{value.0}}% Дневная прибыль {{value.1}}$ (Всего сделок: {{value.2}})</a></h2>
+
+        </div>
+        {% elif value.0 < 0 %}
+        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            <h2><a class="change-color-link" style="color: #f6465d" href="{% url 'day' key %}">{{key}} => {{value.0}}% Дневная прибыль {{value.1}}$ (Всего сделок: {{value.2}})</a></h2>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <main>
+            <div>
+                <table style="width: 900px; min-width: 70%; table-layout: auto;">
+                    <colgroup>
+                        <col style="width: 9%;">
+                        <col style="width: 9%;">
+                        <col style="width: 6%;">
+                        <col style="width: 8%;">
+                        <col style="width: 7%;">
+                        <col style="width: 7%;">
+                        <col style="width: 6%;">
+                        <col style="width: 6%;">
+                        <col style="width: 6%;">
+                        <col style="width: 6%;">
+                    </colgroup>
+                    <thead class="bn-table-thead">
+                    <tr>
+                        <th class="bn-table-cell time" style="color: #747d8a">Время создания</th>
+                        <th class="bn-table-cell time" style="color: #747d8a">Время закрытия</th>
+                        <th class="bn-table-cell time" style="color: #747d8a">Длительность сделки</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Валютная пара</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Процент прибыли</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Объем прибыли</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Объем торгов</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Процент от сут. минимума</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Процент от сут. максимума</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Упущенная выгода</th>
+                    </tr>
+                    </thead>
+                    <tbody class="bn-table-tbody">
+                    {% for p in orders %}
+                    <tr class="bn-table-measure-row" aria-hidden="true" style="height: 0px; font-size: 0px;">
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+                        <td style="padding: 0px; border: 0px; height: 0px;"></td>
+
+
+                    <tr class="bn-table-row bn-table-row-level-0 hasExtend selected" data-row-key="294436889">
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.time}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.update_time}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.duration_order}} sec</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">
+                            <a href="https://www.binance.com/ru/trade/{{p.name_cript}}_USDT?_from=markets&theme=dark&type=grid" target="_blank" style="text-align: center; color: #4792db">{{p.name_cript}}/USDT</a>
+                        </td>
+
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">
+                            {% if p.percent_profit >= 0 %}
+                            <div class="bebra" style="color: #0ecb81">{{p.percent_profit}}%</div>
+                            {% elif p.percent_profit <= 0  %}
+                            <div class="sho" style="color: #f6465d">{{p.percent_profit}} %
+                            {% endif %}
+                            </div>
+                        </td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">
+                            {% if p.volume_profit >= 0 %}
+                            <div class="bebra" style="color: #0ecb81">{{p.volume_profit}} USDT</div>
+                            {% elif p.volume_profit <= 0  %}
+                            <div class="sho" style="color: #f6465d">{{p.volume_profit}} USDT</div>
+                            {% endif %}
+                        </td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.volume_per_5h }}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_change_percent_min_24h}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_change_percent_max_24h}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.max_profit}}</td>
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+</body>
+</html>

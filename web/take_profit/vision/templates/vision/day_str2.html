@@ -1,37 +1,20 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'vision/css/style.css' %}">
-    <title>Основная страница</title>
+    <title>{{date}}</title>
 </head>
 <body style="background-color: #1c2128">
-        <h1 style="text-align: center; height: 50px; color: #fcd535"> Тестовый запуск торгового ботыча на банане 2.0</h1>
-        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
-            {% if all_profit.1 >= 0 %}
-            <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{all_profit.1}} USDT => {{all_profit.0}}%</span></h2></div>
-            {% elif all_profit.1 <= 0 %}
-            <div><h2>Суммарная прибыль аккаунта: <span style="color: #f6465d">{{all_profit.1}} USDT => {{all_profit.0}}%</span></h2></div>
+    <h1 style="text-align: center; height: 50px; color: #fcd535"> {{date}}</h1>
+    <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+            {% if day_volume_result >= 0 %}
+            <div><h2>Доход за день: <span style="color: #0ecb81">{{day_percent_result}}% = {{day_volume_result}} USDT (Всего сделок: {{day_qnt}})</span></h2></div>
+            {% elif day_volume_result <= 0 %}
+            <div><h2>Доход за день: <span style="color: #f6465d">{{day_percent_result}}% = {{day_volume_result}} USDT (Всего сделок: {{day_qnt}})</span></h2></div>
             {% endif %}
         </div>
         <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
-            <h2>Результат по дням:</h2>
-        </div>
-        {% for key, value in percent_change_for_day.items %}
-        {% if value.0 >= 0 %}
-        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
-            <h2><a class="change-color-link" style="color: #0ecb81;" href="{% url 'day' key %}">{{key}} => {{value.0}}% Дневная прибыль {{value.1}}$ (Всего сделок: {{value.2}})</a></h2>
-
-        </div>
-        {% elif value.0 < 0 %}
-        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
-            <h2><a class="change-color-link" style="color: #f6465d" href="{% url 'day' key %}">{{key}} => {{value.0}}% Дневная прибыль {{value.1}}$ (Всего сделок: {{value.2}})</a></h2>
-        </div>
-        {% endif %}
-        {% endfor %}
-        <main>
+    <main>
             <div>
                 <table style="width: 900px; min-width: 70%; table-layout: auto;">
                     <colgroup>
@@ -41,6 +24,7 @@
                         <col style="width: 8%;">
                         <col style="width: 7%;">
                         <col style="width: 7%;">
+                        <col style="width: 6%;">
                         <col style="width: 6%;">
                         <col style="width: 6%;">
                         <col style="width: 6%;">
@@ -58,10 +42,11 @@
                         <th class="bn-table-cell" style="color: #747d8a">Процент от сут. минимума</th>
                         <th class="bn-table-cell" style="color: #747d8a">Процент от сут. максимума</th>
                         <th class="bn-table-cell" style="color: #747d8a">Упущенная выгода</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Размер свечи</th>
                     </tr>
                     </thead>
                     <tbody class="bn-table-tbody">
-                    {% for p in orders %}
+                    {% for p in days %}
                     <tr class="bn-table-measure-row" aria-hidden="true" style="height: 0px; font-size: 0px;">
                         <td style="padding: 0px; border: 0px; height: 0px;"></td>
                         <td style="padding: 0px; border: 0px; height: 0px;"></td>
@@ -97,11 +82,13 @@
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_change_percent_min_24h}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_change_percent_max_24h}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.max_profit}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.change_15}}%</td>
                         {% endfor %}
                     </tr>
                     </tbody>
                 </table>
             </div>
         </main>
+
 </body>
 </html>

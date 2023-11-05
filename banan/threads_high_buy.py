@@ -27,18 +27,18 @@ two = ['APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'ARUSDT', 'ASRU
 
 three = ['BCHUSDT', 'BELUSDT', 'BETAUSDT', 'BETHUSDT', 'BICOUSDT', 'BIFIUSDT', 'BLZUSDT', 'BNTUSDT', 'BNXUSDT',
          'BONDUSDT', 'BSWUSDT', 'BTSUSDT', 'YGGUSDT', 'ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT', 'BURGERUSDT',
-         'BUSDUSDT', 'C98USDT', 'CAKEUSDT', 'CELOUSDT', 'CELRUSDT', 'CFXUSDT', 'CHESSUSDT', 'CHRUSDT', 'CHZUSDT']
+         'C98USDT', 'CAKEUSDT', 'CELOUSDT', 'CELRUSDT', 'CFXUSDT', 'CHESSUSDT', 'CHRUSDT', 'CHZUSDT']
 
 four = ['CITYUSDT', 'CKBUSDT', 'CLVUSDT', 'COMBOUSDT', 'COMPUSDT', 'COSUSDT', 'COTIUSDT', 'CRVUSDT', 'CTKUSDT',
         'CTSIUSDT', 'CTXCUSDT', 'CVCUSDT', 'CVPUSDT', 'CVXUSDT', 'CYBERUSDT', 'DARUSDT', 'DASHUSDT', 'DATAUSDT',
         'DCRUSDT', 'DEGOUSDT', 'DENTUSDT', 'DEXEUSDT', 'DFUSDT']
 
 five = ['DGBUSDT', 'DIAUSDT', 'DOCKUSDT', 'DODOUSDT', 'DOGEUSDT', 'DOTUSDT', 'DREPUSDT', 'DUSKUSDT', 'DYDXUSDT',
-        'EDUUSDT', 'EGLDUSDT', 'ELFUSDT', 'ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ERNUSDT', 'ETCUSDT', 'EURUSDT', 'FARMUSDT',
-        'FDUSDUSDT', 'FETUSDT', 'FIDAUSDT']
+        'EDUUSDT', 'EGLDUSDT', 'ELFUSDT', 'ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ERNUSDT', 'ETCUSDT', 'FARMUSDT',
+        'FETUSDT', 'FIDAUSDT']
 
 six = ['FILUSDT', 'FIOUSDT', 'FIROUSDT', 'FISUSDT', 'FLMUSDT', 'FLOKIUSDT', 'FLOWUSDT', 'FLUXUSDT', 'FORTHUSDT',
-       'FORUSDT', 'FRONTUSDT', 'FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT', 'GASUSDT', 'GBPUSDT', 'GHSTUSDT',
+       'FORUSDT', 'FRONTUSDT', 'FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT', 'GASUSDT', 'GHSTUSDT',
        'GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT']
 
 seven = ['GNOUSDT', 'GNSUSDT', 'GRTUSDT', 'GTCUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT', 'HIFIUSDT', 'HIGHUSDT',
@@ -69,8 +69,8 @@ thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSD
               'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT', 'SUNUSDT', 'SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT',
               'SYSUSDT', 'TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT']
 
-fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'TUSDUSDT', 'TVKUSDT', 'TWTUSDT',
-              'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'UNIUSDT', 'USDCUSDT', 'USDPUSDT', 'USTCUSDT', 'UTKUSDT', 'VETUSDT',
+fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'TVKUSDT', 'TWTUSDT',
+              'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'UNIUSDT', 'USTCUSDT', 'UTKUSDT', 'VETUSDT',
               'VGXUSDT', 'VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT']
 
 fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT',
@@ -181,17 +181,17 @@ def top_coin(trading_pairs: list):
                 # and price_change_percent_min_24h < 20 \
                 # and price_change_percent_max_24h < 20
                 if ((4.5 > price_change_in_2min > 2.4 and 4.5 > price_change_in_3min - price_change_in_2min > 0.85
-                     and (price_change_in_4min - price_change_in_3min > -0.3 or (price_change_in_4min - price_change_in_3min + price_change_in_5min - price_change_in_4min) > 1)
+                     and price_change_in_4min - price_change_in_3min > -0.25
                      and price_change_in_4min - price_change_in_3min != 0
                      and price_change_in_5min - price_change_in_4min > -0.3
                      and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.5 > price_change_in_2min > 0.85 and 4.5 > price_change_in_3min - price_change_in_2min > 2.3
-                        and (price_change_in_4min - price_change_in_3min > -0.3 or (price_change_in_4min - price_change_in_3min + price_change_in_5min - price_change_in_4min) > 1)
+                        and price_change_in_4min - price_change_in_3min > -0.25
                         and price_change_in_4min - price_change_in_3min != 0
                         and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.5 > price_change_in_2min > 1.25 and 4.5 > price_change_in_3min - price_change_in_2min > 1.25
-                        and (price_change_in_4min - price_change_in_3min > -0.3 or (price_change_in_4min - price_change_in_3min + price_change_in_5min - price_change_in_4min) > 1)
+                        and price_change_in_4min - price_change_in_3min > -0.25
                         and price_change_in_5min - price_change_in_4min > -0.3
                         and price_change_in_6min - price_change_in_5min > -0.9)
                     or (4.5 > price_change_in_2min > 1.5 and 4.5 > price_change_in_4min - price_change_in_3min > 1.5
@@ -225,8 +225,7 @@ def top_coin(trading_pairs: list):
                                                                         f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n"
                                                                         f"Время покупки {frame}\n"
                                                                         f"{fut_yes}")
-
-
+                    time.sleep(5)
                     start_time = time.time()
                     try:
                         order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET', quantity=buy_qty)
@@ -289,9 +288,9 @@ def top_coin(trading_pairs: list):
                             bot.send_message(chat_id, message)
                             loss_sell = 0
 
-                        if int(last_time-start_time) > 10750:
+                        if int(last_time-start_time) > 10750 and float(sell_qty) > 0.05:
                             data_token: Dataset = last_data(name_cript_check, "1m", "1440")
-                            if (buyprice / 100 * 96) < data_token.high_price[-1]:  #Если цена продажи упала меньше чем на 4%
+                            if (buyprice / 100 * 95) < data_token.high_price[-1]:  #Если цена продажи упала меньше чем на 4%
 
                                 orders = client.get_open_orders(symbol=name_cript_check)
                                 for order in orders:

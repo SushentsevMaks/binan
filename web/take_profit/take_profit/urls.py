@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from vision.views import OrdersViewSet, index, day
+from vision.views import OrdersViewSet, index_str1, day_str1, index_str2, day_str2
 
 urlpatterns = [
     path("vision/", OrdersViewSet.as_view({'get': 'list'})),
     path('admin/', admin.site.urls),
-    path("", index),
-    path("<str:time>", day, name="day")
+    path("str1/", index_str1),
+    path("str1/<str:time>", day_str1, name="day"),
+    path("", index_str2),
+    path("<str:time>", day_str2, name="day")
 ]

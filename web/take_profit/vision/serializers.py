@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from vision.models import Orders
+from vision import Orders
 
 
 class OrdersSerializer(serializers.ModelSerializer):

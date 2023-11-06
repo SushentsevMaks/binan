@@ -97,7 +97,7 @@ def sql_req_str2(i: str, price_change_percent_24h: float, price_in_2min: float, 
         if volume_profit > 0:
             max_profit = round(((max_price / price_sell) * 100) - 100, 2) # % от цены продажи (упущенная выгода)
         else:
-            max_profit = -round(((max_price / price_buy) * 100) - 100, 2)
+            max_profit = 0
 
         values = (formatted_time, formatted_time_update, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit,
                   volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min,

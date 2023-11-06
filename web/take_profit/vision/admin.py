@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from vision.models import Orders
+from vision import Orders
 
 
 # Register your models here.

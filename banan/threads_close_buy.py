@@ -130,7 +130,7 @@ keks = {}
 def top_coin(trading_pairs: list):
     for name_cript_check in trading_pairs:
         start = time.time()
-        if name_cript_check not in ex or start - ex[name_cript_check] > 7200:
+        if name_cript_check not in ex or start - ex[name_cript_check] > 3600:
             try:
                 # print(name_cript_check)
                 # print(last_data(name_cript_check, "3m", "300"))
@@ -151,19 +151,22 @@ def top_coin(trading_pairs: list):
                 # print(name_cript_check)
 
                 if (price_change_in_3min > 3 or price_change_in_2min > 3) \
-                        and data_token.high_price[-3:] == sorted(data_token.high_price[-3:])\
-                        and volume_per_5h > 250:
+                        and data_token.high_price[-3:] == sorted(data_token.high_price[-3:]) \
+                        and volume_per_5h > 250 \
+                        and price_change_percent_24h < 15:
 
                     start_time_check = time.time()
 
-                    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 55:
+                    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 57:
                         start_time_check = time.time()
                         time.sleep(1)
 
                     data_token_inf: Dataset = last_data(name_cript_check, "15m", "1440")
-                    change_15 = round(data_token_inf.close_price[-1] / data_token_inf.open_price[-1] * 100 - 100, 2)
+                    change_close = data_token_inf.close_price[-1] / data_token_inf.open_price[-1] * 100 - 100
+                    change_high = data_token_inf.high_price[-1] / data_token_inf.open_price[-1] * 100 - 100
+                    change_15 = round(change_close / change_high, 2)
 
-                    if change_15 < 10:
+                    if change_15 < 0.7:
                         buy_qty = round(11 / data_token.close_price[-1], 1)
                         telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {name_cript_check}\n"
                                                                             f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}\n"
@@ -178,7 +181,7 @@ def top_coin(trading_pairs: list):
                                                                             f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                             f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                             f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                            f"% Роста свечи  {change_15}%\n"
+                                                                            f"Соотношение роста свечи  {change_15}%\n"
                                                                             f"Изменение цены от минимальной за 24ч  {round(price_change_percent_min_24h, 2)}%\n"
                                                                             f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n")
 
@@ -286,7 +289,7 @@ def top_coin(trading_pairs: list):
                                 price_change_in_4min, price_change_in_5min, volume_per_5h, price_change_percent_min_24h,
                                 price_change_percent_max_24h, max_price, change_15)
 
-                        #ex[name_cript_check] = time.time()
+                        ex[name_cript_check] = time.time()
                     else:
                         telebot.TeleBot(telega_token).send_message(chat_id, f"СВЕЧА БОЛЬШАЯ - {name_cript_check}\n"
                                                                             f"Цены {data_token.high_price[-9:]}\n"
@@ -300,7 +303,7 @@ def top_coin(trading_pairs: list):
                                                                             f"Изменение цены за 3 мин {round(price_change_in_3min, 2)}%  {round(price_change_in_3min - price_change_in_2min, 2)}%\n"
                                                                             f"Изменение цены за 2 мин {round(price_change_in_2min, 2)}%\n"
                                                                             f"Изменение цены за 24ч  {round(price_change_percent_24h, 2)}%\n"
-                                                                            f"% Роста свечи  {change_15}%\n"
+                                                                            f"Соотношение роста свечи  {change_15}%\n"
                                                                             f"Изменение цены от минимальной за 24ч  {round(price_change_percent_min_24h, 2)}%\n"
                                                                             f"Изменение цены от максимальной за 24ч  {round(price_change_percent_max_24h, 2)}%\n")
 

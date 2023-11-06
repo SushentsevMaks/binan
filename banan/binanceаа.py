@@ -248,12 +248,4 @@ print(sorted(s, key=lambda x: -x[1]))
 start = time.time()
 
 
-while time.localtime(start).tm_min % 15 != 14 or time.localtime(start).tm_sec < 55:
-    start = time.time()
-    print(time.localtime(start).tm_min, time.localtime(start).tm_sec)
-    print(time.localtime(start).tm_min % 15)
-    time.sleep(1)
-
-
-data_token = last_data("CTSIUSDT", "15m", "1440")
-print(round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2))
+print("QA".lower())

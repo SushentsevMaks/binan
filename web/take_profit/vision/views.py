@@ -1,12 +1,8 @@
 from django.shortcuts import render
-from matplotlib import pyplot as plt
+
 from rest_framework import viewsets
 
-import time
-from rest_framework import viewsets, permissions
-
-from vision.models import Orders, Orders_str2
-from vision.serializers import OrdersSerializer
+from vision import Orders, Orders_str2
 
 
 # Create your views here.

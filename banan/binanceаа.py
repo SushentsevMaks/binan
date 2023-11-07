@@ -75,6 +75,7 @@ class Dataset(NamedTuple):
     volume: list
     close_price: list
     open_price: list
+    low_price: list
 
 def last_data(symbol, interval, lookback):
     frame = pd.DataFrame(client.get_historical_klines(symbol, interval, lookback + 'min ago UTC'))
@@ -87,6 +88,7 @@ def last_data(symbol, interval, lookback):
     # print(frame["Volume"].sum())
     return Dataset(high_price=[i.High for i in frame.itertuples()], volume=[i.Volume for i in frame.itertuples()], close_price=[i.Close for i in
                                                                                           frame.itertuples()], open_price=[i.Open for i in
+                                                                                          frame.itertuples()], low_price=[i.Low for i in
                                                                                           frame.itertuples()])
 
 
@@ -254,14 +256,12 @@ r = ['EPX', 'DUSK', 'SYN', 'PROS', 'FRONT', 'AUCTION', 'REI', 'NEXO', 'UNFI', 'F
      'MULTI', 'AGLD', 'HIFI', 'OAX', 'GHST', 'ARDR', 'PHA', 'STMX', 'KEY', 'UFT', 'APT', 'ANKR', 'ACA', 'IOTA', 'STORJ',
      'AST', 'MAV', 'WLD', 'EDU', 'QUICK', 'STRAX', 'TRB', 'WAXP', 'SLP', 'LPT', 'PNT', 'GALA', 'BCH', 'VET', 'KMD']
 
-i = "LQTYUSDT"
-data_token = last_data(i, "15m", "1440")
+i = "AKROUSDT"
+data_token = last_data(i, "1m", "15")
 
-price_change_percent_24h = round(((data_token.close_price[-2] / data_token.close_price[0]) * 100) - 100, 2)
-volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-10:]]) / len(data_token.volume[-10:]) / 15
-print(price_change_percent_24h)
-print(volume_per_5h)
-print(price_change_percent_24h > -5)
+print(data_token.low_price)
+
+print(data_token.low_price.index(min(data_token.low_price)))
 # while True:
 #     start_time_check = time.time()
 #

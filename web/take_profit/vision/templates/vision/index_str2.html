@@ -56,10 +56,9 @@
                         <th class="bn-table-cell" style="color: #747d8a">Процент прибыли</th>
                         <th class="bn-table-cell" style="color: #747d8a">Объем прибыли</th>
                         <th class="bn-table-cell" style="color: #747d8a">Объем торгов</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Процент от сут. минимума</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Процент от сут. максимума</th>
                         <th class="bn-table-cell" style="color: #747d8a">Упущенная выгода</th>
                         <th class="bn-table-cell" style="color: #747d8a">Размер свечи</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Минута минимальной цены</th>
                     </tr>
                     </thead>
                     <tbody class="bn-table-tbody">
@@ -96,10 +95,9 @@
                             {% endif %}
                         </td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.volume_per_5h }}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_change_percent_min_24h}}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.price_change_percent_max_24h}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.max_profit}}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.change_15}}%</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.res}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.low_price_index}}</td>
                         {% endfor %}
                     </tr>
                     </tbody>

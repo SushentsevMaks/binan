@@ -137,27 +137,23 @@ def top_coin(trading_pairs: list):
                 data_token: Dataset = last_data(name_cript_check, "15m", "1440")
                 volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-10:]]) / len(data_token.volume[-10:]) / 15
                 res = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+                res_before = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
                 price_change_percent_24h = round(((data_token.close_price[-2] / data_token.close_price[0]) * 100) - 100, 2)
+
 
                 # print(name_cript_check)
 
-                if -3.1 > res and 20 > price_change_percent_24h > 0:
+                if -3.1 > res and 20 > price_change_percent_24h > 0 and res_before < 20:
 
                     buy_qty = round(11 / data_token.close_price[-1], 1)
 
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {name_cript_check}\n"
-                                                                        f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}\n"
-                                                                        f"Цены {data_token.high_price[-9:]}\n"
-                                                                        f"Объемы {int(volume_per_5h)}\n"
-                                                                        f"Цена упала на {res}%\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
                     start_time = time.time()
                     try:
                         order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET',
                                                         quantity=buy_qty)
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
-                            buy_qty = int(round(11 / data_token.close_price[-1], 1))
+                            buy_qty = int(round(11 / data_token.open_price[-1], 1))
                             try:
                                 order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET',
                                                                 quantity=buy_qty)
@@ -171,6 +167,19 @@ def top_coin(trading_pairs: list):
                                                                                 f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}")
                             time.sleep(1)
                             break
+
+                    data_token_check: Dataset = last_data(name_cript_check, "1m", "15")
+                    low_price = data_token_check.low_price
+                    low_price_index = data_token_check.low_price.index(min(data_token.low_price))
+
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {name_cript_check}\n"
+                                                                        f"Количество покупаемого - {buy_qty}, Цена - {data_token.high_price[-1]}\n"
+                                                                        f"Минимальные Цены {low_price}\n"
+                                                                        f"Объемы {int(volume_per_5h)}\n"
+                                                                        f"Цена упала на {res}%\n"
+                                                                        f"Минута минимальной цены {low_price_index}%\n"
+                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n"
+                                                                        f"Изменение цены за прошлый таймфрейм {res_before}%\n")
 
                     try:
                         buyprice = float(order_buy["fills"][0]["price"])
@@ -256,7 +265,7 @@ def top_coin(trading_pairs: list):
                     else:
                         max_price = max(data_token[0])
 
-                    sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price)
+                    sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, low_price_index, res)
 
                     ex[name_cript_check] = time.time()
             except:
@@ -268,6 +277,7 @@ class Dataset(NamedTuple):
     volume: list
     close_price: list
     open_price: list
+    low_price: list
 
 
 def last_data(symbol: str, interval: str, lookback: str) -> Dataset:
@@ -280,7 +290,8 @@ def last_data(symbol: str, interval: str, lookback: str) -> Dataset:
     # frame.to_csv('file1.csv')
     # print(frame["Volume"].sum())
     return Dataset(high_price=[i.High for i in frame.itertuples()], volume=[i.Volume for i in frame.itertuples()],
-                   close_price=[i.Close for i in frame.itertuples()], open_price=[i.Open for i in frame.itertuples()])
+                   close_price=[i.Close for i in frame.itertuples()], open_price=[i.Open for i in frame.itertuples()],
+                   low_price=[i.Low for i in frame.itertuples()])
 
 
 def btc_anal(data: last_data) -> bool:

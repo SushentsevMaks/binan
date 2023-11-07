@@ -46,6 +46,8 @@ class Orders_str2(models.Model):
     price_change_percent_24h = models.FloatField(verbose_name="Изменение цены за последние 24 ч.")
     volume_per_5h = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Объемы за последние 5 часов")
     max_profit = models.FloatField(verbose_name="Недополученная прибыль")
+    low_price_index = models.IntegerField(null=True)
+    res = models.FloatField(null=True, verbose_name="Размер свечи")
 
 
     class Meta:

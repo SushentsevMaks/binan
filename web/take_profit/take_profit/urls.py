@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from vision import OrdersViewSet, index_str1, day_str1, index_str2, day_str2
+from vision.views import OrdersViewSet, index_str1, day_str1, index_str2, day_str2
 
 urlpatterns = [
     path("vision/", OrdersViewSet.as_view({'get': 'list'})),

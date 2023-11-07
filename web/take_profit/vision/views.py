@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from rest_framework import viewsets
 
-from vision import Orders, Orders_str2
+from vision.models import Orders, Orders_str2
 
 
 # Create your views here.

@@ -68,9 +68,8 @@ def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price
 
 #sql_req("LUNCUSDT", 7.21, 1.87, 2.65, 0.92, -0.05, 16078)
 
-def sql_req_str2(i: str, price_change_percent_24h: float, price_in_2min: float, price_in_3min: float, price_in_4min: float,
-            price_in_5min: float, volume_per_5h: float, price_change_percent_min_24h: float, price_change_percent_max_24h: float,
-            max_price: float, change_15: float):
+def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
+            max_price: float):
     try:
         orders = client.get_all_orders(symbol=i, limit=5)
         orders = [i for i in orders if i["status"] == "FILLED"][-2:]
@@ -100,8 +99,8 @@ def sql_req_str2(i: str, price_change_percent_24h: float, price_in_2min: float, 
             max_profit = 0
 
         values = (formatted_time, formatted_time_update, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit,
-                  volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min,
-                  volume_per_5h, price_change_percent_min_24h, price_change_percent_max_24h, max_profit, change_15)
+                  volume_profit, link_cript, price_change_percent_24h,
+                  volume_per_5h, max_profit)
 
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -110,9 +109,9 @@ def sql_req_str2(i: str, price_change_percent_24h: float, price_in_2min: float, 
             try:
                 with connection.cursor() as cursor:
                     insert_query = "INSERT INTO `vision_orders_str2` (time, update_time, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, " \
-                                   "volume_profit, link_cript, price_change_percent_24h, price_in_2min, price_in_3min, price_in_4min, price_in_5min, volume_per_5h, " \
-                                   "price_change_percent_min_24h, price_change_percent_max_24h, max_profit, change_15) " \
-                                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                   "volume_profit, link_cript, price_change_percent_24h, volume_per_5h, " \
+                                   "max_profit) " \
+                                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
             finally:

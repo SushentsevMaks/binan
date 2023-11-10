@@ -267,13 +267,6 @@ def top_coin(trading_pairs: list):
 i = "DARUSDT"
 data_token = last_data(i, "15m", "1440")
 
-g = [round(data_token.close_price[i] / data_token.open_price[i] * 100 - 100, 2) for i in range(10)]
-res = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
-res_before = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
-price_change_percent_24h = round(((data_token.close_price[-2] / data_token.close_price[0]) * 100) - 100, 2)
-print(res, res_before, price_change_percent_24h)
+telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 
-
-
-if -3.1 > res and 30 > price_change_percent_24h > -2 and res_before < 20:
-    print("yes")
+telebot.TeleBot(telega_token).send_photo(chat_id, 'https://ya.ru/images/search?img_url=https%3A%2F%2Fsun9-57.userapi.com%2Fimpg%2F-87n0Qh0_H-l41mdkfIxMZmni3TCXXvn_nAYJQ%2FamPqpygY3ic.jpg%3Fsize%3D300x299%26quality%3D96%26sign%3D5669ab2e62261b771c60467bca2fa9a4%26type%3Dalbum&lr=50&pos=40&rpt=simage&text=%D0%9B%D0%9E%D0%A5')

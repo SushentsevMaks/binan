@@ -154,7 +154,7 @@ def top_coin(trading_pairs: list):
                     low_price = data_token.low_price[-1]
                     low_price_index = 0
 
-                    buy_qty = round(11 / data_token.close_price[-1], 1)
+                    buy_qty = round(70 / data_token.close_price[-1], 1)
 
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {name_cript_check}\n"
                                                                             f"Количество покупаемого - {buy_qty}\n"
@@ -173,7 +173,7 @@ def top_coin(trading_pairs: list):
                                                         quantity=buy_qty)
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
-                            buy_qty = int(round(11 / data_token.close_price[-1], 1))
+                            buy_qty = int(round(70 / data_token.close_price[-1], 1))
                             try:
                                 order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET',
                                                                 quantity=buy_qty)
@@ -229,7 +229,6 @@ def top_coin(trading_pairs: list):
                                       f"\n" \
                                       f"https://www.binance.com/ru/trade/{name_cript_check[:-4]}_USDT?_from=markets&theme=dark&type=grid"
                             bot.send_message(chat_id, message)
-                            loss_sell = 0
 
                         if int(last_time - start_time) > 5700 and float(sell_qty) > 0.05:
                             data_token: Dataset = last_data(name_cript_check, "1m", "1440")
@@ -251,7 +250,6 @@ def top_coin(trading_pairs: list):
                                                                                f"Продажа в минус за {price}\n"
                                                                                f"Покупал за {buyprice}\n"
                                                                                f"Разница {round(100 - 100 * (buyprice / price), 2)}%")
-                                    loss_sell = 1
                                     open_position = False
                                 except Exception as e:
                                     telebot.TeleBot(telega_token).send_message(chat_id,
@@ -264,13 +262,9 @@ def top_coin(trading_pairs: list):
 
                         time.sleep(1)
 
-                    if loss_sell == 0:
-                        time.sleep(180)
+                    max_price = max(data_token[0])
 
-                        data_tok: Dataset = last_data(name_cript_check, "1m", "3")
-                        max_price = max(data_tok[0])
-                    else:
-                        max_price = max(data_token[0])
+                    time.sleep(1)
 
                     sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, low_price_index, res)
 

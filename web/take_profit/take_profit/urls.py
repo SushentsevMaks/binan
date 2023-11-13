@@ -22,7 +22,7 @@ urlpatterns = [
     path("vision/", OrdersViewSet.as_view({'get': 'list'})),
     path('admin/', admin.site.urls),
     path("str1/", index_str1),
-    path("str1/<str:time>", day_str1, name="day"),
+    path("ff/<str:time>", day_str1, name="day"),
     path("", index_str2),
     path("<str:time>", day_str2, name="day")
 ]

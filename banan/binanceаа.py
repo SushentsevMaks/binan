@@ -262,11 +262,10 @@ def top_coin(trading_pairs: list):
         except Exception as e:
             print(e)
 
+from binance import ThreadedWebsocketManager
 
-
-i = "DARUSDT"
+i = "NTRNUSDT"
 data_token = last_data(i, "15m", "1440")
 
-telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 
-telebot.TeleBot(telega_token).send_photo(chat_id, 'https://ya.ru/images/search?img_url=https%3A%2F%2Fsun9-57.userapi.com%2Fimpg%2F-87n0Qh0_H-l41mdkfIxMZmni3TCXXvn_nAYJQ%2FamPqpygY3ic.jpg%3Fsize%3D300x299%26quality%3D96%26sign%3D5669ab2e62261b771c60467bca2fa9a4%26type%3Dalbum&lr=50&pos=40&rpt=simage&text=%D0%9B%D0%9E%D0%A5')
+round(100 - data_token.close_price[-2] / max([i for i in data_token.high_price[-8:]]) * 100, 2)

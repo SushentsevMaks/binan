@@ -34,7 +34,7 @@ class Orders(models.Model):
 class Orders_str2(models.Model):
     time = models.CharField(max_length=30)
     update_time = models.CharField(max_length=30)
-    duration_order = models.CharField(max_length=30)
+    duration_order = models.IntegerField()
     name_cript = models.CharField(verbose_name="Название крипты", max_length=15)
     price_buy = models.FloatField(verbose_name="Цена за шт.")
     price_sell = models.FloatField(verbose_name="Цена за шт.")
@@ -46,7 +46,8 @@ class Orders_str2(models.Model):
     price_change_percent_24h = models.FloatField(verbose_name="Изменение цены за последние 24 ч.")
     volume_per_5h = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Объемы за последние 5 часов")
     max_profit = models.FloatField(verbose_name="Недополученная прибыль")
-    low_price_index = models.IntegerField(null=True)
+    relation_low = models.FloatField(null=True, verbose_name="Отношение close k low")
+    relation_high = models.FloatField(null=True, verbose_name="Отношение close k high")
     res = models.FloatField(null=True, verbose_name="Размер свечи")
 
 

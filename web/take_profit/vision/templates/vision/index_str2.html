@@ -10,9 +10,9 @@
 <body style="background-color: #1c2128">
         <h1 style="text-align: center; height: 50px; color: #fcd535"> Тестовый запуск торгового ботыча на банане 2.0 (СТРАТЕГИЯ CLOSE)</h1>
         <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
-            {% if all_profit.1 >= 0 %}
+            {% if all_profit.0 >= 0 %}
             <div><h2>Суммарная прибыль аккаунта: <span style="color: #0ecb81">{{all_profit.1}} USDT => {{all_profit.0}}%</span></h2></div>
-            {% elif all_profit.1 <= 0 %}
+            {% elif all_profit.0 <= 0 %}
             <div><h2>Суммарная прибыль аккаунта: <span style="color: #f6465d">{{all_profit.1}} USDT => {{all_profit.0}}%</span></h2></div>
             {% endif %}
         </div>
@@ -56,9 +56,9 @@
                         <th class="bn-table-cell" style="color: #747d8a">Процент прибыли</th>
                         <th class="bn-table-cell" style="color: #747d8a">Объем прибыли</th>
                         <th class="bn-table-cell" style="color: #747d8a">Объем торгов</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Упущенная выгода</th>
                         <th class="bn-table-cell" style="color: #747d8a">Размер свечи</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Минута минимальной цены</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Отношение close/low</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Отношение close/high</th>
                     </tr>
                     </thead>
                     <tbody class="bn-table-tbody">
@@ -95,9 +95,9 @@
                             {% endif %}
                         </td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.volume_per_5h }}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.max_profit}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.res}}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.low_price_index}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.relation_low}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.relation_high}}</td>
                         {% endfor %}
                     </tr>
                     </tbody>

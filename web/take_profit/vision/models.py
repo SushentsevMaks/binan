@@ -47,7 +47,7 @@ class Orders_str2(models.Model):
     volume_per_5h = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Объемы за последние 5 часов")
     max_profit = models.FloatField(verbose_name="Недополученная прибыль")
     relation_low = models.FloatField(null=True, verbose_name="Отношение close k low")
-    relation_high = models.FloatField(null=True, verbose_name="Отношение close k high")
+    loss_price_for_two_hours = models.FloatField(null=True, verbose_name="Отношение close k high")
     res = models.FloatField(null=True, verbose_name="Размер свечи")
 
 

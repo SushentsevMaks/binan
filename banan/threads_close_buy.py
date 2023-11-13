@@ -138,22 +138,22 @@ def top_coin(trading_pairs: list):
                 # print(last_data(name_cript_check, "3m", "300"))
 
                 data_token: Dataset = last_data(name_cript_check, "15m", "1440")
-                volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-10:]]) / len(data_token.volume[-10:]) / 15
-                res = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-                res_before = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-                price_change_percent_24h = round(((data_token.close_price[-2] / data_token.close_price[0]) * 100) - 100, 2)
+                volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-10:]]) / len(data_token.volume[-10:]) / 15
+                res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+                res_before: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+                price_change_percent_24h: float = round(((data_token.close_price[-2] / data_token.close_price[0]) * 100) - 100, 2)
 
                 '''процентное соотношение тела свечи и лоу свечи(Оринентир - меньше 30%)'''
-                low_k_open = (data_token.low_price[-1] / data_token.open_price[-1] - 1) * 100
-                close_k_low = (1 - data_token.close_price[-1] / data_token.low_price[-1]) * 100
-                relation_low = round(close_k_low/low_k_open*100, 2)
+                low_k_open: float = (data_token.low_price[-1] / data_token.open_price[-1] - 1) * 100
+                close_k_low: float = (1 - data_token.close_price[-1] / data_token.low_price[-1]) * 100
+                relation_low: float = round(close_k_low/low_k_open*100, 2)
 
                 '''процентное соотношение тела свечи(прошлой) и хая свечи(Ориентир - меньше 30%)'''
-                high_k_open = data_token.high_price[-2] - data_token.open_price[-2]
-                high_k_close = data_token.high_price[-2] - data_token.close_price[-2]
-                relation_high = round(high_k_close / high_k_open * 100, 2) if data_token.close_price[-2] > data_token.open_price[-2] else 0
+                high_k_open: float = data_token.high_price[-2] - data_token.open_price[-2]
+                high_k_close: float = data_token.high_price[-2] - data_token.close_price[-2]
+                relation_high: float = round(high_k_close / high_k_open * 100, 2) if data_token.close_price[-2] > data_token.open_price[-2] else 0
 
-                loss_price_for_two_hours = round(100 - data_token.close_price[-2] / max([i for i in data_token.high_price[-8:]]) * 100, 2)
+                loss_price_for_two_hours: float = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
                 if -3.1 > res and volume_per_5h > 6500 and price_change_percent_24h < 39 and loss_price_for_two_hours < 20:
 
@@ -304,7 +304,7 @@ def top_coin(trading_pairs: list):
 
                     time.sleep(1)
 
-                    sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, relation_low, relation_high, res)
+                    sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, relation_low, loss_price_for_two_hours, res)
 
                     ex[name_cript_check] = time.time()
             except:

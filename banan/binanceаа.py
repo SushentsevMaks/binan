@@ -264,8 +264,19 @@ def top_coin(trading_pairs: list):
 
 from binance import ThreadedWebsocketManager
 
-i = "NTRNUSDT"
+i = "LUNAUSDT"
 data_token = last_data(i, "15m", "1440")
+loss_price_for_two_hours = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
+print(loss_price_for_two_hours)
+print(data_token.close_price[-2])
+print(max([i for i in data_token.open_price[-9:]]))
+# for i in x:
+#     try:
+#         data_token = last_data(i, "15m", "1440")
+#         loss_price_for_two_hours = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
+#
+#         print(i, loss_price_for_two_hours)
+#     except:
+#         pass
 
 
-round(100 - data_token.close_price[-2] / max([i for i in data_token.high_price[-8:]]) * 100, 2)

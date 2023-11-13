@@ -69,7 +69,7 @@ def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price
 #sql_req("LUNCUSDT", 7.21, 1.87, 2.65, 0.92, -0.05, 16078)
 
 def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
-            max_price: float, relation_low: float, relation_high: float, res: float):
+            max_price: float, relation_low: float, loss_price_for_two_hours: float, res: float):
     try:
         orders = client.get_all_orders(symbol=i, limit=5)
         orders = [i for i in orders if i["status"] == "FILLED"][-2:]
@@ -100,7 +100,7 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
 
         values = (formatted_time, formatted_time_update, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit,
                   volume_profit, link_cript, price_change_percent_24h,
-                  volume_per_5h, max_profit, relation_low, relation_high, res)
+                  volume_per_5h, max_profit, relation_low, loss_price_for_two_hours, res)
 
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -110,7 +110,7 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
                 with connection.cursor() as cursor:
                     insert_query = "INSERT INTO `vision_orders_str2` (time, update_time, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, " \
                                    "volume_profit, link_cript, price_change_percent_24h, volume_per_5h, " \
-                                   "max_profit, relation_low, relation_high, res) " \
+                                   "max_profit, relation_low, loss_price_for_two_hours, res) " \
                                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
@@ -120,11 +120,11 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
         except Exception as e:
             telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR data fix: {e}\n"
                                                                    f"relation_low: {relation_low}\n"
-                                                                   f"relation_high: {relation_high}\n")
+                                                                   f"relation_high: {loss_price_for_two_hours}\n")
 
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR input attempt: {e}\n"
                                                                f"relation_low: {relation_low}\n"
-                                                               f"relation_high: {relation_high}\n")
+                                                               f"relation_high: {loss_price_for_two_hours}\n")
 
 #sql_req_str2("SUPERUSDT", 22.18, 7640, 1.54, 2.52, -3.2, 0.0)

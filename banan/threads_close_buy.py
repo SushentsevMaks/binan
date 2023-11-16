@@ -10,6 +10,7 @@ import telebot
 from sql_request import sql_req_str2
 from threading import Thread
 from typing import NamedTuple
+from tradingview_ta import TA_Handler, Interval, Exchange
 
 telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 
@@ -18,66 +19,95 @@ client = Client(keys.api_key, keys.api_secret)
 # trading_pairs = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
 
 one = ['1INCHUSDT', 'AAVEUSDT', 'ACAUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'ADXUSDT', 'AERGOUSDT', 'AGIXUSDT',
-       'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT', 'ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT',
-       'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
+       'AGLDUSDT', 'AKROUSDT', 'ALCXUSDT', 'ALGOUSDT']
+
+onedop = ['ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
 
 two = ['APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'ARUSDT', 'ASRUSDT', 'ASTRUSDT', 'ASTUSDT', 'ATAUSDT',
-       'ATMUSDT', 'ATOMUSDT', 'AUCTIONUSDT', 'AUDIOUSDT', 'AVAUSDT', 'AVAXUSDT', 'AXSUSDT', 'BADGERUSDT', 'BAKEUSDT',
+       'ATMUSDT', 'ATOMUSDT', 'AUCTIONUSDT']
+
+twodop = ['AUDIOUSDT', 'AVAUSDT', 'AVAXUSDT', 'AXSUSDT', 'BADGERUSDT', 'BAKEUSDT',
        'BALUSDT', 'BANDUSDT', 'BARUSDT', 'BATUSDT', 'ARKUSDT']
 
-three = ['BCHUSDT', 'BELUSDT', 'BETAUSDT', 'BETHUSDT', 'BICOUSDT', 'BIFIUSDT', 'BLZUSDT', 'BNXUSDT',
-         'BONDUSDT', 'BSWUSDT', 'BTSUSDT', 'YGGUSDT', 'ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT', 'BURGERUSDT',
+three = ["BEAMXUSDT", 'BCHUSDT', 'BELUSDT', 'BETAUSDT', 'BETHUSDT', 'BICOUSDT', 'BIFIUSDT', 'BLZUSDT', 'BNXUSDT',
+         'BONDUSDT', 'BSWUSDT', 'BTSUSDT', 'YGGUSDT']
+
+threedop = ['ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT', 'BURGERUSDT',
          'C98USDT', 'CAKEUSDT', 'CELOUSDT', 'CELRUSDT', 'CFXUSDT', 'CHESSUSDT', 'CHRUSDT', 'CHZUSDT']
 
 four = ['CITYUSDT', 'CKBUSDT', 'CLVUSDT', 'COMBOUSDT', 'COMPUSDT', 'COSUSDT', 'COTIUSDT', 'CRVUSDT', 'CTKUSDT',
-        'CTSIUSDT', 'CTXCUSDT', 'CVCUSDT', 'CVPUSDT', 'CVXUSDT', 'CYBERUSDT', 'DARUSDT', 'DASHUSDT', 'DATAUSDT',
+        'CTSIUSDT', 'CTXCUSDT', 'CVCUSDT']
+
+fourdop = ['CVPUSDT', 'CVXUSDT', 'CYBERUSDT', 'DARUSDT', 'DASHUSDT', 'DATAUSDT',
         'DCRUSDT', 'DEGOUSDT', 'DENTUSDT', 'DEXEUSDT', 'DFUSDT']
 
 five = ['DGBUSDT', 'DIAUSDT', 'DOCKUSDT', 'DODOUSDT', 'DOGEUSDT', 'DOTUSDT', 'DREPUSDT', 'DUSKUSDT', 'DYDXUSDT',
-        'EDUUSDT', 'EGLDUSDT', 'ELFUSDT', 'ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ERNUSDT', 'ETCUSDT', 'FARMUSDT',
+        'EDUUSDT', 'EGLDUSDT', 'ELFUSDT']
+
+fivedop = ['ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ERNUSDT', 'ETCUSDT', 'FARMUSDT',
         'FETUSDT', 'FIDAUSDT', 'IQUSDT', 'GFTUSDT']
 
 six = ["FTTUSDT", 'FILUSDT', 'FIOUSDT', 'FIROUSDT', 'FISUSDT', 'FLMUSDT', 'FLOKIUSDT', 'FLOWUSDT', 'FLUXUSDT', 'FORTHUSDT',
-       'FORUSDT', 'FRONTUSDT', 'FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT', 'GHSTUSDT',
-       'GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT']
+       'FORUSDT', 'FRONTUSDT']
+
+sixdop = ['FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT', 'GHSTUSDT',
+       'GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT', 'GASUSDT']
 
 seven = ['GNOUSDT', 'GNSUSDT', 'GRTUSDT', 'GTCUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT', 'HIGHUSDT',
-         'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT', 'ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT', 'INJUSDT',
+         'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT']
+
+sevendop = ['ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT', 'INJUSDT',
          'IOSTUSDT', 'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT']
 
 eight = ['JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT', 'KDAUSDT', 'KEYUSDT', 'KLAYUSDT', 'KMDUSDT',
-         'KNCUSDT', 'KP3RUSDT', 'KSMUSDT', 'LAZIOUSDT', 'LDOUSDT', 'LEVERUSDT', 'LINAUSDT', 'LINKUSDT', 'LITUSDT',
+         'KNCUSDT', 'KP3RUSDT', 'KSMUSDT']
+
+eightdop = ['LAZIOUSDT', 'LDOUSDT', 'LEVERUSDT', 'LINAUSDT', 'LINKUSDT', 'LITUSDT',
          'LOKAUSDT', 'LOOMUSDT', 'LPTUSDT', 'LQTYUSDT', 'LRCUSDT']
 
 nine = ['LSKUSDT', 'LTCUSDT', 'LTOUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT', 'MASKUSDT', 'MATICUSDT',
-        'MAVUSDT', 'MBLUSDT', 'MBOXUSDT', 'MCUSDT', 'MDTUSDT', 'MDXUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT',
+        'MAVUSDT', 'MBLUSDT', 'MBOXUSDT']
+
+ninedop = ['MCUSDT', 'MDTUSDT', 'MDXUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT',
         'MOVRUSDT', 'MTLUSDT', 'MULTIUSDT', 'NEARUSDT', 'MEMEUSDT']
 
 ten = ['NEOUSDT', 'NEXOUSDT', 'NKNUSDT', 'NMRUSDT', 'NULSUSDT', 'OAXUSDT', 'OCEANUSDT', 'OGNUSDT', 'OGUSDT', 'OMGUSDT',
-       'OMUSDT', 'ONEUSDT', 'ORDIUSDT', 'ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT', 'OSMOUSDT', 'OXTUSDT', 'PAXGUSDT',
+       'OMUSDT', 'ONEUSDT', 'ORDIUSDT']
+
+tendop = ['ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT', 'OSMOUSDT', 'OXTUSDT', 'PAXGUSDT',
        'PENDLEUSDT', 'PEOPLEUSDT', 'NTRNUSDT']
 
 eleven = ['PERLUSDT', 'PERPUSDT', 'PHAUSDT', 'PHBUSDT', 'PLAUSDT', 'PNTUSDT', 'POLSUSDT', 'POLYXUSDT', 'PONDUSDT',
-          'PORTOUSDT', 'POWRUSDT', 'PROMUSDT', 'PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'QIUSDT', 'QKCUSDT',
+          'PORTOUSDT', 'POWRUSDT', 'PROMUSDT']
+
+elevendop = ['PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'QKCUSDT',
           'QNTUSDT', 'QTUMUSDT', 'QUICKUSDT', 'RADUSDT', 'RAREUSDT']
 
 twelve = ['RAYUSDT', 'RDNTUSDT', 'REEFUSDT', 'REIUSDT', 'RENUSDT', 'REQUSDT', 'RIFUSDT', 'RLCUSDT', 'RNDRUSDT',
-          'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT', 'RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT',
+          'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT']
+
+twelvedop = ['RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT',
           'SEIUSDT', 'SFPUSDT', 'SHIBUSDT', 'SKLUSDT', 'SLPUSDT']
 
 thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSDT', 'STGUSDT', 'STMXUSDT', 'STORJUSDT',
-              'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT', 'SUNUSDT', 'SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT',
+              'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT']
+
+thirteenthdop = ['SUNUSDT', 'SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT',
               'SYSUSDT', 'TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT', 'TIAUSDT']
 
 fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'TVKUSDT', 'TWTUSDT',
-              'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'UNIUSDT', 'USTCUSDT', 'UTKUSDT', 'VETUSDT',
+              'UFTUSDT', 'UMAUSDT', 'UNFIUSDT']
+
+fourteenthdop = ['UNIUSDT', 'USTCUSDT', 'UTKUSDT', 'VETUSDT',
               'VGXUSDT', 'VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT']
 
 fifteenth = ['VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT',
-             'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT',
+             'WOOUSDT', 'WRXUSDT', 'WTCUSDT']
+
+fifteenthdop = ['XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT',
              'XVGUSDT', 'XVSUSDT', 'YFIUSDT']
 
-izg = ['GASUSDT', "HIFIUSDT"]
+izg = ["HIFIUSDT", "CREAMUSDT", 'QIUSDT']
 
 ex = {}
 
@@ -153,6 +183,7 @@ def top_coin(trading_pairs: list):
                 high_k_close: float = data_token.high_price[-2] - data_token.close_price[-2]
                 relation_high: float = round(high_k_close / high_k_open * 100, 2) if data_token.close_price[-2] > data_token.open_price[-2] else 0
 
+                '''процент падения за последние 2ч. Отрицательные значение == был рост'''
                 loss_price_for_two_hours: float = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
                 if -3.1 > res and volume_per_5h > 6500 and price_change_percent_24h < 39 and loss_price_for_two_hours < 20:
@@ -166,7 +197,7 @@ def top_coin(trading_pairs: list):
                     #     low_price = 0
                     #     low_price_index = 0
 
-                    buy_qty = round(45 / data_token.close_price[-1], 1)
+                    buy_qty = round(50 / data_token.close_price[-1], 1)
 
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM - {name_cript_check}\n"
                                                                             f"Количество покупаемого - {buy_qty}\n"
@@ -182,7 +213,7 @@ def top_coin(trading_pairs: list):
                                                         quantity=buy_qty)
                     except BinanceAPIException as e:
                         if e.message == "Filter failure: LOT_SIZE":
-                            buy_qty = int(round(45 / data_token.close_price[-1], 1))
+                            buy_qty = int(round(50 / data_token.close_price[-1], 1))
                             try:
                                 order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET',
                                                                 quantity=buy_qty)
@@ -244,8 +275,9 @@ def top_coin(trading_pairs: list):
                                       f"\n" \
                                       f"https://www.binance.com/ru/trade/{name_cript_check[:-4]}_USDT?_from=markets&theme=dark&type=grid"
                             bot.send_message(chat_id, message)
+                            tt = last_time - start_time
 
-                        if int(last_time - start_time) > 5200:
+                        if last_time - start_time > 5300:
 
                             orders = client.get_open_orders(symbol=name_cript_check)
                             for order in orders:
@@ -263,6 +295,7 @@ def top_coin(trading_pairs: list):
                                                                                f"Покупал за {buyprice}\n"
                                                                                f"Разница {round(100 - 100 * (buyprice / price), 2)}%")
                                 open_position = False
+                                tt = last_time - start_time
                             except Exception as e:
                                 telebot.TeleBot(telega_token).send_message(chat_id,
                                                                                f"Ошибка продажи в минус, Нужен хелп!\n"
@@ -270,41 +303,67 @@ def top_coin(trading_pairs: list):
                                 time.sleep(1)
                                 break
 
-                        if buyprice * 0.91 > data_token.close_price[-1]:
-                            orders = client.get_open_orders(symbol=name_cript_check)
-                            for order in orders:
-                                ordId = order["orderId"]
-                                client.cancel_order(symbol=name_cript_check, orderId=ordId)
+                        # if buyprice * 0.93 > data_token.close_price[-1]:
+                        #     orders = client.get_open_orders(symbol=name_cript_check)
+                        #     for order in orders:
+                        #         ordId = order["orderId"]
+                        #         client.cancel_order(symbol=name_cript_check, orderId=ordId)
+                        #
+                        #     try:
+                        #         balance = client.get_asset_balance(asset=name_cript_check[:-4])
+                        #         sell_qty = float(balance["free"])
+                        #         order_sell = client.order_market_sell(symbol=name_cript_check, quantity=sell_qty)
+                        #         orders = client.get_all_orders(symbol=name_cript_check, limit=1)
+                        #         price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
+                        #         telebot.TeleBot(telega_token).send_photo(chat_id,
+                        #                                                  'https://github.com/bibar228/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true',
+                        #                                                  caption=
+                        #                                                  f"Продажа в минус за {price}\n"
+                        #                                                  f"Покупал за {buyprice}\n"
+                        #                                                  f"Разница {round(100 - 100 * (buyprice / price), 2)}%")
+                        #         open_position = False
+                        #     except Exception as e:
+                        #         telebot.TeleBot(telega_token).send_message(chat_id,
+                        #                                                    f"Ошибка СТОП ЛОССА, Нужен хелп!\n"
+                        #                                                    f"{e}")
+                        #         time.sleep(1)
+                        #         break
 
-                            try:
-                                balance = client.get_asset_balance(asset=name_cript_check[:-4])
-                                sell_qty = float(balance["free"])
-                                order_sell = client.order_market_sell(symbol=name_cript_check, quantity=sell_qty)
-                                orders = client.get_all_orders(symbol=name_cript_check, limit=1)
-                                price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
-                                telebot.TeleBot(telega_token).send_photo(chat_id,
-                                                                         'https://github.com/bibar228/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true',
-                                                                         caption=
-                                                                         f"Продажа в минус за {price}\n"
-                                                                         f"Покупал за {buyprice}\n"
-                                                                         f"Разница {round(100 - 100 * (buyprice / price), 2)}%")
-                                open_position = False
-                            except Exception as e:
-                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                           f"Ошибка СТОП ЛОССА, Нужен хелп!\n"
-                                                                           f"{e}")
-                                time.sleep(1)
-                                break
-
-                        data_token: Dataset = last_data(name_cript_check, "15m", "1440")
+                        #data_token: Dataset = last_data(name_cript_check, "15m", "1440")
 
                         time.sleep(10)
+                    try:
+                        data_token: Dataset = last_data(name_cript_check, "15m", f"{(int(tt/15)+1)*15}")
+                        max_price_frame_end = data_token.high_price
+                        f1 = max_price_frame_end[0]
+                        try:
+                            f2: float = max_price_frame_end[1]
+                        except:
+                            f2 = 0
+                        try:
+                            f3: float = max_price_frame_end[2]
+                        except:
+                            f3 = 0
+                        try:
+                            f4: float = max_price_frame_end[3]
+                        except:
+                            f4 = 0
+                        try:
+                            f5: float = max_price_frame_end[4]
+                        except:
+                            f5 = 0
+
+                    except Exception as e:
+                        telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                   f"Ошибка анализа данных роста по таймфреймам\n"
+                                                                   f"{e}")
+                        f1, f2, f3, f4, f5 = 0, 0, 0, 0, 0
 
                     max_price = max(data_token[0])
 
                     time.sleep(1)
 
-                    sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, relation_low, loss_price_for_two_hours, res)
+                    sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, relation_low, loss_price_for_two_hours, res, f1, f2, f3, f4, f5)
 
                     ex[name_cript_check] = time.time()
             except:
@@ -351,18 +410,22 @@ def btc_anal(data: last_data) -> bool:
     return True
 
 
-# def get_recommend(i):
-#     interval = Interval.INTERVAL_1_MINUTE
-#     output = TA_Handler(symbol=i, screener="Crypto", exchange="Binance", interval=interval)
-#
-#     activiti = output.get_analysis().summary
-#     return activiti
+def get_recommend(i, interval):
+    handler = TA_Handler(
+        symbol=i,
+        exchange="binance",
+        screener="crypto",
+        interval=interval,
+        timeout=None
+    )
+
+    return handler.get_analysis().summary
 
 
 while True:
     start_time_check = time.time()
     '''Заглушка для ожидания конца таймфрейма 15 мин'''
-    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 35:
+    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 45:
         start_time_check = time.time()
         time.sleep(1)
 
@@ -377,7 +440,17 @@ while True:
                    Thread(target=top_coin, args=([ten])), Thread(target=top_coin, args=([eleven])),
                    Thread(target=top_coin, args=([twelve])),
                    Thread(target=top_coin, args=([thirteenth])), Thread(target=top_coin, args=([fourteenth])),
-                   Thread(target=top_coin, args=([fifteenth]))]
+                   Thread(target=top_coin, args=([fifteenth])),
+                   Thread(target=top_coin, args=([onedop])), Thread(target=top_coin, args=([twodop])),
+                   Thread(target=top_coin, args=([threedop])),
+                   Thread(target=top_coin, args=([fourdop])), Thread(target=top_coin, args=([fivedop])),
+                   Thread(target=top_coin, args=([sixdop])),
+                   Thread(target=top_coin, args=([sevendop])), Thread(target=top_coin, args=([eightdop])),
+                   Thread(target=top_coin, args=([ninedop])),
+                   Thread(target=top_coin, args=([tendop])), Thread(target=top_coin, args=([elevendop])),
+                   Thread(target=top_coin, args=([twelvedop])),
+                   Thread(target=top_coin, args=([thirteenthdop])), Thread(target=top_coin, args=([fourteenthdop])),
+                   Thread(target=top_coin, args=([fifteenthdop]))]
 
         start_threads = [i.start() for i in threads]
 

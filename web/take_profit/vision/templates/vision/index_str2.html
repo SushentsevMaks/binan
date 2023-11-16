@@ -58,7 +58,7 @@
                         <th class="bn-table-cell" style="color: #747d8a">Объем торгов</th>
                         <th class="bn-table-cell" style="color: #747d8a">Размер свечи</th>
                         <th class="bn-table-cell" style="color: #747d8a">Отношение close/low</th>
-                        <th class="bn-table-cell" style="color: #747d8a">Отношение close/high</th>
+                        <th class="bn-table-cell" style="color: #747d8a">Падение за последние 2ч.</th>
                     </tr>
                     </thead>
                     <tbody class="bn-table-tbody">
@@ -97,7 +97,7 @@
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.volume_per_5h }}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.res}}</td>
                         <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.relation_low}}</td>
-                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.relation_high}}</td>
+                        <td class="bn-table-cell" style="text-align: center; color: #eaecef">{{p.loss_price_for_two_hours}}</td>
                         {% endfor %}
                     </tr>
                     </tbody>

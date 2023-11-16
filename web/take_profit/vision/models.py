@@ -49,6 +49,11 @@ class Orders_str2(models.Model):
     relation_low = models.FloatField(null=True, verbose_name="Отношение close k low")
     loss_price_for_two_hours = models.FloatField(null=True, verbose_name="Отношение close k high")
     res = models.FloatField(null=True, verbose_name="Размер свечи")
+    f1 = models.FloatField(null=True, verbose_name="Максимальная цена 1 таймфрейма после закупа")
+    f2 = models.FloatField(null=True, verbose_name="Максимальная цена 2 таймфрейма после закупа")
+    f3 = models.FloatField(null=True, verbose_name="Максимальная цена 3 таймфрейма после закупа")
+    f4 = models.FloatField(null=True, verbose_name="Максимальная цена 4 таймфрейма после закупа")
+    f5 = models.FloatField(null=True, verbose_name="Максимальная цена 5 таймфрейма после закупа")
 
 
     class Meta:

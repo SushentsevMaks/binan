@@ -128,8 +128,6 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
 
 def equal(name_cript_check: str, res: float):
     try:
-        name_cript_check = name_cript_check + "USDT"
-
         values = (name_cript_check, res)
 
         try:
@@ -152,7 +150,6 @@ def equal(name_cript_check: str, res: float):
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal: {e}\n")
 
 def get_top_crypto():
-
     try:
         connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
                                              database='banans',
@@ -171,8 +168,6 @@ def get_top_crypto():
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR get top cripto connect: {e}\n")
 
-
-
 def sql_del():
     try:
         connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -187,5 +182,5 @@ def sql_del():
             connection.close()
 
     except Exception as e:
-        print(e)
+        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR DEL: {e}\n")
 

@@ -7,7 +7,6 @@ import keys
 telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 
 client = Client(keys.api_key, keys.api_secret)
-i = "HIFIUSDT"
 
 # def sql_req(i: str, price_change_percent_24h: float, price_in_2min: float, price_in_3min: float, price_in_4min: float,
 #             price_in_5min: float, volume_per_5h: float, price_change_percent_min_24h: float, price_change_percent_max_24h: float,
@@ -69,8 +68,7 @@ i = "HIFIUSDT"
 #sql_req("LUNCUSDT", 7.21, 1.87, 2.65, 0.92, -0.05, 16078)
 
 def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
-            max_price: float, relation_low: float, loss_price_for_two_hours: float, res: float,
-                 f1: float, f2: float, f3: float, f4: float, f5: float):
+            max_price: float, loss_price_for_two_hours: float, res: float):
     try:
         orders = client.get_all_orders(symbol=i, limit=5)
         orders = [i for i in orders if i["status"] == "FILLED"][-2:]
@@ -101,7 +99,7 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
 
         values = (formatted_time, formatted_time_update, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit,
                   volume_profit, link_cript, price_change_percent_24h,
-                  volume_per_5h, max_profit, relation_low, loss_price_for_two_hours, res, f1, f2, f3, f4, f5)
+                  volume_per_5h, max_profit, loss_price_for_two_hours, res)
 
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -111,8 +109,8 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
                 with connection.cursor() as cursor:
                     insert_query = "INSERT INTO `vision_orders_str2` (time, update_time, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, " \
                                    "volume_profit, link_cript, price_change_percent_24h, volume_per_5h, " \
-                                   "max_profit, relation_low, loss_price_for_two_hours, res, f1, f2, f3, f4, f5) " \
-                                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                   "max_profit, loss_price_for_two_hours, res) " \
+                                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
             finally:
@@ -120,12 +118,74 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
 
         except Exception as e:
             telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR data fix: {e}\n"
-                                                                   f"relation_low: {relation_low}\n"
                                                                    f"relation_high: {loss_price_for_two_hours}\n")
 
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR input attempt: {e}\n"
-                                                               f"relation_low: {relation_low}\n"
                                                                f"relation_high: {loss_price_for_two_hours}\n")
 
 #sql_req_str2("SUPERUSDT", 22.18, 7640, 1.54, 2.52, -3.2, 0.0)
+
+def equal(name_cript_check: str, res: float):
+    try:
+        name_cript_check = name_cript_check + "USDT"
+
+        values = (name_cript_check, res)
+
+        try:
+            connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
+                                             database='banans',
+                                             cursorclass=pymysql.cursors.DictCursor)
+            try:
+                with connection.cursor() as cursor:
+                    insert_query = "INSERT INTO `vision_equals` (name_cript, res) " \
+                                   "VALUES (%s, %s)"
+                    cursor.execute(insert_query, (values))
+                    connection.commit()
+            finally:
+                connection.close()
+
+        except Exception as e:
+            telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal connect k bd: {e}\n")
+
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal: {e}\n")
+
+def get_top_crypto():
+
+    try:
+        connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
+                                             database='banans',
+                                             cursorclass=pymysql.cursors.DictCursor)
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("select name_cript from `vision_equals`"
+                               "ORDER BY res ASC LIMIT 1")
+                result = cursor.fetchall()
+
+        finally:
+            connection.close()
+
+        return result[0]["name_cript"]
+
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR get top cripto connect: {e}\n")
+
+
+
+def sql_del():
+    try:
+        connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
+                                     database='banans',
+                                     cursorclass=pymysql.cursors.DictCursor)
+        try:
+            with connection.cursor() as cursor:
+                insert_query = "DELETE FROM `vision_equals`"
+                cursor.execute(insert_query)
+                connection.commit()
+        finally:
+            connection.close()
+
+    except Exception as e:
+        print(e)
+

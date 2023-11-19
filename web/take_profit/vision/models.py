@@ -46,19 +46,22 @@ class Orders_str2(models.Model):
     price_change_percent_24h = models.FloatField(verbose_name="Изменение цены за последние 24 ч.")
     volume_per_5h = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="Объемы за последние 5 часов")
     max_profit = models.FloatField(verbose_name="Недополученная прибыль")
-    relation_low = models.FloatField(null=True, verbose_name="Отношение close k low")
     loss_price_for_two_hours = models.FloatField(null=True, verbose_name="Отношение close k high")
     res = models.FloatField(null=True, verbose_name="Размер свечи")
-    f1 = models.FloatField(null=True, verbose_name="Максимальная цена 1 таймфрейма после закупа")
-    f2 = models.FloatField(null=True, verbose_name="Максимальная цена 2 таймфрейма после закупа")
-    f3 = models.FloatField(null=True, verbose_name="Максимальная цена 3 таймфрейма после закупа")
-    f4 = models.FloatField(null=True, verbose_name="Максимальная цена 4 таймфрейма после закупа")
-    f5 = models.FloatField(null=True, verbose_name="Максимальная цена 5 таймфрейма после закупа")
-
 
     class Meta:
         ordering = ('id',)
         verbose_name_plural = 'Данные ордеров'
+
+    def __str__(self):
+        return self.name_cript
+
+class Equals(models.Model):
+    name_cript = models.CharField(verbose_name="Название крипты", max_length=15)
+    res = models.FloatField(verbose_name="Размер свечи")
+
+    class Meta:
+        ordering = ('id',)
 
     def __str__(self):
         return self.name_cript

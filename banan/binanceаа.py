@@ -377,9 +377,8 @@ from binance import ThreadedWebsocketManager
 # print(handler.get_analysis().oscillators["COMPUTE"]["MACD"])
 
 
-i = "DOGEUSDT"
-data_token = last_data(i, "1h", "1440")
-
+i = "ARDRUSDT"
+data_token = last_data(i, "1h", "150000")
 
 
 def sql_del():
@@ -399,6 +398,54 @@ def sql_del():
     except Exception as e:
         print(e)
 
+def sql_req_high():
+    try:
+        connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
+                                             database='banans',
+                                             cursorclass=pymysql.cursors.DictCursor)
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT title, count(price_high)  FROM banans.new_table WHERE price_high >= 1.15 GROUP BY title")
+                result = cursor.fetchall()
+        finally:
+            connection.close()
+
+        return sorted([[i["title"], i["count(price_high)"]] for i in result])
+
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR get top cripto connect: {e}\n")
+
+def sql_req_low():
+    try:
+        connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
+                                             database='banans',
+                                           cursorclass=pymysql.cursors.DictCursor)
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT title, count(price_high)  FROM banans.new_table WHERE price_high < 1.15 GROUP BY title")
+                result = cursor.fetchall()
+        finally:
+            connection.close()
+
+        return sorted([[i["title"], i["count(price_high)"]] for i in result])
+
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR get top cripto connect: {e}\n")
+
+high = sql_req_high()
+low = sql_req_low()
+
+gf = []
+for i in high:
+    for j in low:
+        if i[0] == j[0]:
+            if j[1] == 0:
+                gf.append([i[0], i[1], j[1], i[1]])
+            else:
+                gf.append([i[0], i[1], j[1], round(i[1]/j[1], 2)])
+
+print(gf)
+print(sorted(gf, key=lambda x: -x[3]))
 
 
 # hhhhh = []
@@ -407,7 +454,7 @@ def sql_del():
 # for d in x:
 #     data = []
 #     try:
-#         data_token = last_data(d, "15m", "9440")
+#         data_token = last_data(d, "15m", "500000")
 #         open = data_token.open_price
 #
 #         close = data_token.close_price
@@ -416,7 +463,7 @@ def sql_del():
 #
 #         high = data_token.high_price
 #
-#         it = list(map(lambda x: -round((x[0]/x[1] * 100 - 100), 2) if x[0] > x[1] else round((100 - x[0]/x[1] *100), 2), zip(open, close)))
+#         it = list(map(lambda x: round((x[1]/x[0] * 100 - 100), 2), zip(open, close)))
 #
 #         high_it = list(map(lambda x: abs(round((x[1]/x[0] * 100 - 100), 2)), zip(high, open)))
 #
@@ -425,17 +472,17 @@ def sql_del():
 #         low_it = list(map(lambda x: round((x[0] / x[1] * 100 - 100), 2), zip(low, open)))
 #
 #
-#         for i in range(0, len(it)-2):
+#         for i in range(1, len(it)-2):
 #
 #              # if it[i] < - 3.1 and high_it[i + 1] < 1:
 #              #     print(it[i], high_it[i+1], d)
 #
-#              if it[i] < - 4:
+#              if it[i] < -3:
 #                  if d not in ddd:
 #                      ddd[d] = [it[i], high_it[i+1]]
 #                      print(it[i], high_it[i+1], d)
 #                      hhhhh.append(high_it[i+1])
-#                      values = (d, it[i], high_it[i+1], close_it[i+1], low_it[i+1], it.index(it[i]),
+#                      values = (d, it[i-1], it[i], high_it[i+1], close_it[i+1], low_it[i+1], it.index(it[i]),
 #                                close_it[i+2])
 #
 #                      try:
@@ -445,10 +492,12 @@ def sql_del():
 #                                                       cursorclass=pymysql.cursors.DictCursor)
 #                          try:
 #                              with connection.cursor() as cursor:
-#                                  insert_query = "INSERT INTO `new_table` (title, price_loss, price_high, price_close, price_low, indexx, price_next_close) " \
-#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+#                                  insert_query = "INSERT INTO `new_table` (title, price_before, price_loss, price_high, price_close, price_low, indexx, price_next_close) " \
+#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 #                                  cursor.execute(insert_query, (values))
 #                                  connection.commit()
+#                          except Exception as e:
+#                              print(e)
 #                          finally:
 #                              connection.close()
 #                      except Exception as e:
@@ -456,7 +505,7 @@ def sql_del():
 #
 #                  else:
 #                      ddd[d] += it[i], high_it[i + 1]
-#                      values = (d, it[i], high_it[i+1], close_it[i+1], low_it[i+1], it.index(it[i]),
+#                      values = (d, it[i-1], it[i], high_it[i+1], close_it[i+1], low_it[i+1], it.index(it[i]),
 #                                close_it[i+2])
 #
 #                      try:
@@ -466,16 +515,18 @@ def sql_del():
 #                                                       cursorclass=pymysql.cursors.DictCursor)
 #                          try:
 #                              with connection.cursor() as cursor:
-#                                  insert_query = "INSERT INTO `new_table` (title, price_loss, price_high, price_close, price_low, indexx, price_next_close) " \
-#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+#                                  insert_query = "INSERT INTO `new_table` (title, price_before, price_loss, price_high, price_close, price_low, indexx, price_next_close) " \
+#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 #                                  cursor.execute(insert_query, (values))
 #                                  connection.commit()
+#                          except Exception as e:
+#                              print(e)
 #                          finally:
 #                              connection.close()
 #                      except Exception as e:
 #                          print(e)
-#     except:
-#         pass
+#     except Exception as e:
+#         print(e)
 #
 # print(ddd)
 

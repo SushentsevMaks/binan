@@ -149,21 +149,19 @@ def equal(name_cript_check: str, res: float):
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal: {e}\n")
 
-def get_top_crypto():
+def get_top_crypto() -> list:
     try:
         connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
                                              database='banans',
                                              cursorclass=pymysql.cursors.DictCursor)
         try:
             with connection.cursor() as cursor:
-                cursor.execute("select name_cript from `vision_equals`"
-                               "ORDER BY res ASC LIMIT 1")
+                cursor.execute("select name_cript from `vision_equals`")
                 result = cursor.fetchall()
-
         finally:
             connection.close()
 
-        return result[0]["name_cript"]
+        return result
 
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR get top cripto connect: {e}\n")

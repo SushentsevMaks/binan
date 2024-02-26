@@ -126,9 +126,9 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
 
 #sql_req_str2("SUPERUSDT", 22.18, 7640, 1.54, 2.52, -3.2, 0.0)
 
-def equal(name_cript_check: str, res: float):
+def equal(name_cript_check: str, res: float, res_before: float, price_change_percent_24h: float):
     try:
-        values = (name_cript_check, res)
+        values = (name_cript_check, res, res_before, price_change_percent_24h)
 
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -136,8 +136,8 @@ def equal(name_cript_check: str, res: float):
                                              cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO `vision_equals` (name_cript, res) " \
-                                   "VALUES (%s, %s)"
+                    insert_query = "INSERT INTO `vision_equals` (name_cript, res, res_before, price_change_percent_24h) " \
+                                   "VALUES (%s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
             finally:
@@ -149,14 +149,14 @@ def equal(name_cript_check: str, res: float):
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal: {e}\n")
 
-def get_top_crypto() -> list:
+def get_crypto() -> list:
     try:
         connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
                                              database='banans',
                                              cursorclass=pymysql.cursors.DictCursor)
         try:
             with connection.cursor() as cursor:
-                cursor.execute("select name_cript from `vision_equals`")
+                cursor.execute("select * from `vision_equals`")
                 result = cursor.fetchall()
         finally:
             connection.close()

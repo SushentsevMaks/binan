@@ -14,6 +14,8 @@ from tradingview_ta import TA_Handler, Interval, Exchange
 
 import re
 
+from binan.banan.sql_request import get_crypto, equal, sql_del
+
 telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 import asyncio
 
@@ -228,96 +230,125 @@ trading_pairs_fut = ['LEVERUSDT', 'USDCUSDT', 'AVAXUSDT', 'ATAUSDT', 'ACHUSDT', 
 #              'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT',
 #              'XVGUSDT', 'XVSUSDT', 'YFIUSDT']
 
-one = ['1INCHUSDT', 'AAVEUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'AERGOUSDT', 'AGIXUSDT',
-       'AGLDUSDT', 'ALCXUSDT', 'ALGOUSDT']
+one = ['1INCHUSDT', 'AAVEUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'MANTAUSDT']
 
-onedop = ['ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT', 'AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT']
+onegop = ['AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'ALCXUSDT', 'ALGOUSDT']
 
-two = ['APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'ARUSDT', 'ASRUSDT',
-       'ATMUSDT', 'ATOMUSDT', 'AUCTIONUSDT']
+onedop = ['ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT']
 
-twodop = ['AUDIOUSDT', 'AVAXUSDT', 'AXSUSDT', 'BADGERUSDT', 'BAKEUSDT',
-       'BALUSDT', 'BANDUSDT', 'BARUSDT', 'BATUSDT', 'ARKUSDT']
+onemop = ['AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT', 'AIUSDT']
 
-three = ["BEAMXUSDT", 'BCHUSDT', 'BELUSDT', 'BETAUSDT', 'BICOUSDT', 'BIFIUSDT', 'BLZUSDT', 'BNXUSDT',
-         'BONDUSDT', 'YGGUSDT']
+two = ['APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'XAIUSDT']
 
-threedop = ['ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT', 'BURGERUSDT',
-         'C98USDT', 'CAKEUSDT', 'CELRUSDT', 'CFXUSDT', 'CHESSUSDT', 'CHRUSDT', 'CHZUSDT']
+twogop = ['ARUSDT', 'ASRUSDT', 'ATMUSDT', 'ATOMUSDT', 'AUCTIONUSDT']
 
-four = ['CITYUSDT', 'CKBUSDT', 'CLVUSDT', 'COMPUSDT', 'COTIUSDT', 'CRVUSDT',
-        'CTSIUSDT', 'CTXCUSDT', 'CVCUSDT']
+twodop = ['AUDIOUSDT', 'AVAXUSDT', 'AXSUSDT', 'BADGERUSDT', 'BAKEUSDT']
 
-fourdop = ['CVPUSDT', 'CVXUSDT', 'CYBERUSDT', 'DARUSDT', 'DASHUSDT', 'DATAUSDT',
-        'DCRUSDT', 'DEGOUSDT', 'DENTUSDT', 'DEXEUSDT', 'DFUSDT']
+twomop = ['BALUSDT', 'BANDUSDT', 'BARUSDT', 'BATUSDT', 'ARKUSDT']
 
-five = ['DIAUSDT', 'DODOUSDT', 'DOGEUSDT', 'DOTUSDT', 'DREPUSDT', 'DUSKUSDT', 'DYDXUSDT',
-        'EDUUSDT', 'EGLDUSDT', 'ELFUSDT']
+three = ["BEAMXUSDT", 'BCHUSDT', 'BELUSDT', 'BETAUSDT', 'BICOUSDT', 'NFPUSDT']
 
-fivedop = ['ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ETCUSDT', 'FARMUSDT',
-        'FETUSDT', 'FIDAUSDT', 'GFTUSDT']
+threegop = ['BIFIUSDT', 'BLZUSDT', 'BNXUSDT', 'BONDUSDT', 'YGGUSDT']
 
-six = ["FTTUSDT", 'FILUSDT', 'FIOUSDT', 'FIROUSDT', 'FISUSDT', 'FLOKIUSDT', 'FLUXUSDT', 'FORTHUSDT',
-       'FORUSDT', 'FRONTUSDT']
+threedop = ['ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT', 'BURGERUSDT', 'C98USDT', 'CAKEUSDT']
 
-sixdop = ['FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT',
-       'GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT', 'GASUSDT']
+threemop = ['CELRUSDT', 'CFXUSDT', 'CHESSUSDT', 'CHRUSDT', 'CHZUSDT']
 
-seven = ['GNSUSDT', 'GRTUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT', 'HIGHUSDT',
-         'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT']
+four = ['CITYUSDT', 'CKBUSDT', 'CLVUSDT', 'COMPUSDT', 'COTIUSDT']
 
-sevendop = ['ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT', 'INJUSDT',
-         'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT']
+fourgop = ['CRVUSDT', 'CTSIUSDT', 'CTXCUSDT', 'CVCUSDT', 'DYMUSDT']
 
-eight = ['JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT', 'KEYUSDT', 'KLAYUSDT', 'KMDUSDT',
-         'KP3RUSDT', 'KSMUSDT']
+fourdop = ['CVPUSDT', 'CVXUSDT', 'CYBERUSDT', 'DARUSDT', 'DASHUSDT', 'DATAUSDT']
 
-eightdop = ['LAZIOUSDT', 'LDOUSDT', 'LEVERUSDT', 'LINAUSDT', 'LINKUSDT', 'LITUSDT',
-         'LOKAUSDT', 'LOOMUSDT', 'LQTYUSDT', 'LRCUSDT']
+fourmop = ['DCRUSDT', 'DEGOUSDT', 'DENTUSDT', 'DEXEUSDT', 'DFUSDT']
 
-nine = ['LSKUSDT', 'LTCUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT', 'MASKUSDT', 'MATICUSDT',
-        'MAVUSDT', 'MBLUSDT', 'MBOXUSDT']
+five = ['DIAUSDT', 'DODOUSDT', 'DOGEUSDT', 'DOTUSDT', 'DREPUSDT', 'ALTUSDT']
 
-ninedop = ['MDTUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT',
-        'MOVRUSDT', 'MTLUSDT', 'MULTIUSDT', 'NEARUSDT', 'MEMEUSDT']
+fivegop = ['DUSKUSDT', 'DYDXUSDT', 'EDUUSDT', 'EGLDUSDT', 'ELFUSDT']
 
-ten = ['NEOUSDT', 'NKNUSDT', 'NMRUSDT', 'NULSUSDT', 'OAXUSDT', 'OCEANUSDT', 'OGNUSDT', 'OGUSDT', 'OMGUSDT',
-       'OMUSDT', 'ONEUSDT', 'ORDIUSDT']
+fivedop = ['ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ETCUSDT', 'RONINUSDT']
 
-tendop = ['ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT', 'OSMOUSDT', 'OXTUSDT',
-       'PENDLEUSDT', 'PEOPLEUSDT', 'NTRNUSDT']
+fivemop = ['FARMUSDT', 'FETUSDT', 'FIDAUSDT', 'GFTUSDT', 'PYTHUSDT']
 
-eleven = ['PERLUSDT', 'PERPUSDT', 'PHAUSDT', 'PHBUSDT', 'PNTUSDT', 'POLSUSDT', 'POLYXUSDT',
-          'PORTOUSDT', 'POWRUSDT', 'PROMUSDT']
+six = ["FTTUSDT", 'FILUSDT', 'FIOUSDT', 'FIROUSDT', 'FISUSDT']
 
-elevendop = ['PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'QKCUSDT',
-          'QTUMUSDT', 'QUICKUSDT', 'RADUSDT']
+sixgop = ['FLOKIUSDT', 'FLUXUSDT', 'FORTHUSDT', 'FORUSDT', 'FRONTUSDT']
 
-twelve = ['RAYUSDT', 'RDNTUSDT', 'REEFUSDT', 'REIUSDT', 'RENUSDT', 'REQUSDT', 'RIFUSDT', 'RLCUSDT', 'RNDRUSDT',
-          'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT']
+sixdop = ['FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT']
 
-twelvedop = ['RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT',
-          'SEIUSDT', 'SFPUSDT', 'SHIBUSDT', 'SKLUSDT', 'SLPUSDT']
+sixmop = ['GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT', 'GASUSDT']
 
-thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSDT', 'STGUSDT', 'STMXUSDT', 'STORJUSDT',
-              'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT']
+seven = ['GNSUSDT', 'GRTUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT']
 
-thirteenthdop = ['SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT',
-              'SYSUSDT', 'TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT', 'TIAUSDT']
+sevengop = ['HIGHUSDT', 'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT']
 
-fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'TVKUSDT', 'TWTUSDT',
-              'UFTUSDT', 'UMAUSDT', 'UNFIUSDT']
+sevendop = ['ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT']
 
-fourteenthdop = ['UNIUSDT', 'USTCUSDT', 'VETUSDT',
-              'VGXUSDT', 'VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT']
+sevenmop = ['INJUSDT', 'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT', 'STMXUSDT']
 
-fifteenth = ['WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WLDUSDT', 'WNXMUSDT',
-             'WOOUSDT', 'WRXUSDT', 'WTCUSDT']
+eight = ['JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT']
 
-fifteenthdop = ['XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XRPUSDT',
-             'XVGUSDT', 'YFIUSDT']
+eightgop = ['KEYUSDT', 'KLAYUSDT', 'KMDUSDT', 'KP3RUSDT', 'KSMUSDT']
 
-izg = ["HIFIUSDT", "CREAMUSDT", "QIUSDT"]
+eightdop = ['LAZIOUSDT', 'LDOUSDT', 'LEVERUSDT', 'LINAUSDT', 'LINKUSDT']
+
+eightmop = ['LITUSDT', 'LOKAUSDT', 'LOOMUSDT', 'LQTYUSDT', 'LRCUSDT']
+
+nine = ['LSKUSDT', 'LTCUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT']
+
+ninegop = ['MASKUSDT', 'MATICUSDT', 'MAVUSDT', 'MBLUSDT', 'MBOXUSDT']
+
+ninedop = ['MDTUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT']
+
+ninemop = ['MOVRUSDT', 'MTLUSDT', 'MULTIUSDT', 'NEARUSDT', 'MEMEUSDT']
+
+ten = ['NEOUSDT', 'NKNUSDT', 'NMRUSDT', 'NULSUSDT', 'OAXUSDT', 'OCEANUSDT']
+
+tengop = ['OGNUSDT', 'OGUSDT', 'OMGUSDT', 'OMUSDT', 'ONEUSDT', 'ORDIUSDT']
+
+tendop = ['ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT']
+
+tenmop = ['OSMOUSDT', 'OXTUSDT', 'PENDLEUSDT', 'PEOPLEUSDT', 'NTRNUSDT']
+
+eleven = ['PERLUSDT', 'PERPUSDT', 'PHAUSDT', 'PHBUSDT', 'PNTUSDT']
+
+elevengop = ['POLSUSDT', 'POLYXUSDT', 'PORTOUSDT', 'POWRUSDT', 'PROMUSDT']
+
+elevendop = ['PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'RIFUSDT']
+
+elevenmop = ['QKCUSDT', 'QTUMUSDT', 'QUICKUSDT', 'RADUSDT', 'RLCUSDT']
+
+twelve = ['RAYUSDT', 'RDNTUSDT', 'REEFUSDT', 'REIUSDT', 'RENUSDT', 'REQUSDT']
+
+twelvegop = ['RNDRUSDT', 'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT']
+
+twelvedop = ['RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT']
+
+twelvemop = ['SEIUSDT', 'SFPUSDT', 'SHIBUSDT', 'SKLUSDT', 'SLPUSDT']
+
+thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSDT', 'STGUSDT']
+
+thirteenthgop = ['STORJUSDT', 'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT']
+
+thirteenthdop = ['SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT', 'SYSUSDT']
+
+thirteenthmop = ['TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT', 'TIAUSDT']
+
+fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT']
+
+fourteenthgop = ['TVKUSDT', 'TWTUSDT', 'UFTUSDT', 'UMAUSDT', 'UNFIUSDT']
+
+fourteenthdop = ['UNIUSDT', 'USTCUSDT', 'VETUSDT', 'VGXUSDT', 'XVGUSDT', "CREAMUSDT"]
+
+fourteenthmop = ['VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT', 'YFIUSDT']
+
+fifteenth = ['WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'JUPUSDT']
+
+fifteenthgop = ['WLDUSDT', 'WNXMUSDT', 'WOOUSDT', 'WRXUSDT', 'WTCUSDT']
+
+fifteenthdop = ['XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', "NTRNUSDT", 'XRPUSDT']
+
+izg = ["HIFIUSDT", 'QIUSDT']
 
 x = one + two + three + four + five + six + seven + eight + nine + ten + eleven + twelve + thirteenth + fourteenth + fifteenth + izg + \
     onedop + twodop + threedop + fourdop + fivedop + sixdop + sevendop + eightdop + ninedop + tendop + elevendop + twelvedop + \
@@ -377,26 +408,23 @@ from binance import ThreadedWebsocketManager
 # print(handler.get_analysis().oscillators["COMPUTE"]["MACD"])
 
 
-i = "ARDRUSDT"
-data_token = last_data(i, "1h", "150000")
 
-
-def sql_del():
-    try:
-        connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user',
-                                     password='warlight123',
-                                     database='banans',
-                                     cursorclass=pymysql.cursors.DictCursor)
-        try:
-            with connection.cursor() as cursor:
-                insert_query = "DELETE FROM `new_table`"
-                cursor.execute(insert_query)
-                connection.commit()
-        finally:
-            connection.close()
-
-    except Exception as e:
-        print(e)
+# def sql_del():
+#     try:
+#         connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user',
+#                                      password='warlight123',
+#                                      database='banans',
+#                                      cursorclass=pymysql.cursors.DictCursor)
+#         try:
+#             with connection.cursor() as cursor:
+#                 insert_query = "DELETE FROM `1h_info`"
+#                 cursor.execute(insert_query)
+#                 connection.commit()
+#         finally:
+#             connection.close()
+#
+#     except Exception as e:
+#         print(e)
 
 def sql_req_high():
     try:
@@ -432,20 +460,20 @@ def sql_req_low():
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR get top cripto connect: {e}\n")
 
-high = sql_req_high()
-low = sql_req_low()
-
-gf = []
-for i in high:
-    for j in low:
-        if i[0] == j[0]:
-            if j[1] == 0:
-                gf.append([i[0], i[1], j[1], i[1]])
-            else:
-                gf.append([i[0], i[1], j[1], round(i[1]/j[1], 2)])
-
-print(gf)
-print(sorted(gf, key=lambda x: -x[3]))
+# high = sql_req_high()
+# low = sql_req_low()
+#
+# gf = []
+# for i in high:
+#     for j in low:
+#         if i[0] == j[0]:
+#             if j[1] == 0:
+#                 gf.append([i[0], i[1], j[1], i[1]])
+#             else:
+#                 gf.append([i[0], i[1], j[1], round(i[1]/j[1], 2)])
+#
+# print(gf)
+# print(sorted(gf, key=lambda x: -x[3]))
 
 
 # hhhhh = []
@@ -454,36 +482,34 @@ print(sorted(gf, key=lambda x: -x[3]))
 # for d in x:
 #     data = []
 #     try:
-#         data_token = last_data(d, "15m", "500000")
+#         data_token = last_data(d, "4h", "600000")
+#
 #         open = data_token.open_price
 #
 #         close = data_token.close_price
+#
 #
 #         low = data_token.low_price
 #
 #         high = data_token.high_price
 #
-#         it = list(map(lambda x: round((x[1]/x[0] * 100 - 100), 2), zip(open, close)))
+#         close_it = list(map(lambda x: round((x[1]/x[0] * 100 - 100), 2), zip(open, close)))
 #
 #         high_it = list(map(lambda x: abs(round((x[1]/x[0] * 100 - 100), 2)), zip(high, open)))
 #
-#         close_it = list(map(lambda x: -round((x[0] / x[1] * 100 - 100), 2), zip(open, close)))
-#
-#         low_it = list(map(lambda x: round((x[0] / x[1] * 100 - 100), 2), zip(low, open)))
-#
-#
-#         for i in range(1, len(it)-2):
+#         print(d, close_it)
+#         for i in range(1, len(close_it)-4):
 #
 #              # if it[i] < - 3.1 and high_it[i + 1] < 1:
 #              #     print(it[i], high_it[i+1], d)
 #
-#              if it[i] < -3:
+#              if close_it[i] < -4:
 #                  if d not in ddd:
-#                      ddd[d] = [it[i], high_it[i+1]]
-#                      print(it[i], high_it[i+1], d)
+#                      ddd[d] = [close_it[i], high_it[i+1]]
+#                      print(close_it[i], high_it[i+1], d)
 #                      hhhhh.append(high_it[i+1])
-#                      values = (d, it[i-1], it[i], high_it[i+1], close_it[i+1], low_it[i+1], it.index(it[i]),
-#                                close_it[i+2])
+#                      values = (d, close_it[i], high_it[i+1], close_it[i+1], high_it[i+2], close_it[i+2],
+#                                high_it[i+3], close_it[i+3], high_it[i+4], close_it[i+4])
 #
 #                      try:
 #                          connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user',
@@ -492,8 +518,9 @@ print(sorted(gf, key=lambda x: -x[3]))
 #                                                       cursorclass=pymysql.cursors.DictCursor)
 #                          try:
 #                              with connection.cursor() as cursor:
-#                                  insert_query = "INSERT INTO `new_table` (title, price_before, price_loss, price_high, price_close, price_low, indexx, price_next_close) " \
-#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+#                                  insert_query = "INSERT INTO `1h_info` (title, price_loss, price_high, price_close, price_next_high, price_next_close," \
+#                                                 "price_2next_high, price_2next_close, price_3next_high, price_3next_close) " \
+#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 #                                  cursor.execute(insert_query, (values))
 #                                  connection.commit()
 #                          except Exception as e:
@@ -504,9 +531,9 @@ print(sorted(gf, key=lambda x: -x[3]))
 #                          print(e)
 #
 #                  else:
-#                      ddd[d] += it[i], high_it[i + 1]
-#                      values = (d, it[i-1], it[i], high_it[i+1], close_it[i+1], low_it[i+1], it.index(it[i]),
-#                                close_it[i+2])
+#                      ddd[d] += close_it[i], high_it[i + 1]
+#                      values = (d, close_it[i], high_it[i+1], close_it[i+1],
+#                                high_it[i+2], close_it[i+2], high_it[i+3], close_it[i+3], high_it[i+4], close_it[i+4])
 #
 #                      try:
 #                          connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user',
@@ -515,8 +542,9 @@ print(sorted(gf, key=lambda x: -x[3]))
 #                                                       cursorclass=pymysql.cursors.DictCursor)
 #                          try:
 #                              with connection.cursor() as cursor:
-#                                  insert_query = "INSERT INTO `new_table` (title, price_before, price_loss, price_high, price_close, price_low, indexx, price_next_close) " \
-#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+#                                  insert_query = "INSERT INTO `1h_info` (title, price_loss, price_high, price_close, price_next_high, price_next_close, " \
+#                                                 "price_2next_high, price_2next_close, price_3next_high, price_3next_close) " \
+#                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 #                                  cursor.execute(insert_query, (values))
 #                                  connection.commit()
 #                          except Exception as e:
@@ -542,4 +570,172 @@ print(sorted(gf, key=lambda x: -x[3]))
 #     print("4aCoBuk")
 # else:
 #     print("15 min")
+# bd_cript = get_top_crypto()
+# reit_bd_cript = []
+# all_cript = [['SYSUSDT', 28, 1, 2.76], ['PHBUSDT', 30, 2, 5.87]]
+# print(bd_cript)
+#
+# for i in all_cript:
+#     for j in bd_cript:
+#         if i[0] == j['name_cript']:
+#             reit_bd_cript.append([j['name_cript'], i[3], j["res"]])
+#
+# if -30 < sorted(reit_bd_cript, key=lambda x: x[2])[0][2] < -20:
+#     top = sorted(reit_bd_cript, key=lambda x: [x[2], -x[1]])[0][0]
+#     sell_pr = 103
+#
+# elif sorted(reit_bd_cript, key=lambda x: x[2])[0][2] < -30:
+#     top = sorted(reit_bd_cript, key=lambda x: [x[2], -x[1]])[0][0]
+#     sell_pr = 105
+#
+# else:
+#     top = sorted(reit_bd_cript, key=lambda x: -x[1])[0][0]
+#     sell_pr = 101.15
+"""Алгоритм сбора данных """
+# hhhhh = []
+# ddd = {}
+# data = []
+# data_token = last_data("NTRNUSDT", "4h", "4440")
+# open = data_token.open_price
+#
+# close = data_token.close_price
+#
+# low = data_token.low_price
+#
+# high = data_token.high_price
+#
+# high_it = list(map(lambda x: abs(round((x[1]/x[0] * 100 - 100), 2)), zip(high, open)))
+#
+# close_it = list(map(lambda x: round((x[1]/x[0] * 100 - 100), 2), zip(open, close)))
+#
+# #low_it = list(map(lambda x: round((x[0] / x[1] * 100 - 100), 2), zip(low, open)))
+#
+# print(list(zip(close_it, high_it)))
 
+# for i in range(1, len(it)-2):
+#
+#     # if it[i] < - 3.1 and high_it[i + 1] < 1:
+#     #     print(it[i], high_it[i+1], d)
+#
+#     if it[i] < -3:
+#         if d not in ddd:
+#             ddd[d] = [it[i], high_it[i+1]]
+#             print(it[i], high_it[i+1], d)
+#             hhhhh.append(high_it[i+1])
+#             values = (d, it[i-1], it[i], high_it[i+1], close_it[i+1], low_it[i+1], it.index(it[i]),
+#                                close_it[i+2])
+
+# i = "ARDRUSDT"
+# data_token = last_data(i, "1h", "150000")
+# open_price_1 = 7262
+# close_price_1 = 6705
+#
+# open_price_2 = 6739
+# close_price_2 = 7262
+#
+# res: float = round(close_price_1 / open_price_1 * 100 - 100, 2)
+# res_before: float = round(close_price_2 / open_price_2 * 100 - 100, 2)
+#
+# print(res)
+# print(res_before)
+# x = -6.2
+# y = 39.32
+# print(abs(x) / y)
+# print(abs(res) / res_before)
+
+
+sql_del()
+equal('WOOUSDT', -4.09, 1, 11.37)
+equal('FRONTUSDT', -5.91, 1, -0.76)
+equal('UNIUSDT', -7.19, 1, -16.96)
+equal('SCUSDT', 0, 1, 100)
+
+bd_cript = get_crypto()
+'''Проверка на наилучший объект и работа с ним дальше'''
+reit_bd_cript = []
+
+for j in bd_cript:
+    reit_bd_cript.append([j['name_cript'], j["res"], j["price_change_percent_24h"]])
+print(sorted(reit_bd_cript, key=lambda x: x[2]))
+print(sorted(reit_bd_cript, key=lambda x: x[2])[0][0])
+
+
+
+# import numpy as np
+# import pandas as pd
+# import matplotlib.pyplot as plt
+# import yfinance as yf
+# from sklearn.preprocessing import MinMaxScaler
+# from keras.layers import Dense, Dropout, LSTM
+# from keras.models import Sequential
+#
+# start = "2023-12-25"
+# end = "2024-02-13"
+# stock = "CHR-USD"
+#
+# data = yf.download(stock, start, end, interval="15m")
+# data.reset_index(inplace=True)
+#
+# data.dropna(inplace=True)
+#
+# data_train = pd.DataFrame(data.Close[0:int(len(data)*0.75)])
+# data_test = pd.DataFrame(data.Close[int(len(data)*0.75):len(data)])
+#
+# scaler = MinMaxScaler(feature_range=(0,1))
+# data_train_scale = scaler.fit_transform(data_train)
+# x = []
+# y = []
+# for i in range(100, data_train_scale.shape[0]):
+#     x.append(data_train_scale[i-100:i])
+#     y.append(data_train_scale[i, 0])
+#
+# x, y = np.array(x), np.array(y)
+#
+#
+# model = Sequential()
+# model.add(LSTM(units=50, activation="relu", return_sequences=True, input_shape=(x.shape[1], 1)))
+# model.add(Dropout(0.2))
+#
+# model.add(LSTM(units=60, activation="relu", return_sequences=True))
+# model.add(Dropout(0.3))
+#
+# model.add(LSTM(units=80, activation="relu", return_sequences=True))
+# model.add(Dropout(0.4))
+#
+# model.add(LSTM(units=120, activation="relu"))
+# model.add(Dropout(0.2))
+#
+# model.add(Dense(units=1))
+#
+# model.compile(optimizer="adam", loss="mean_squared_error")
+# model.fit(x, y, epochs=50, batch_size=32, verbose=1)
+# model.save('15min_CHR.h5')
+# #model = keras.models.load_model('16_model_2.h5')
+# pas_100_days = data_train.tail(100)
+# data_test = pd.concat([pas_100_days, data_test], ignore_index=True)
+# data_test_scale = scaler.fit_transform(data_test)
+# x = []
+# y = []
+#
+# for i in range(100, data_test_scale.shape[0]):
+#     x.append(data_train_scale[i-100:i])
+#     y.append(data_train_scale[i, 0])
+#
+# x, y = np.array(x), np.array(y)
+# y_predict = model.predict(x)
+#
+# scale = 1/scaler.scale_
+# y_predict = y_predict * scale
+# y = y * scale
+# plt.figure(figsize=(10, 8))
+# plt.plot(y_predict, "r", label="Predicted Price")
+# plt.plot(y, "g", label="Original Price")
+# plt.xlabel("Time")
+# plt.ylabel("Price")
+# plt.legend()
+# plt.show()
+
+# data_token = last_data("EPXUSDT", "4h", "1440")
+# price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.close_price[0]) * 100) - 100, 2)
+# print(data_token.close_price[-1], data_token.close_price[0])
+# print(price_change_percent_24h)

@@ -17,3 +17,4 @@ def get_employees():
     cursor.execute("SELECT * FROM vision_orders")
     result = cursor.fetchall()
     return {"employees": result}
+

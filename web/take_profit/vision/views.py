@@ -46,8 +46,8 @@ def day_str1(request, time):
     day_volume_result = sum([i.volume_profit for i in Orders.objects.all() if i.time[:10] == time])
     day_qnt = len([i for i in Orders.objects.all() if i.time[:10] == time])
     days = [i for i in Orders.objects.all() if i.time[:10] == time]
-    months = {"1": "Января", "2": "Февраля", "3": "Марта", "4": "Апреля", "5": "Мая", "6": "Июня",
-              "7": "Июля", "8": "Августа", "9": "Сентября", "10": "Октября", "11": "Ноября", "12": "Декабря"}
+    months = {"01": "Января", "02": "Февраля", "03": "Марта", "04": "Апреля", "05": "Мая", "06": "Июня",
+              "07": "Июля", "08": "Августа", "09": "Сентября", "10": "Октября", "11": "Ноября", "12": "Декабря"}
     date = f"{time[-2:]} {months[time[5:7]]} {time[:4]}"
     return render(request, "vision/day_str1.html", {"day": queryset, "days": days, "date": date, "day_percent_result": day_percent_result,
                                                "day_volume_result": day_volume_result, "day_qnt": day_qnt})
@@ -80,8 +80,8 @@ def day_str2(request, time):
     day_volume_result = sum([i.volume_profit for i in Orders_str2.objects.all() if i.time[:10] == time])
     day_qnt = len([i for i in Orders_str2.objects.all() if i.time[:10] == time])
     days = [i for i in Orders_str2.objects.order_by("time")[::-1] if i.time[:10] == time]
-    months = {"1": "Января", "2": "Февраля", "3": "Марта", "4": "Апреля", "5": "Мая", "6": "Июня",
-              "7": "Июля", "8": "Августа", "9": "Сентября", "10": "Октября", "11": "Ноября", "12": "Декабря"}
+    months = {"01": "Января", "02": "Февраля", "03": "Марта", "04": "Апреля", "05": "Мая", "06": "Июня",
+              "07": "Июля", "08": "Августа", "09": "Сентября", "10": "Октября", "11": "Ноября", "12": "Декабря"}
     date = f"{time[-2:]} {months[time[5:7]]} {time[:4]}"
 
     return render(request, "vision/day_str2.html", {"day": queryset, "days": days, "date": date, "day_percent_result": day_percent_result,

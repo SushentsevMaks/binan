@@ -644,21 +644,35 @@ def sql_req_low():
 # print(abs(res) / res_before)
 
 
-sql_del()
-equal('WOOUSDT', -4.09, 1, 11.37)
-equal('FRONTUSDT', -5.91, 1, -0.76)
-equal('UNIUSDT', -7.19, 1, -16.96)
-equal('SCUSDT', 0, 1, 100)
+# sql_del()
+# equal('WOOUSDT', -4.09, 1, 11.37)
+# equal('FRONTUSDT', -5.91, 1, -0.76)
+# equal('UNIUSDT', -7.19, 1, -16.96)
+# equal('SCUSDT', 0, 1, 100)
+#
+# bd_cript = get_crypto()
+# '''Проверка на наилучший объект и работа с ним дальше'''
+# reit_bd_cript = []
+#
+# for j in bd_cript:
+#     reit_bd_cript.append([j['name_cript'], j["res"], j["price_change_percent_24h"]])
+# print(sorted(reit_bd_cript, key=lambda x: x[2]))
+# print(sorted(reit_bd_cript, key=lambda x: x[2])[0][0])
 
-bd_cript = get_crypto()
-'''Проверка на наилучший объект и работа с ним дальше'''
-reit_bd_cript = []
+d = [['SUSHIUSDT', -5.51, -4.87], ['ALTUSDT', -4.66, -4.63], ['PERPUSDT', -5.9, 0.64], ['SSVUSDT', -4.44, 5.46], ['THETAUSDT', -4.92, 8.53], ['USTCUSDT', -5.05, 10.78]]
 
-for j in bd_cript:
-    reit_bd_cript.append([j['name_cript'], j["res"], j["price_change_percent_24h"]])
-print(sorted(reit_bd_cript, key=lambda x: x[2]))
-print(sorted(reit_bd_cript, key=lambda x: x[2])[0][0])
-
+k = [i[0] for i in sorted(d, key=lambda x: x[1])]
+m = [i[0] for i in sorted(d, key=lambda x: x[2])]
+#[['PYTHUSDT', -8.61, 27.21], ['TFUELUSDT', -7.08, 7.81], ['XVGUSDT', -6.37, -0.75], ['HOTUSDT', -6.2, 10.28]]
+#[['XVGUSDT', -6.37, -0.75], ['TFUELUSDT', -7.08, 7.81], ['HOTUSDT', -6.2, 10.28], ['PYTHUSDT', -8.61, 27.21]]
+itog = []
+for i in k:
+    itog.append([i, k.index(i), m.index(i)])
+print(k)
+print(m)
+print(itog)
+print([[i[0], i[1]+i[2]] for i in itog])
+print(sorted([[i[0], i[1]+i[2]] for i in itog], key=lambda x: x[1]))
 
 
 # import numpy as np

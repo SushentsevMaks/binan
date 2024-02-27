@@ -195,8 +195,9 @@ def top_coin(trading_pairs: list):
                             res = 0
                             price_change_percent_24h = 100
 
-                        '''Добавляем в базу найденный объект'''
-                        equal(name_cript_check, res, res_before, price_change_percent_24h)
+                        '''Если такой крипты в базе еще нет, то добавляем в базу '''
+                        if name_cript_check not in [i['name_cript'] for i in get_crypto()]:
+                            equal(name_cript_check, res, res_before, price_change_percent_24h)
 
                         start_time_check = time.time()
                         '''Заглушка для ожидания конца таймфрейма 15 мин'''
@@ -211,7 +212,13 @@ def top_coin(trading_pairs: list):
                         for j in bd_cript:
                             reit_bd_cript.append([j['name_cript'], j["res"], j["price_change_percent_24h"]])
 
-                        top = sorted(reit_bd_cript, key=lambda x: x[2])[0][0]
+                        """Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
+                        reit_timeframe_change = [i[0] for i in sorted(reit_bd_cript, key=lambda x: x[1])]
+                        reit_day_change = [i[0] for i in sorted(reit_bd_cript, key=lambda x: x[2])]
+                        itog = []
+                        for i in reit_timeframe_change:
+                            itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i)])
+                        top = sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])[0][0]
 
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         '''''''''''''''''''''''''''''Выбор цены продажи'''''''''''''''''''''''''''''''''''''''''''''''
@@ -231,8 +238,6 @@ def top_coin(trading_pairs: list):
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
                         start_time = time.time()
-
-                        sql_del()
 
                         """Алгоритм закупа"""
                         if name_cript_check == top and len(bd_cript) >= 4:
@@ -414,6 +419,8 @@ def top_coin(trading_pairs: list):
 
                             ex[name_cript_check] = time.time()
 
+                        time.sleep(15)
+                        sql_del()
 
                 # '''Пятнадцатиминутка'''
                 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''

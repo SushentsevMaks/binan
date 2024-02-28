@@ -187,6 +187,7 @@ def top_coin(trading_pairs: list):
                                                                                 f"На сколько упала цена за последние 2ч {loss_price_for_two_hours}% (Отриц. знач. == был рост)\n"
                                                                                 f"Объемы {int(volume_per_5h)}\n"
                                                                                 f"Цена упала на {res}%\n"
+                                                                                f"data_token.close_price[-1] == {data_token.close_price[-1]} / data_token.close_price[0] == {data_token.close_price[0]}\n"
                                                                                 f"Изменение цены за сутки {price_change_percent_24h}%\n"
                                                                                 f"Изменение цены за прошлый таймфрейм {res_before}%\n")
 

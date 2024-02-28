@@ -669,20 +669,13 @@ for i in k:
     itog.append([i, k.index(i), m.index(i)])
 print(sorted([[i[0], i[1]+i[2]] for i in itog], key=lambda x: x[1]))
 all_work_crypt = sorted([[i[0], i[1]+i[2]] for i in itog], key=lambda x: x[1])[1:]
-start_time = time.time()
-last_time = time.time()
-while last_time - start_time < 20:
-    for i in all_work_crypt:
-        last_time = time.time()
-        data_token: Dataset = last_data(i[0], "4h", "1440")
-        res_now: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-        res_past: float = round(data_token.high_price[-1] / data_token.close_price[-2] * 100 - 100, 2)
-        print(i[0], res_now, res_past)
-        if res_now < 0 and res_past < 0.8 and last_time - start_time < 20:
-            print(i[0], "proshel")
-        time.sleep(1)
-        print(last_time - start_time)
-print("end")
+
+data_token: Dataset = last_data("PHAUSDT", "4h", "1440")
+res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.close_price[0]) * 100) - 100, 2)
+print(data_token.close_price[-1], data_token.close_price[0])
+print(res, price_change_percent_24h)
+
 # import numpy as np
 # import pandas as pd
 # import matplotlib.pyplot as plt

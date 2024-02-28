@@ -659,8 +659,7 @@ def sql_req_low():
 # print(sorted(reit_bd_cript, key=lambda x: x[2]))
 # print(sorted(reit_bd_cript, key=lambda x: x[2])[0][0])
 
-d = [['SUSHIUSDT', -5.51, -4.87], ['ALTUSDT', -4.66, -4.63], ['PERPUSDT', -5.9, 0.64], ['SSVUSDT', -4.44, 5.46], ['THETAUSDT', -4.92, 8.53], ['USTCUSDT', -5.05, 10.78]]
-
+d =  [['PYTHUSDT', -6.59, 7.53], ['PYTHUSDT', -6.4, -12.21], ['CKBUSDT', -5.52, -13.18], ['XAIUSDT', -5.46, -7.92], ['BEAMXUSDT', -4.02, -3.32]]
 k = [i[0] for i in sorted(d, key=lambda x: x[1])]
 m = [i[0] for i in sorted(d, key=lambda x: x[2])]
 #[['PYTHUSDT', -8.61, 27.21], ['TFUELUSDT', -7.08, 7.81], ['XVGUSDT', -6.37, -0.75], ['HOTUSDT', -6.2, 10.28]]
@@ -668,13 +667,16 @@ m = [i[0] for i in sorted(d, key=lambda x: x[2])]
 itog = []
 for i in k:
     itog.append([i, k.index(i), m.index(i)])
-print(k)
-print(m)
-print(itog)
-print([[i[0], i[1]+i[2]] for i in itog])
 print(sorted([[i[0], i[1]+i[2]] for i in itog], key=lambda x: x[1]))
+all_work_crypt = sorted([[i[0], i[1]+i[2]] for i in itog], key=lambda x: x[1])[1:]
 
-
+for i in all_work_crypt:
+    data_token: Dataset = last_data(i[0], "4h", "1440")
+    res_now: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+    res_past: float = round(data_token.high_price[-1] / data_token.close_price[-2] * 100 - 100, 2)
+    print(i[0], res_now, res_past)
+    if res_now < 0 and res_past < 0.8:
+        print(i[0], "proshel")
 # import numpy as np
 # import pandas as pd
 # import matplotlib.pyplot as plt

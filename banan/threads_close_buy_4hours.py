@@ -219,7 +219,7 @@ def top_coin(trading_pairs: list):
                         for i in reit_timeframe_change:
                             itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i)])
                         top = sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])[0][0]
-
+                        all_work_crypt = sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])[1:]
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                         '''''''''''''''''''''''''''''Выбор цены продажи'''''''''''''''''''''''''''''''''''''''''''''''
                         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -418,6 +418,19 @@ def top_coin(trading_pairs: list):
                             sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res)
 
                             ex[name_cript_check] = time.time()
+
+                            """АЛГОРИТМ ДОП ЗАКУПА ПОСЛЕ ОСНОВНОГО"""
+                            if last_time - start_time < 7300:
+                                for i in all_work_crypt:
+                                    data_token: Dataset = last_data(i[0], "4h", "1440")
+                                    res_now: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+                                    res_past: float = round(data_token.high_price[-1] / data_token.close_price[-2] * 100 - 100, 2)
+                                    print(i[0], res_now, res_past)
+                                    if res_now < 0 and res_past < 0.8 and last_time - start_time < 7300:
+                                        telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                                   f"СРАБОТАЛ ДОП АЛГОРИТМ !!!!!!!!!!!!!!!! - {i[0]}, {res_now}, {res_past}")
+
+
 
                         time.sleep(15)
                         sql_del()

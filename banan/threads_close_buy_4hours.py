@@ -420,17 +420,17 @@ def top_coin(trading_pairs: list):
                             ex[name_cript_check] = time.time()
 
                             """АЛГОРИТМ ДОП ЗАКУПА ПОСЛЕ ОСНОВНОГО"""
-                            if last_time - start_time < 7300:
+                            while last_time - start_time < 7300:
                                 for i in all_work_crypt:
+                                    last_time = time.time()
                                     data_token: Dataset = last_data(i[0], "4h", "1440")
                                     res_now: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
                                     res_past: float = round(data_token.high_price[-1] / data_token.close_price[-2] * 100 - 100, 2)
-                                    print(i[0], res_now, res_past)
                                     if res_now < 0 and res_past < 0.8 and last_time - start_time < 7300:
-                                        telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                   f"СРАБОТАЛ ДОП АЛГОРИТМ !!!!!!!!!!!!!!!! - {i[0]}, {res_now}, {res_past}")
-
-
+                                        telebot.TeleBot(telega_token).send_message(chat_id,f"СРАБОТАЛ ДОП АЛГОРИТМ !!!!!!!!!!!!!!!! - {i[0]}, {res_now}, {res_past}")
+                                    time.sleep(1)
+                            telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                       f"ВЫШЕЛ ИЗ АЛГОРИТМА !!!!!!!!!!!!!!!! - {i[0]}, {res_now}, {res_past}")
 
                         time.sleep(15)
                         sql_del()

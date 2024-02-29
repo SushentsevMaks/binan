@@ -659,7 +659,7 @@ def sql_req_low():
 # print(sorted(reit_bd_cript, key=lambda x: x[2]))
 # print(sorted(reit_bd_cript, key=lambda x: x[2])[0][0])
 
-d =  [['PYTHUSDT', -6.59, 7.53], ['PYTHUSDT', -6.4, -12.21], ['CKBUSDT', -5.52, -13.18], ['XAIUSDT', -5.46, -7.92], ['BEAMXUSDT', -4.02, -3.32]]
+d =  [['SPELLUSDT', -8.17, 3.69], ['PHAUSDT', -7.09, -11.45], ['JASMYUSDT', -6.17, 14.42], ['COTIUSDT', -6.16, -14.97], ['VGXUSDT', -5.42, 3.49], ['OMUSDT', -5.15, 13.52], ['LDOUSDT', -4.29, -2.8], ['STXUSDT', -4.16, 1.9]]
 k = [i[0] for i in sorted(d, key=lambda x: x[1])]
 m = [i[0] for i in sorted(d, key=lambda x: x[2])]
 #[['PYTHUSDT', -8.61, 27.21], ['TFUELUSDT', -7.08, 7.81], ['XVGUSDT', -6.37, -0.75], ['HOTUSDT', -6.2, 10.28]]
@@ -668,13 +668,12 @@ itog = []
 for i in k:
     itog.append([i, k.index(i), m.index(i)])
 print(sorted([[i[0], i[1]+i[2]] for i in itog], key=lambda x: x[1]))
-all_work_crypt = sorted([[i[0], i[1]+i[2]] for i in itog], key=lambda x: x[1])[1:]
 
-data_token: Dataset = last_data("PHAUSDT", "4h", "1440")
-res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.close_price[0]) * 100) - 100, 2)
-print(data_token.close_price[-1], data_token.close_price[0])
-print(res, price_change_percent_24h)
+
+# data_token: Dataset = last_data("COTIUSDT", "4h", "1440")
+# res_now: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+# res_past: float = round(data_token.high_price[-1] / data_token.close_price[-2] * 100 - 100, 2)
+# print(res_past)
 
 # import numpy as np
 # import pandas as pd

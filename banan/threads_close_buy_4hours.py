@@ -488,7 +488,7 @@ def top_coin(trading_pairs: list):
                                 time.sleep(1)
                             time.sleep(600)
 
-                    time.sleep(15)
+                    time.sleep(25)
                     sql_del()
 
                 # '''Пятнадцатиминутка'''

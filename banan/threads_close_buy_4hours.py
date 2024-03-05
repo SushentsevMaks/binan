@@ -237,11 +237,17 @@ def top_coin(trading_pairs: list):
                     """Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
                     reit_timeframe_change = [i[0] for i in sorted(reit_bd_cript, key=lambda x: x[1])]
                     reit_day_change = [i[0] for i in sorted(reit_bd_cript, key=lambda x: x[2])]
+
+                    """Формируем список крипт со значениями"""
                     itog = []
                     for i in reit_timeframe_change:
-                        itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i)])
-                    top = sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])[0][0]
-                    all_work_crypt = sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])[1:]
+                        for j in reit_bd_cript:
+                            if i == j[0]:
+                                itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i), j[3]])
+
+                    """Определяем топ крипту и оставшийся массив для доп закупа"""
+                    top = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: -x[2])[0][0]
+                    all_work_crypt = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: -x[2])[1:]
 
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     '''''''''''''''''''''''''''Основная логика'''''''''''''''''''''''''''''''''''''''''''''''''''

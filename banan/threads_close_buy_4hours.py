@@ -23,7 +23,7 @@ onegop = ['AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'ALCXUSDT', 'ALGOUSDT']
 
 onedop = ['ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT']
 
-onemop = ['AMPUSDT', 'ANKRUSDT', 'ANTUSDT', 'APEUSDT', 'API3USDT', 'AIUSDT']
+onemop = ['AMPUSDT', 'ANKRUSDT', 'APEUSDT', 'API3USDT', 'AIUSDT']
 
 two = ['APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'XAIUSDT']
 
@@ -83,59 +83,59 @@ eightmop = ['LITUSDT', 'LOKAUSDT', 'LOOMUSDT', 'LQTYUSDT', 'LRCUSDT']
 
 nine = ['LSKUSDT', 'LTCUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT']
 
-ninegop = ['MASKUSDT', 'MATICUSDT', 'MAVUSDT', 'MBLUSDT', 'MBOXUSDT']
+ninegop = ['MASKUSDT', 'MATICUSDT', 'MAVUSDT', 'MBLUSDT', 'MBOXUSDT', "COMBOUSDT"]
 
-ninedop = ['MDTUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT']
+ninedop = ['MDTUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT', 'IQUSDT']
 
-ninemop = ['MOVRUSDT', 'MTLUSDT', 'MULTIUSDT', 'NEARUSDT', 'MEMEUSDT']
+ninemop = ['MOVRUSDT', 'MTLUSDT', 'NEARUSDT', 'MEMEUSDT', 'PIVXUSDT']
 
 ten = ['NEOUSDT', 'NKNUSDT', 'NMRUSDT', 'NULSUSDT', 'OAXUSDT', 'OCEANUSDT']
 
 tengop = ['OGNUSDT', 'OGUSDT', 'OMGUSDT', 'OMUSDT', 'ONEUSDT', 'ORDIUSDT']
 
-tendop = ['ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT']
+tendop = ['ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT', 'VICUSDT']
 
-tenmop = ['OSMOUSDT', 'OXTUSDT', 'PENDLEUSDT', 'PEOPLEUSDT', 'NTRNUSDT']
+tenmop = ['OSMOUSDT', 'OXTUSDT', 'PENDLEUSDT', 'PEOPLEUSDT', 'NTRNUSDT', 'BLURUSDT']
 
-eleven = ['PERLUSDT', 'PERPUSDT', 'PHAUSDT', 'PHBUSDT', 'PNTUSDT']
+eleven = ['PERPUSDT', 'PHAUSDT', 'PHBUSDT', 'PNTUSDT', "VANRYUSDT"]
 
-elevengop = ['POLSUSDT', 'POLYXUSDT', 'PORTOUSDT', 'POWRUSDT', 'PROMUSDT']
+elevengop = ['POLSUSDT', 'POLYXUSDT', 'PORTOUSDT', 'POWRUSDT', 'PROMUSDT', 'AEURUSDT']
 
-elevendop = ['PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'RIFUSDT']
+elevendop = ['PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'RIFUSDT', 'JTOUSDT']
 
-elevenmop = ['QKCUSDT', 'QTUMUSDT', 'QUICKUSDT', 'RADUSDT', 'RLCUSDT']
+elevenmop = ['QKCUSDT', 'QTUMUSDT', 'QUICKUSDT', 'RADUSDT', 'RLCUSDT', '1000SATSUSDT']
 
 twelve = ['RAYUSDT', 'RDNTUSDT', 'REEFUSDT', 'REIUSDT', 'RENUSDT', 'REQUSDT']
 
-twelvegop = ['RNDRUSDT', 'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT']
+twelvegop = ['RNDRUSDT', 'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT', "BONKUSDT"]
 
-twelvedop = ['RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT']
+twelvedop = ['RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT', "ACEUSDT"]
 
-twelvemop = ['SEIUSDT', 'SFPUSDT', 'SHIBUSDT', 'SKLUSDT', 'SLPUSDT']
+twelvemop = ['SEIUSDT', 'SFPUSDT', 'SHIBUSDT', 'SKLUSDT', 'SLPUSDT', "PIXELUSDT"]
 
-thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSDT', 'STGUSDT']
+thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSDT']
 
-thirteenthgop = ['STORJUSDT', 'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT']
+thirteenthgop = ['STORJUSDT', 'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT', "STRKUSDT"]
 
-thirteenthdop = ['SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT', 'SYSUSDT']
+thirteenthdop = ['SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT', 'SYSUSDT', "HIFIUSDT"]
 
-thirteenthmop = ['TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT', 'TIAUSDT']
+thirteenthmop = ['TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT', 'TIAUSDT', 'YFIUSDT']
 
-fourteenth = ['TOMOUSDT', 'TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT']
+fourteenth = ['TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'STGUSDT']
 
-fourteenthgop = ['TVKUSDT', 'TWTUSDT', 'UFTUSDT', 'UMAUSDT', 'UNFIUSDT']
+fourteenthgop = ['TWTUSDT', 'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'QIUSDT']
 
 fourteenthdop = ['UNIUSDT', 'USTCUSDT', 'VETUSDT', 'VGXUSDT', 'XVGUSDT', "CREAMUSDT"]
 
-fourteenthmop = ['VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT']
+fourteenthmop = ['VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT', "PEPEUSDT", "PORTALUSDT"]
 
-fifteenth = ['WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'JUPUSDT']
+fifteenth = ['WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'JUPUSDT', "PDAUSDT"]
 
-fifteenthgop = ['WLDUSDT', 'WNXMUSDT', 'WOOUSDT', "NTRNUSDT", 'WRXUSDT', 'WTCUSDT']
+fifteenthgop = ['WLDUSDT', 'WNXMUSDT', 'WOOUSDT', "NTRNUSDT", 'WRXUSDT']
 
-fifteenthdop = ['XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XRPUSDT']
+fifteenthdop = ['XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XRPUSDT', "AXLUSDT"]
 
-izg = ["HIFIUSDT", 'QIUSDT', 'YFIUSDT']
+izg = []
 
 very_good_cript_1hour = [['MEMEUSDT', 28, 1, 28.0], ['SEIUSDT', 20, 2, 10.0], ['BEAMXUSDT', 8, 1, 8.0], ['ORDIUSDT', 15, 2, 7.5], ['TIAUSDT', 14, 2, 7.0], ['CREAMUSDT', 18, 3, 6.0], ['DOGEUSDT', 259, 50, 5.18], ['RDNTUSDT', 15, 3, 5.0], ['NTRNUSDT', 19, 4, 4.75], ['ADAUSDT', 164, 35, 4.69], ['XRPUSDT', 183, 40, 4.58], ['SHIBUSDT', 172, 39, 4.41], ['SLPUSDT', 273, 62, 4.4], ['HFTUSDT', 70, 16, 4.38], ['CYBERUSDT', 30, 7, 4.29], ['OAXUSDT', 60, 14, 4.29], ['YFIUSDT', 226, 54, 4.19]]
 very_good_cript_1hour_lst = [i[0] for i in very_good_cript_1hour]
@@ -165,21 +165,41 @@ def top_coin(trading_pairs: list):
 
             if time.localtime(time.time()).tm_min == 59 and time.localtime(time.time()).tm_hour in time_frames:
 
-                data_token: Dataset = last_data(name_cript_check, "4h", "1440")
+                data_token: Dataset = last_data(name_cript_check, "4h", "4320")
                 volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-2:]]) / len(data_token.volume[-2:]) / 240
                 res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
                 res_before: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-                price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[0]) * 100) - 100, 2)
+                price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
 
                 '''процент падения за последние 2ч. Отрицательные значение == был рост'''
                 loss_price_for_two_hours: float = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
-                if -4 > res > -15 and volume_per_5h > 6500:
+                if -4 > res > -15:
 
-                    buy_qty = round(12 / data_token.close_price[-1], 1)
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    '''''''''''''''''''''''''''''Выбор цены продажи'''''''''''''''''''''''''''''''''''''''''''''''
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+                    if -4 > res > -6:
+                        sell_pr = 101.15
+
+                    if -6 > res > -8:
+                        sell_pr = 101.5
+
+                    if -8 > res > -15:
+                        sell_pr = 102
+
+                    """Волатильность по фреймам"""
+                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                           zip(data_token.open_price, data_token.high_price)))
+                    awerage_high_frame = len([i for i in high_frames if i > sell_pr-100])
+
+                    buy_qty = round(15 / data_token.close_price[-1], 1)
 
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                            f"Количество покупаемого - {buy_qty}\n"
+                                                                            f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr-100])}\n"
+                                                                            f"{high_frames}\n"
+                                                                            f"{[i for i in high_frames if i > sell_pr-100]}\n"
                                                                             f"На сколько упала цена за последние 2ч {loss_price_for_two_hours}% (Отриц. знач. == был рост)\n"
                                                                             f"Объемы {int(volume_per_5h)}\n"
                                                                             f"Цена упала на {res}%\n"
@@ -188,13 +208,18 @@ def top_coin(trading_pairs: list):
                                                                             f"Изменение цены за прошлый таймфрейм {res_before}%\n")
 
                     """Изменяем % суточного падения, чтобы исключить выбор этой крипты для закупа"""
-                    if price_change_percent_24h < -20:
+                    if price_change_percent_24h < -30:
                         res = 0
                         price_change_percent_24h = 100
 
+                    if volume_per_5h < 6500:
+                        res = 0.1
+                        price_change_percent_24h = 101
+
+
                     '''Если такой крипты в базе еще нет, то добавляем в базу '''
                     if name_cript_check not in [i['name_cript'] for i in get_crypto()]:
-                        equal(name_cript_check, res, res_before, price_change_percent_24h)
+                        equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame)
 
                     start_time_check = time.time()
                     '''Заглушка для ожидания конца таймфрейма 15 мин'''
@@ -202,13 +227,12 @@ def top_coin(trading_pairs: list):
                         start_time_check = time.time()
                         time.sleep(1)
 
-                    time.sleep(5)
                     bd_cript = get_crypto()
                     '''Проверка на наилучший объект и работа с ним дальше'''
                     reit_bd_cript = []
 
                     for j in bd_cript:
-                        reit_bd_cript.append([j['name_cript'], j["res"], j["price_change_percent_24h"]])
+                        reit_bd_cript.append([j['name_cript'], j["res"], j["price_change_percent_24h"], j["awerage_high_frame"]])
 
                     """Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
                     reit_timeframe_change = [i[0] for i in sorted(reit_bd_cript, key=lambda x: x[1])]
@@ -218,29 +242,16 @@ def top_coin(trading_pairs: list):
                         itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i)])
                     top = sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])[0][0]
                     all_work_crypt = sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])[1:]
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    '''''''''''''''''''''''''''''Выбор цены продажи'''''''''''''''''''''''''''''''''''''''''''''''
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-                    if -4 > res > -6:
-                        sell_pr = 101.15
-
-                    if -6 > res > -7:
-                        sell_pr = 101.5
-
-                    if -7 > res > -15:
-                        sell_pr = 102
 
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     '''''''''''''''''''''''''''Основная логика'''''''''''''''''''''''''''''''''''''''''''''''''''
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"Дошел сюда {bd_cript}")
                     start_time = time.time()
 
                     """Алгоритм закупа"""
                     if name_cript_check == top and len(bd_cript) >= 4:
                         telebot.TeleBot(telega_token).send_message(chat_id, f"ВЫБОР ПАЛ НА {name_cript_check}\n"
-                                                                            f"Список крипт из базы по рейтингу - {sorted(reit_bd_cript, key=lambda x: x[1])}\n"
+                                                                            f"Список крипт из базы по рейтингу - {sorted(reit_bd_cript, key=lambda x: -x[3])}\n"
                                                                             f"РЕЙТИНГ - {sorted([[i[0], i[1] + i[2]] for i in itog], key=lambda x: x[1])}\n"
                                                                             f"Топ крипта - {top}\n"
                                                                             f"Количество триггеров - {len(bd_cript)}\n")
@@ -250,7 +261,7 @@ def top_coin(trading_pairs: list):
                                                                 quantity=buy_qty)
                         except BinanceAPIException as e:
                             if e.message == "Filter failure: LOT_SIZE":
-                                buy_qty = int(round(12 / data_token.close_price[-1], 1))
+                                buy_qty = int(round(15 / data_token.close_price[-1], 1))
                                 try:
                                     order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET',
                                                                         quantity=buy_qty)
@@ -287,17 +298,20 @@ def top_coin(trading_pairs: list):
                             if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
                                 try:
                                     order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=sell_qty,
-                                                                            price=Decimal(str(round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1])
-                                                                                            for i in data_token[0][-5:]])))))
+                                                                            price=Decimal(str(round((buyprice / 100) * sell_pr,
+                                                                                                   max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]])))))
                                     time.sleep(10)
-                                except Exception as e:
-                                    telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
+                                except:
+                                    try:
+                                        telebot.TeleBot(telega_token).send_message(chat_id, f"Трабл с количеством продаваемой крипты (float, int)")
+                                        order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=int(sell_qty),
+                                                                               price=Decimal(str(round((buyprice / 100) * sell_pr,
+                                                                                                       max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]])))))
+                                        time.sleep(1)
+                                    except Exception as e:
+                                        telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
                                                                                             f"Количество продаваемого - {sell_qty}, Цена - {round((buyprice / 100) * 100.99, len(str(data_token.high_price[-1]).split('.')[1]))}\n"
                                                                                             f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                    order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=sell_qty,
-                                                                           price=Decimal(str(round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1])
-                                                                                            for i in data_token[0][-5:]])))))
-                                    time.sleep(1)
 
                             sell_qty = float(balance["free"])
 
@@ -353,13 +367,15 @@ def top_coin(trading_pairs: list):
 
                         sql_req_str2(name_cript_check, price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res)
 
+                        new_alg_crypto_work_end = []
 
                         """АЛГОРИТМ ДОП ЗАКУПА ПОСЛЕ ОСНОВНОГО"""
                         while last_time - start_time < 12000:
                             sell_pr = 101.15
-                            for i in all_work_crypt:
+                            for i in all_work_crypt[:round(len(all_work_crypt)/-2)]:
                                 last_time = time.time()
                                 data_token: Dataset = last_data(i[0], "4h", "1440")
+                                volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-2:]]) / len(data_token.volume[-2:]) / 240
                                 res_now: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
                                 res_past: float = round(data_token.high_price[-1] / data_token.close_price[-2] * 100 - 100, 2)
                                 price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[0]) * 100) - 100, 2)
@@ -367,19 +383,20 @@ def top_coin(trading_pairs: list):
                                 loss_price_for_two_hours: float = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
                                 """ЗАКУПАЕМ С УСЛОВИЯМИ"""
-                                if res_now < 0.2 and res_past < 1 and last_time - start_time < 12000:
+                                if res_now < 0.2 and res_past < 1 and last_time - start_time < 12000 and i[0] not in new_alg_crypto_work_end:
                                     start_time_dop_alg = time.time()
-                                    buy_qty = round(12 / data_token.close_price[-1], 1)
+                                    buy_qty = round(15 / data_token.close_price[-1], 1)
                                     telebot.TeleBot(telega_token).send_message(chat_id, f"!!!!!!!!!!!!!ДОП АЛГОРИТМ!!!!!!!!!!!!!\n"
                                                                                         f"РАБОТАЕМ С {i[0]}\n"
                                                                                         f"Изменение цены сейчас относительно начала фрейма {res_now}\n"
                                                                                         f"Максимальный рост цены в этот фрейм {res_past}\n")
+                                    new_alg_crypto_work_end.append(i[0])
 
                                     try:
                                         order_buy = client.create_order(symbol=i[0], side='BUY', type='MARKET', quantity=buy_qty)
                                     except BinanceAPIException as e:
                                         if e.message == "Filter failure: LOT_SIZE":
-                                            buy_qty = int(round(12 / data_token.close_price[-1], 1))
+                                            buy_qty = int(round(15 / data_token.close_price[-1], 1))
                                             try:
                                                 order_buy = client.create_order(symbol=i[0], side='BUY', type='MARKET', quantity=buy_qty)
                                             except:
@@ -418,17 +435,21 @@ def top_coin(trading_pairs: list):
                                             try:
                                                 order_sell = client.order_limit_sell(symbol=i[0], quantity=sell_qty,
                                                                                      price=Decimal(str(round((buyprice / 100) * sell_pr,
-                                                                                         max([len(str(i).split(".")[1]) for i in data_token[0][-5:]])))))
+                                                                                                   max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]])))))
                                                 time.sleep(10)
-                                            except Exception as e:
-                                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                           f"SELL ERROR: {e}\n"
-                                                                                           f"Количество продаваемого - {sell_qty}, Цена - {round((buyprice / 100) * 100.99, len(str(data_token.high_price[-1]).split('.')[1]))}\n"
-                                                                                           f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                order_sell = client.order_limit_sell(symbol=i[0], quantity=sell_qty,
-                                                                                     price=Decimal(str(round((buyprice / 100) * sell_pr,
-                                                                                         max([len(str(i).split(".")[1]) for i in data_token[0][-5:]])))))
-                                                time.sleep(1)
+                                            except:
+                                                try:
+                                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                                               f"Трабл с количеством продаваемой крипты (float, int)")
+                                                    order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=int(sell_qty),
+                                                                                         price=Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1])
+                                                                                                  for i in data_token[0][-5:]])))))
+                                                    time.sleep(1)
+                                                except Exception as e:
+                                                    telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                                               f"SELL ERROR: {e}\n"
+                                                                                               f"Количество продаваемого - {sell_qty}, Цена - {round((buyprice / 100) * 100.99, len(str(data_token.high_price[-1]).split('.')[1]))}\n"
+                                                                                               f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
 
                                         sell_qty = float(balance["free"])
 
@@ -483,12 +504,13 @@ def top_coin(trading_pairs: list):
 
                                     time.sleep(1)
 
-                                    sql_req_str2(i[0], price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res)
+                                    sql_req_str2(i[0], price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res_now)
 
                                 time.sleep(1)
                             time.sleep(600)
 
-                    time.sleep(25)
+
+                    time.sleep(60)
                     sql_del()
 
                 # '''Пятнадцатиминутка'''
@@ -760,7 +782,7 @@ def get_recommend(i, interval):
 while True:
     start_time_check = time.time()
     '''Заглушка для ожидания конца таймфрейма 15 мин'''
-    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 45:
+    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 40:
         start_time_check = time.time()
         time.sleep(1)
 

@@ -410,11 +410,14 @@ for i in reit_timeframe_change:
             itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i), j[3]])
 
 
-top = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: -x[2])[0][0]
+top = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: -x[2])[0][2]
 all_work_crypt = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: -x[2])[1:]
 
-print(top)
+print(type(top))
 print(all_work_crypt)
+for i in all_work_crypt[:round(len(all_work_crypt)/-2)]:
+    if i[2] >= 12:
+        print(i[0])
 
 
 #from binance import ThreadedWebsocketManager

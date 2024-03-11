@@ -126,9 +126,9 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
 
 #sql_req_str2("SUPERUSDT", 22.18, 7640, 1.54, 2.52, -3.2, 0.0)
 
-def equal(name_cript_check: str, res: float, res_before: float, price_change_percent_24h: float, awerage_high_frame: float):
+def equal(name_cript_check: str, res: float, res_before: float, price_change_percent_24h: float, awerage_high_frame: float, high_close_change: float):
     try:
-        values = (name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame)
+        values = (name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame, high_close_change)
 
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
@@ -136,8 +136,8 @@ def equal(name_cript_check: str, res: float, res_before: float, price_change_per
                                              cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO `vision_equals` (name_cript, res, res_before, price_change_percent_24h, awerage_high_frame) " \
-                                   "VALUES (%s, %s, %s, %s, %s)"
+                    insert_query = "INSERT INTO `vision_equals` (name_cript, res, res_before, price_change_percent_24h, awerage_high_frame, high_close_change) " \
+                                   "VALUES (%s, %s, %s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
             finally:

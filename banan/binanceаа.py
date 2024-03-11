@@ -286,7 +286,7 @@ sevendop = ['ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT']
 
 sevenmop = ['INJUSDT', 'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT', 'STMXUSDT']
 
-eight = ['JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT']
+eight = ['JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT', "WIFUSDT"]
 
 eightgop = ['KEYUSDT', 'KLAYUSDT', 'KMDUSDT', 'KP3RUSDT', 'KSMUSDT']
 
@@ -358,15 +358,15 @@ x = one + two + three + four + five + six + seven + eight + nine + ten + eleven 
     twelvegop + thirteenthgop + fourteenthgop + fifteenthgop
 
 
-# url = "https://api.binance.com/api/v3/exchangeInfo"
-# response = requests.get(url)
-# data = response.json()
-# symbols = [symbol["symbol"] for symbol in data["symbols"] if symbol['symbol'][-4:] == "USDT"]
-# s = []
-# for i in symbols:
-#     if i not in x:
-#         s.append(i)
-# print(s[::-1])
+url = "https://api.binance.com/api/v3/exchangeInfo"
+response = requests.get(url)
+data = response.json()
+symbols = [symbol["symbol"] for symbol in data["symbols"] if symbol['symbol'][-4:] == "USDT"]
+s = []
+for i in symbols:
+    if i not in x:
+        s.append(i)
+print(s[::-1])
 
 
 def top_coin(trading_pairs: list):
@@ -376,14 +376,19 @@ def top_coin(trading_pairs: list):
             # print(name_cript_check)
             # print(last_data(name_cript_check, "3m", "300"))
             data_token: Dataset = last_data(name_cript_check, "4h", "4320")
-            volume_per_5h = sum([int(i * data_token.high_price[-1]) for i in data_token.volume]) / len(
-                data_token.volume)
+            volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-2:]]) / len(
+                data_token.volume[-2:]) / 240
             res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
             res_before: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-            high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2), zip(data_token.open_price, data_token.high_price)))
+            price_change_percent_24h: float = round(
+                ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
 
-            print(name_cript_check, res, len([i for i in high_frames if i > 1.5]))
-            j.append([name_cript_check, res, len([i for i in high_frames if i > 1.5])])
+            '''процент падения за последние 2ч. Отрицательные значение == был рост'''
+            loss_price_for_two_hours: float = round(
+                100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
+
+            if -4 > res > -15:
+                print(name_cript_check, res)
             # print(name_cript_check)
 
             # if 2 > res:
@@ -396,29 +401,36 @@ def top_coin(trading_pairs: list):
             #                                                         f"Цена упала на {res}%\n")
         except:
             pass
-    print(j)
-tt = [['FLOKIUSDT', -10.69, -14.23, 17.0], ['XECUSDT', -7.25, 58.47, 16.0], ['SHIBUSDT', -13.12, 43.16, 16.0], ['BCHUSDT', -4.01, -2.74, 15.0], ['QTUMUSDT', -4.43, -2.85, 15.0], ['POLYXUSDT', -5.85, -2.2, 14.0], ['EPXUSDT', -7.32, 5.13, 14.0], ['DOGEUSDT', -9.02, 8.81, 13.0], ['LUNCUSDT', -6.69, -0.77, 13.0], ['CKBUSDT', -6.42, 19.9, 12.0]]
 
-
-"""Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
-reit_timeframe_change = [i[0] for i in sorted(tt, key=lambda x: x[1])]
-reit_day_change = [i[0] for i in sorted(tt, key=lambda x: x[2])]
-itog = []
-for i in reit_timeframe_change:
-    for j in tt:
-        if i == j[0]:
-            itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i), j[3]])
-
-
-top = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: -x[2])[0][2]
-all_work_crypt = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: -x[2])[1:]
-
-print(type(top))
-print(all_work_crypt)
-for i in all_work_crypt[:round(len(all_work_crypt)/-2)]:
-    if i[2] >= 12:
-        print(i[0])
-
+# tt =  [['FETUSDT', -4.34, 3.49, 16.0], ['BONKUSDT', -4.84, 0.16, 16.0], ['NFPUSDT', -4.37, 7.42, 15.0], ['WLDUSDT', -8.74, 16.89, 14.0], ['ARKMUSDT', -6.39, 19.64, 14.0]]
+# t = [['FETUSDT', 3.43], ['BONKUSDT', 4.63], ['NFPUSDT', 3.46], ['WLDUSDT', 2.5], ['ARKMUSDT', 3.14]]
+# #
+# # for i in tt:
+# #     data_token: Dataset = last_data(i[0], "4h", "4320")
+# #     kk = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), zip(data_token.high_price, data_token.close_price)))
+# #
+# #     high_low_change: float = round(data_token.high_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
+# #     print(i[0], sum(kk)/len(kk))
+# #     t.append([i[0], round(sum(kk)/len(kk), 2)])
+# print(sorted(t, key=lambda x: -x[1]))
+#
+# reit_timeframe_change = [i[0] for i in sorted(tt, key=lambda x: x[1])]
+# reit_day_change = [i[0] for i in sorted(tt, key=lambda x: x[2])]
+# #reit_awerage_high_frame = [i[0] for i in sorted(reit_bd_cript, key=lambda x: -x[3])]
+#
+# """Формируем список крипт со значениями"""
+# itog = []
+# for i in reit_timeframe_change:
+#     for j in tt:
+#         if i == j[0]:
+#             itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i), j[3]])
+#
+# """Определяем топ крипту и оставшийся массив для доп закупа"""
+# # top = sorted(reit_bd_cript, key=lambda x: -x[3])[0][0]
+# # all_work_crypt = sorted(reit_bd_cript, key=lambda x: -x[3])[1:]
+# top = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: (-x[2], x[1]))
+# all_work_crypt = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: (-x[2], [1]))[1:]
+# print(top)
 
 #from binance import ThreadedWebsocketManager
 

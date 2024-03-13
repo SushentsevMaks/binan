@@ -358,15 +358,15 @@ x = one + two + three + four + five + six + seven + eight + nine + ten + eleven 
     twelvegop + thirteenthgop + fourteenthgop + fifteenthgop
 
 
-url = "https://api.binance.com/api/v3/exchangeInfo"
-response = requests.get(url)
-data = response.json()
-symbols = [symbol["symbol"] for symbol in data["symbols"] if symbol['symbol'][-4:] == "USDT"]
-s = []
-for i in symbols:
-    if i not in x:
-        s.append(i)
-print(s[::-1])
+# url = "https://api.binance.com/api/v3/exchangeInfo"
+# response = requests.get(url)
+# data = response.json()
+# symbols = [symbol["symbol"] for symbol in data["symbols"] if symbol['symbol'][-4:] == "USDT"]
+# s = []
+# for i in symbols:
+#     if i not in x:
+#         s.append(i)
+# print(s[::-1])
 
 
 def top_coin(trading_pairs: list):
@@ -401,6 +401,24 @@ def top_coin(trading_pairs: list):
             #                                                         f"Цена упала на {res}%\n")
         except:
             pass
+
+# from binance.exceptions import BinanceAPIException
+# #x = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
+# buyprice = 0.004146
+# data_token: Dataset = last_data("REEFUSDT", "4h", "1440")
+# try:
+#     x = Decimal(str(round((buyprice / 100) * 101.15, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
+#     print(x)
+#     order_sell = client.order_limit_sell(symbol="REEFUSDT", quantity=4825.0, price=x)
+# except BinanceAPIException as e:
+#     print(e)
+
+tt = [['AMPUSDT', -5.35, -4.76, 14.0, 10.78], ['DREPUSDT', 0.1, 101.0, 16.0, 8.76], ['OOKIUSDT', -6.31, 6.88, 11.0, 8.38], ['ARPAUSDT', -4.22, 12.13, 15.0, 3.9], ['WIFUSDT', -4.69, 15.31, 11.0, 3.66], ['SYSUSDT', 0.1, 101.0, 13.0, 3.6], ['VIBUSDT', 0.1, 101.0, 11.0, 3.56], ['BONKUSDT', -7.23, -1.36, 9.0, 3.01], ['PEPEUSDT', -5.5, 5.54, 10.0, 3.0], ['ZILUSDT', -5.97, 11.61, 12.0, 2.2]]
+
+g = tt[1:]
+print(g)
+print(tt[1:round(len(tt)/-2)])
+
 
 # tt =  [['FETUSDT', -4.34, 3.49, 16.0], ['BONKUSDT', -4.84, 0.16, 16.0], ['NFPUSDT', -4.37, 7.42, 15.0], ['WLDUSDT', -8.74, 16.89, 14.0], ['ARKMUSDT', -6.39, 19.64, 14.0]]
 # t = [['FETUSDT', 3.43], ['BONKUSDT', 4.63], ['NFPUSDT', 3.46], ['WLDUSDT', 2.5], ['ARKMUSDT', 3.14]]

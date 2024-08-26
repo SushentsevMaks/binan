@@ -812,7 +812,11 @@ def sql_req_low():
 # plt.legend()
 # plt.show()
 
-# data_token = last_data("EPXUSDT", "4h", "1440")
-# price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.close_price[0]) * 100) - 100, 2)
-# print(data_token.close_price[-1], data_token.close_price[0])
-# print(price_change_percent_24h)
+data_token = last_data("BAKEUSDT", "4h", "1440")
+res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[:-1]]) / len(data_token.volume[:-1]) / 80
+res_before: float = round(data_token.close_price[-2] / data_token.low_price[-2] * 100 - 100, 2)
+print(res)
+print(res_before)
+res_k_low = round(abs(res) / res_before * 100, 2)
+print(res_k_low)

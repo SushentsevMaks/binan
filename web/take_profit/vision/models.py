@@ -59,6 +59,11 @@ class Orders_str2(models.Model):
 class Equals(models.Model):
     name_cript = models.CharField(verbose_name="Название крипты", max_length=15)
     res = models.FloatField(verbose_name="Размер свечи")
+    res_before = models.FloatField(verbose_name="Размер прошлой свечи")
+    price_change_percent_24h = models.FloatField(verbose_name="Изм. цены за 24ч.")
+    awerage_high_frame = models.FloatField(verbose_name="Ср. хай фрейм")
+    high_close_change = models.FloatField()
+    res_k_low = models.FloatField()
 
     class Meta:
         ordering = ('id',)

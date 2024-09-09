@@ -315,8 +315,8 @@ def top_coin(trading_pairs: list):
             # print(name_cript_check)
             # print(last_data(name_cript_check, "3m", "300"))
             data_token: Dataset = last_data(name_cript_check, "4h", "4000")
-            volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[:-7]]) / len(
-                data_token.volume[:-7]) / 80
+            volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-4:]]) / len(
+                data_token.volume[-4:]) / 80
             res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
             res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
             price_change_percent_24h: float = round(
@@ -327,7 +327,7 @@ def top_coin(trading_pairs: list):
             """Отношение свечи падения к нижнему хвосту"""
             res_k_low = round(abs(res) / res_before * 100, 2)
             if -4.1 > res > -20:
-                print(name_cript_check, res)
+                print(name_cript_check, res, volume_per_5h)
 
             # if 2 > res:
             #     buy_qty = round(11 / data_token.close_price[-1], 1)
@@ -749,5 +749,4 @@ def sql_req_low():
 # plt.ylabel("Price")
 # plt.legend()
 # plt.show()
-
 top_coin(x)

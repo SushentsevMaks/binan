@@ -340,6 +340,16 @@ def top_coin(trading_pairs: list):
         except:
             pass
 
+data_token: Dataset = last_data("RAREUSDT", "4h", "1440")
+print(round(data_token.high_price[-1] / data_token.close_price[-1] * 100 - 100, 2))
+buyprice = 0.1420
+sell_pr = 101.15
+x = round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))
+print(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]])))
+high_close = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), zip(data_token.high_price[:-1], data_token.close_price[:-1])))
+if data_token.close_price[-1] >= x and round(data_token.high_price[-1] / data_token.close_price[-1] * 100 - 100, 2) > 0.2:
+    print("yes")
+
 # from binance.exceptions import BinanceAPIException
 # #x = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
 # buyprice = 0.004146
@@ -351,11 +361,6 @@ def top_coin(trading_pairs: list):
 # except BinanceAPIException as e:
 #     print(e)
 
-tt = [['AMPUSDT', -5.35, -4.76, 14.0, 10.78], ['DREPUSDT', 0.1, 101.0, 16.0, 8.76], ['OOKIUSDT', -6.31, 6.88, 11.0, 8.38], ['ARPAUSDT', -4.22, 12.13, 15.0, 3.9], ['WIFUSDT', -4.69, 15.31, 11.0, 3.66], ['SYSUSDT', 0.1, 101.0, 13.0, 3.6], ['VIBUSDT', 0.1, 101.0, 11.0, 3.56], ['BONKUSDT', -7.23, -1.36, 9.0, 3.01], ['PEPEUSDT', -5.5, 5.54, 10.0, 3.0], ['ZILUSDT', -5.97, 11.61, 12.0, 2.2]]
-
-g = tt[1:]
-print(g)
-print(tt[1:round(len(tt)/-2)])
 
 
 # tt =  [['FETUSDT', -4.34, 3.49, 16.0], ['BONKUSDT', -4.84, 0.16, 16.0], ['NFPUSDT', -4.37, 7.42, 15.0], ['WLDUSDT', -8.74, 16.89, 14.0], ['ARKMUSDT', -6.39, 19.64, 14.0]]
@@ -749,4 +754,5 @@ def sql_req_low():
 # plt.ylabel("Price")
 # plt.legend()
 # plt.show()
-top_coin(x)
+#equal("jopa_4h", -1.0, 1.5, -3.2, 2.2, 2.2, 5.3)
+

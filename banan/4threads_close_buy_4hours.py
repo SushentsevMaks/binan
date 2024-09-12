@@ -131,10 +131,10 @@ def top_coin(trading_pairs: list):
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
                     if -4.1 > res > -8.5:
-                        sell_pr = 101.15
+                        sell_pr = 100.95
 
                     if -8.5 > res > -20:
-                        sell_pr = 101.5
+                        sell_pr = 101.25
 
                     """Волатильность по фреймам"""
                     high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
@@ -242,50 +242,60 @@ def top_coin(trading_pairs: list):
 
                         """Алгоритм продажи"""
                         while open_position:
+                            data_token: Dataset = last_data(name_cript_check, "4h", "1440")
                             last_time = time.time()
-                            all_orders = pd.DataFrame(client.get_all_orders(symbol=name_cript_check), columns=["orderId", "type", "side", "price", "status"])
+                            all_orders = pd.DataFrame(client.get_all_orders(symbol=name_cript_check),
+                                                      columns=["orderId", "type", "side", "price", "status"])
                             balance = client.get_asset_balance(asset=name_cript_check[:-4])
                             sell_qty = float(balance["free"])
-                                # sell_qty = Decimal(sell_qty).quantize(Decimal(okr), ROUND_FLOOR)
+                            # sell_qty = Decimal(sell_qty).quantize(Decimal(okr), ROUND_FLOOR)
+                            try:
+                                x = Decimal(str(round((buyprice / 100) * sell_pr,
+                                                      max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in
+                                                           data_token[0][-5:]]))))
 
-                            if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
+                            except BinanceAPIException as e:
+                                telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR 1: {e}\n"
+                                                                                    f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
+                                                                                    f"Количество продаваемого - {sell_qty}, Цена - {x}\n"
+                                                                                    f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
+                                time.sleep(2)
+
                                 try:
-                                    x = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
-                                    order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=sell_qty, price=x)
-
+                                    x = round((buyprice / 100) * sell_pr,
+                                              max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
                                 except BinanceAPIException as e:
-                                    telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR 1: {e}\n"
-                                                                                        f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
+                                    telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
                                                                                         f"Количество продаваемого - {sell_qty}, Цена - {x}\n"
                                                                                         f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                    time.sleep(10)
+                                    time.sleep(2)
 
                                     try:
-                                        x = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
-                                        order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=sell_qty, price=x)
+                                        x = Decimal(str(round((buyprice / 100) * sell_pr,
+                                                              max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in
+                                                                   data_token[0][-5:]]))))
                                     except BinanceAPIException as e:
                                         telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
-                                                                                            f"Количество продаваемого - {sell_qty}, Цена - {x}\n"
+                                                                                            f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
                                                                                             f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                        time.sleep(10)
+                                        time.sleep(2)
 
                                         try:
-                                            x = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
-                                            order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=int(sell_qty), price=x)
+                                            x = round((buyprice / 100) * sell_pr,
+                                                      max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
                                         except BinanceAPIException as e:
-                                            telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
+                                            telebot.TeleBot(telega_token).send_message(chat_id, f"ВСЕ РАВНО ФЕЙЛ: {e}\n"
                                                                                                 f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
                                                                                                 f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                            time.sleep(10)
 
-                                            try:
-                                                x = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
-                                                order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=int(sell_qty), price=x)
-                                            except BinanceAPIException as e:
-                                                telebot.TeleBot(telega_token).send_message(chat_id, f"ВСЕ РАВНО ФЕЙЛ: {e}\n"
-                                                                                                    f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
-                                                                                                    f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                time.sleep(600)
+                            high_k_now_price = round(data_token.high_price[-1] / data_token.close_price[-1] * 100 - 100,
+                                                     2)
+
+                            if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and \
+                                    data_token.close_price[-1] >= x and high_k_now_price > 0.2:
+                                balance = client.get_asset_balance(asset=name_cript_check[:-4])
+                                sell_qty = float(balance["free"])
+                                order_sell = client.order_market_sell(symbol=name_cript_check, quantity=sell_qty)
 
                             sell_qty = float(balance["free"])
 
@@ -332,7 +342,7 @@ def top_coin(trading_pairs: list):
                                     break
 
 
-                            data_token: Dataset = last_data(name_cript_check, "15m", "1440")
+
                             time.sleep(4)
 
                         max_price = max(data_token[0])
@@ -410,64 +420,72 @@ def top_coin(trading_pairs: list):
 
                                         """Алгоритм продажи"""
                                         while open_position:
+                                            data_token: Dataset = last_data(i[0], "4h", "1440")
                                             last_time_dop_alg = time.time()
-                                            all_orders = pd.DataFrame(client.get_all_orders(symbol=i[0]), columns=["orderId", "type", "side", "price", "status"])
+                                            all_orders = pd.DataFrame(client.get_all_orders(symbol=i[0]),
+                                                                      columns=["orderId", "type", "side", "price",
+                                                                               "status"])
                                             balance = client.get_asset_balance(asset=i[0][:-4])
                                             sell_qty = float(balance["free"])
                                             # sell_qty = Decimal(sell_qty).quantize(Decimal(okr), ROUND_FLOOR)
+                                            try:
+                                                x = Decimal(str(round((buyprice / 100) * sell_pr,
+                                                                      max([len(f'{i:.15f}'.rstrip("0").split(".")[1])
+                                                                           for i
+                                                                           in
+                                                                           data_token[0][-5:]]))))
 
-                                            if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
+                                            except BinanceAPIException as e:
+                                                telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                                           f"SELL ERROR 1: {e}\n"
+                                                                                           f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
+                                                                                           f"Количество продаваемого - {sell_qty}, Цена - {x}\n"
+                                                                                           f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
+                                                time.sleep(2)
+
                                                 try:
-                                                    y = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
-                                                    order_sell = client.order_limit_sell(symbol=i[0],
-                                                                                         quantity=sell_qty,
-                                                                                         price=y)
-
+                                                    x = round((buyprice / 100) * sell_pr,
+                                                              max([len(str(i).split(".")[1]) for i in
+                                                                   data_token[0][-5:]]))
                                                 except BinanceAPIException as e:
                                                     telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                               f"ERROR 1 {e}\n"
-                                                                                               f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                               f"Количество продаваемого - {sell_qty}, Цена - {y}\n"
+                                                                                               f"SELL ERROR: {e}\n"
+                                                                                               f"Количество продаваемого - {sell_qty}, Цена - {x}\n"
                                                                                                f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                    time.sleep(10)
+                                                    time.sleep(2)
 
                                                     try:
-                                                        y = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
-                                                        order_sell = client.order_limit_sell(symbol=i[0],
-                                                                                             quantity=sell_qty,
-                                                                                             price=y)
+                                                        x = Decimal(str(round((buyprice / 100) * sell_pr,
+                                                                              max([len(
+                                                                                  f'{i:.15f}'.rstrip("0").split(".")[1])
+                                                                                  for
+                                                                                  i in
+                                                                                  data_token[0][-5:]]))))
                                                     except BinanceAPIException as e:
                                                         telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                                   f"ERROR 2 {e}\n"
-                                                                                                   f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                                   f"Количество продаваемого - {sell_qty}, Цена - {y}\n"
+                                                                                                   f"SELL ERROR: {e}\n"
+                                                                                                   f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
                                                                                                    f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                        time.sleep(10)
+                                                        time.sleep(2)
 
                                                         try:
-                                                            y = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
-                                                            order_sell = client.order_limit_sell(symbol=i[0],
-                                                                                                 quantity=int(sell_qty),
-                                                                                                 price=y)
+                                                            x = round((buyprice / 100) * sell_pr,
+                                                                      max([len(str(i).split(".")[1]) for i in
+                                                                           data_token[0][-5:]]))
                                                         except BinanceAPIException as e:
                                                             telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                                       f"ERROR 3 {e}\n"
-                                                                                                       f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                                       f"Количество продаваемого - {int(sell_qty)}, Цена - {y}\n"
+                                                                                                       f"ВСЕ РАВНО ФЕЙЛ: {e}\n"
+                                                                                                       f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
                                                                                                        f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                            time.sleep(10)
 
-                                                            try:
-                                                                y = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
-                                                                order_sell = client.order_limit_sell(symbol=i[0], quantity=int(sell_qty), price=y)
+                                            high_k_now_price = round(data_token.high_price[-1] / data_token.close_price[-1] * 100 - 100, 2)
 
-                                                            except BinanceAPIException as e:
-                                                                telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                                           f"ВСЕ РАВНО ФЕЙЛ: {e}\n"
-                                                                                                           f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                                           f"Количество продаваемого - {int(sell_qty)}, Цена - {y}\n"
-                                                                                                           f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                                time.sleep(600)
+                                            if sell_qty > 0.05 and len(
+                                                    all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and \
+                                                    data_token.close_price[-1] >= x and high_k_now_price > 0.2:
+                                                balance = client.get_asset_balance(asset=name_cript_check[:-4])
+                                                sell_qty = float(balance["free"])
+                                                order_sell = client.order_market_sell(symbol=name_cript_check, quantity=sell_qty)
 
                                             sell_qty = float(balance["free"])
 
@@ -517,7 +535,7 @@ def top_coin(trading_pairs: list):
                                                     time.sleep(1)
                                                     break
 
-                                            data_token: Dataset = last_data(i[0], "15m", "1440")
+
                                             time.sleep(4)
 
                                         max_price = max(data_token[0])

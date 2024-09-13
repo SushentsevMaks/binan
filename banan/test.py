@@ -167,47 +167,46 @@ def top_coin(trading_pairs: list):
 
             time_frames = [0, 4, 8, 12, 16, 20]
 
-            if time.localtime(time.time()).tm_min == 59 and time.localtime(time.time()).tm_hour in time_frames:
 
-                data_token: Dataset = last_data(name_cript_check, "4h", "4320")
-                volume_per_5h: float = sum(
-                    [int(i * data_token.high_price[-1]) for i in data_token.volume[-2:]]) / len(
-                    data_token.volume[-2:]) / 240
-                res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-                res_before: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-                price_change_percent_24h: float = round(
-                    ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
+            data_token: Dataset = last_data(name_cript_check, "4h", "4320")
+            volume_per_5h: float = sum(
+                [int(i * data_token.high_price[-1]) for i in data_token.volume[-2:]]) / len(
+                data_token.volume[-2:]) / 240
+            res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            res_before: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            price_change_percent_24h: float = round(
+                ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
 
-                '''процент падения за последние 2ч. Отрицательные значение == был рост'''
-                loss_price_for_two_hours: float = round(
-                    100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
+            '''процент падения за последние 2ч. Отрицательные значение == был рост'''
+            loss_price_for_two_hours: float = round(
+                100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
-                if -4 > res > -15:
+            if -4 > res > -15:
 
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    '''''''''''''''''''''''''''''Выбор цены продажи'''''''''''''''''''''''''''''''''''''''''''''''
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                '''''''''''''''''''''''''''''Выбор цены продажи'''''''''''''''''''''''''''''''''''''''''''''''
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-                    if -4 > res > -6:
-                        sell_pr = 101.15
+                if -4 > res > -6:
+                    sell_pr = 101.15
 
-                    if -6 > res > -8:
-                        sell_pr = 101.5
+                if -6 > res > -8:
+                    sell_pr = 101.5
 
-                    if -8 > res > -15:
-                        sell_pr = 102
+                if -8 > res > -15:
+                    sell_pr = 102
 
-                    """Волатильность по фреймам"""
-                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                                           zip(data_token.open_price, data_token.high_price)))
-                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+                """Волатильность по фреймам"""
+                high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                       zip(data_token.open_price, data_token.high_price)))
+                awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
 
 
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                        f"----------------------------------------\n"
-                                                                        f"----------------------------------------\n"
-                                                                        f"ПРОВЕРОЧНЫЙ СКРИПТ\n")
-                    time.sleep(30)
+                telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
+                                                                    f"----------------------------------------\n"
+                                                                    f"----------------------------------------\n"
+                                                                    f"ПРОВЕРОЧНЫЙ СКРИПТ\n")
+                time.sleep(1)
         except:
             pass
 
@@ -264,39 +263,30 @@ def get_recommend(i, interval):
     return handler.get_analysis().summary
 
 
-while True:
-    start_time_check = time.time()
-    '''Заглушка для ожидания конца таймфрейма 15 мин'''
-    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 47:
-        start_time_check = time.time()
-        time.sleep(1)
+'''Старт программы'''
 
-    '''Старт программы'''
+threads = [Thread(target=top_coin, args=([threegop])),
+           Thread(target=top_coin, args=([fourgop])), Thread(target=top_coin, args=([fivegop])),
+           Thread(target=top_coin, args=([sixgop])),
+           Thread(target=top_coin, args=([sevengop])), Thread(target=top_coin, args=([eightgop])),
+           Thread(target=top_coin, args=([ninegop])),
+           Thread(target=top_coin, args=([tengop])), Thread(target=top_coin, args=([elevengop])),
+           Thread(target=top_coin, args=([twelvegop])),
+           Thread(target=top_coin, args=([thirteenthgop])), Thread(target=top_coin, args=([fourteenthgop])),
+           Thread(target=top_coin, args=([fifteenthgop])),
+           Thread(target=top_coin, args=([onemop])), Thread(target=top_coin, args=([twomop])),
+           Thread(target=top_coin, args=([threemop])),
+           Thread(target=top_coin, args=([fourmop])), Thread(target=top_coin, args=([fivemop])),
+           Thread(target=top_coin, args=([sixmop])),
+           Thread(target=top_coin, args=([sevenmop])), Thread(target=top_coin, args=([eightmop])),
+           Thread(target=top_coin, args=([ninemop])),
+           Thread(target=top_coin, args=([tenmop])), Thread(target=top_coin, args=([elevenmop])),
+           Thread(target=top_coin, args=([twelvemop])),
+           Thread(target=top_coin, args=([thirteenthmop])), Thread(target=top_coin, args=([fourteenthmop]))]
 
-    threads = [Thread(target=top_coin, args=([threegop])),
-               Thread(target=top_coin, args=([fourgop])), Thread(target=top_coin, args=([fivegop])),
-               Thread(target=top_coin, args=([sixgop])),
-               Thread(target=top_coin, args=([sevengop])), Thread(target=top_coin, args=([eightgop])),
-               Thread(target=top_coin, args=([ninegop])),
-               Thread(target=top_coin, args=([tengop])), Thread(target=top_coin, args=([elevengop])),
-               Thread(target=top_coin, args=([twelvegop])),
-               Thread(target=top_coin, args=([thirteenthgop])), Thread(target=top_coin, args=([fourteenthgop])),
-               Thread(target=top_coin, args=([fifteenthgop])),
-               Thread(target=top_coin, args=([onemop])), Thread(target=top_coin, args=([twomop])),
-               Thread(target=top_coin, args=([threemop])),
-               Thread(target=top_coin, args=([fourmop])), Thread(target=top_coin, args=([fivemop])),
-               Thread(target=top_coin, args=([sixmop])),
-               Thread(target=top_coin, args=([sevenmop])), Thread(target=top_coin, args=([eightmop])),
-               Thread(target=top_coin, args=([ninemop])),
-               Thread(target=top_coin, args=([tenmop])), Thread(target=top_coin, args=([elevenmop])),
-               Thread(target=top_coin, args=([twelvemop])),
-               Thread(target=top_coin, args=([thirteenthmop])), Thread(target=top_coin, args=([fourteenthmop]))]
+start_threads = [i.start() for i in threads]
 
-    start_threads = [i.start() for i in threads]
-
-    stop_threads = [i.join() for i in threads]
-
-
+stop_threads = [i.join() for i in threads]
 
 
 

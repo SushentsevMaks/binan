@@ -299,12 +299,14 @@ def top_coin(trading_pairs: list):
 
                             sell_qty = float(balance["free"])
 
-                            if float(sell_qty) < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
+                            if sell_qty < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
                                 open_position = False
+                                orders = client.get_all_orders(symbol=name_cript_check, limit=1)
+                                price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
                                 bot = telebot.TeleBot(telega_token)
                                 message = f"СДЕЛКА ЗАВЕРШЕНА - {name_cript_check}\n" \
                                           f"\n" \
-                                          f"ПРИБЫЛЬ СО СДЕЛКИ: +{round(sell_pr-100, 2)}%\n" \
+                                          f"ПРИБЫЛЬ СО СДЕЛКИ: +{round(100 - 100 * (buyprice / price), 2)}%\n" \
                                           f"\n" \
                                           f"https://www.binance.com/ru/trade/{name_cript_check[:-4]}_USDT?_from=markets&theme=dark&type=grid"
                                 bot.send_message(chat_id, message)
@@ -480,8 +482,7 @@ def top_coin(trading_pairs: list):
 
                                             high_k_now_price = round(data_token.high_price[-1] / data_token.close_price[-1] * 100 - 100, 2)
 
-                                            if sell_qty > 0.05 and len(
-                                                    all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and \
+                                            if sell_qty > 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0 and \
                                                     data_token.close_price[-1] >= x and high_k_now_price > 0.2:
                                                 balance = client.get_asset_balance(asset=name_cript_check[:-4])
                                                 sell_qty = float(balance["free"])
@@ -491,10 +492,12 @@ def top_coin(trading_pairs: list):
 
                                             if float(sell_qty) < 0.05 and len(all_orders[all_orders.isin(["NEW"]).any(axis=1)]) == 0:
                                                 open_position = False
+                                                orders = client.get_all_orders(symbol=name_cript_check, limit=1)
+                                                price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
                                                 bot = telebot.TeleBot(telega_token)
                                                 message = f"СДЕЛКА ЗАВЕРШЕНА - {i[0]}\n" \
                                                           f"\n" \
-                                                          f"ПРИБЫЛЬ СО СДЕЛКИ: +{round(sell_pr - 100, 2)}%\n" \
+                                                          f"ПРИБЫЛЬ СО СДЕЛКИ: +{round(100 - 100 * (buyprice / price), 2)}%\n" \
                                                           f"\n" \
                                                           f"https://www.binance.com/ru/trade/{i[0][:-4]}_USDT?_from=markets&theme=dark&type=grid"
                                                 bot.send_message(chat_id, message)

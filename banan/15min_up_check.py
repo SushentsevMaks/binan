@@ -87,7 +87,12 @@ chat_id = -695765690
 
 keks = {}
 
+rab = []
+
 def top_coin(trading_pairs: list):
+    for i in rab:
+        if time.time() - i[1] > 7200:
+            rab.remove(i)
     for name_cript_check in trading_pairs:
         try:
 
@@ -97,22 +102,23 @@ def top_coin(trading_pairs: list):
             res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
             price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
 
-            if res > 0 and data_token.volume[-1]*data_token.close_price[-1] > volume_per_1d*15:
+            if res > 4 and data_token.volume[-1]*data_token.close_price[-1] > volume_per_1d*15 and name_cript_check in [i[0] for i in rab]:
 
                 telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 15минутка - {name_cript_check}\n"
                                                                         f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
                                                                         f"Объемы были {volume_per_1d} - стали {data_token.volume[-1]*data_token.close_price[-1]}\n"
                                                                         f"ОЖИДАЕМ ПУМП!!!!!!!!!!!!!\n"
                                                                         f"Изменение цены за сутки {price_change_percent_24h}%\n")
+                rab.append([name_cript_check, time.time()])
 
-            elif res < 0 and data_token.volume[-1]*data_token.close_price[-1] > volume_per_1d*15:
+            elif res < 4 and data_token.volume[-1]*data_token.close_price[-1] > volume_per_1d*15 and name_cript_check in [i[0] for i in rab]:
 
                 telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 15минутка - {name_cript_check}\n"
                                                                     f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
                                                                     f"Объемы были {volume_per_1d} - стали {data_token.volume[-1] * data_token.close_price[-1]}\n"
                                                                     f"ОЖИДАЕМ ДУМП!!!!!!!!!!!!!\n"
                                                                     f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
+                rab.append([name_cript_check, time.time()])
         except:
             pass
 

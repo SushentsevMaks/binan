@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from decimal import Decimal, ROUND_FLOOR
 from threading import Thread
-
+from candlestick import candlestick
 import pymysql
 import requests
 from binance.client import Client, AsyncClient
@@ -340,15 +340,8 @@ def top_coin(trading_pairs: list):
         except:
             pass
 
-data_token: Dataset = last_data("RAREUSDT", "4h", "1440")
-print(round(data_token.high_price[-1] / data_token.close_price[-1] * 100 - 100, 2))
-buyprice = 0.1420
-sell_pr = 101.15
-x = round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))
-print(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]])))
-high_close = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), zip(data_token.high_price[:-1], data_token.close_price[:-1])))
-if data_token.close_price[-1] >= x and round(data_token.high_price[-1] / data_token.close_price[-1] * 100 - 100, 2) > 0.2:
-    print("yes")
+
+
 
 # from binance.exceptions import BinanceAPIException
 # #x = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))

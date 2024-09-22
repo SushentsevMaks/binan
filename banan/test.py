@@ -167,46 +167,33 @@ def top_coin(trading_pairs: list):
 
             time_frames = [0, 4, 8, 12, 16, 20]
 
-
-            data_token: Dataset = last_data(name_cript_check, "4h", "4320")
-            volume_per_5h: float = sum(
-                [int(i * data_token.high_price[-1]) for i in data_token.volume[-2:]]) / len(
-                data_token.volume[-2:]) / 240
-            res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-            res_before: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            data_token: Dataset = last_data(name_cript_check, "4h", "4000")
+            volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-4:]]) / len(
+                data_token.volume[-4:]) / 80
+            res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+            res_2: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
+            res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
             price_change_percent_24h: float = round(
                 ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
-
-            '''процент падения за последние 2ч. Отрицательные значение == был рост'''
-            loss_price_for_two_hours: float = round(
-                100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
-
-            if -4 > res > -15:
-
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                '''''''''''''''''''''''''''''Выбор цены продажи'''''''''''''''''''''''''''''''''''''''''''''''
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-                if -4 > res > -6:
-                    sell_pr = 101.15
-
-                if -6 > res > -8:
-                    sell_pr = 101.5
-
-                if -8 > res > -15:
-                    sell_pr = 102
-
-                """Волатильность по фреймам"""
-                high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                                       zip(data_token.open_price, data_token.high_price)))
-                awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+            high_close = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2),
+                                  zip(data_token.high_price[:-1], data_token.close_price[:-1])))
+            high_close_change = round(sum(high_close) / len(high_close), 2)
+            """Отношение свечи падения к нижнему хвосту"""
+            res_k_low = round(abs(res) / res_before * 100, 2)
+            if -4.1 > res > -20:
+                print(name_cript_check, res, volume_per_5h, "res")
+            elif res < -0.5 and res_2 < -0.5 and res + res_2 < -4:
+                print(name_cript_check, res + res_2, volume_per_5h, "res2")
+            elif res < -0.5 and res_2 < -0.5 and res_3 < -0.5 and res + res_2 + res_3 < -4:
+                print(name_cript_check, res + res_2 + res_3, volume_per_5h, "res3")
 
 
-                telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                    f"----------------------------------------\n"
-                                                                    f"----------------------------------------\n"
-                                                                    f"ПРОВЕРОЧНЫЙ СКРИПТ\n")
-                time.sleep(1)
+                # telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
+                #                                                     f"----------------------------------------\n"
+                #                                                     f"----------------------------------------\n"
+                #                                                     f"ПРОВЕРОЧНЫЙ СКРИПТ\n")
+                # time.sleep(1)
         except:
             pass
 

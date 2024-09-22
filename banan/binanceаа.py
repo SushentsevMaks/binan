@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from decimal import Decimal, ROUND_FLOOR
 from threading import Thread
-from candlestick import candlestick
+
 import pymysql
 import requests
 from binance.client import Client, AsyncClient
@@ -317,7 +317,9 @@ def top_coin(trading_pairs: list):
             data_token: Dataset = last_data(name_cript_check, "4h", "4000")
             volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-4:]]) / len(
                 data_token.volume[-4:]) / 80
-            res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+            res_2: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
             res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
             price_change_percent_24h: float = round(
                 ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
@@ -327,7 +329,11 @@ def top_coin(trading_pairs: list):
             """Отношение свечи падения к нижнему хвосту"""
             res_k_low = round(abs(res) / res_before * 100, 2)
             if -4.1 > res > -20:
-                print(name_cript_check, res, volume_per_5h)
+                print(name_cript_check, res, volume_per_5h, "res")
+            elif res < -0.5 and res_2 < -0.5 and res+res_2 < -5:
+                print(name_cript_check, res + res_2, volume_per_5h, "res2")
+            elif res < -0.5 and res_2 < -0.5 and res_3 < -0.5 and res+res_2+res_3 < -5:
+                print(name_cript_check, res+res_2+res_3, volume_per_5h, "res3")
 
             # if 2 > res:
             #     buy_qty = round(11 / data_token.close_price[-1], 1)
@@ -341,7 +347,18 @@ def top_coin(trading_pairs: list):
             pass
 
 
-
+data_token: Dataset = last_data("ONGUSDT", "4h", "17280")
+volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-4:]]) / len(
+    data_token.volume[-4:]) / 80
+res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+res_2: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
+res_3: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
+res_4: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
+res_before_new: float = round(data_token.close_price[-2] / min(data_token.low_price[-5:-1]) * 100 - 100, 2)
+res_k_low = round(abs(res+res_2+res_3+res_4) / res_before_new * 100, 2)
+print(res)
+print(res_before_new)
+print(res_k_low)
 
 # from binance.exceptions import BinanceAPIException
 # #x = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))

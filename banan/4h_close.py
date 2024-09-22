@@ -190,7 +190,7 @@ def top_coin(trading_pairs: list):
                     """Определяем топ крипту и оставшийся массив для доп закупа"""
                     # top = sorted(reit_bd_cript, key=lambda x: -x[4])[0][0]
                     # all_work_crypt = sorted(reit_bd_cript, key=lambda x: -x[4])
-                    top = sorted([[i[0], i[1] + i[2], i[5], i[6]] for i in itog], key=lambda x: x[1])[0][0]
+                    top = sorted([[i[0], i[1] + i[2] + i[5], i[6]] for i in itog], key=lambda x: x[1])[0][0]
                     all_work_crypt = sorted([[i[0], i[1] + i[2] + i[5], i[6]] for i in itog], key=lambda x: x[1])
                     # top = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: (-x[2], x[1]))[0][0]
                     # all_work_crypt = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: (-x[2], [1]))[1:]
@@ -205,7 +205,7 @@ def top_coin(trading_pairs: list):
                         telebot.TeleBot(telega_token).send_message(chat_id, f"ВЫБОР ПАЛ НА {name_cript_check}\n"
                                                                             f"Список крипт из базы по рейтингу - {sorted(reit_bd_cript, key=lambda x: -x[3])}\n"
                                                                             f"------------------------\n"
-                                                                            f"РЕЙТИНГ - {sorted([[i[0], i[1] + i[2], i[5]] for i in itog], key=lambda x: x[1])}\n"
+                                                                            f"РЕЙТИНГ - {sorted([[i[0], i[1] + i[2] + i[5]] for i in itog], key=lambda x: x[1])}\n"
                                                                             f"------------------------\n"
                                                                             f"Количество триггеров - {len(bd_cript)}\n")
 
@@ -312,6 +312,7 @@ def top_coin(trading_pairs: list):
                                     ordId = order["orderId"]
                                     client.cancel_order(symbol=name_cript_check, orderId=ordId)
 
+                                time.sleep(1)
                                 try:
                                     balance = client.get_asset_balance(asset=name_cript_check[:-4])
                                     sell_qty = float(balance["free"])
@@ -326,11 +327,12 @@ def top_coin(trading_pairs: list):
                                     open_position = False
 
                                 except Exception as e:
-                                    telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                       f"Ошибка продажи в минус, Нужен хелп!\n"
-                                                                                       f"{e}")
-                                    time.sleep(1)
-                                    break
+                                    telebot.TeleBot(telega_token).send_message(chat_id,f"Ошибка продажи в минус, Нужен хелп!\n"
+                                                                                       f"{e}\n"
+                                                                                       f"sell_qty {sell_qty}\n"
+                                                                                       f"balance {balance}")
+                                    time.sleep(500)
+
 
 
                             data_token: Dataset = last_data(name_cript_check, "15m", "1440")
@@ -515,8 +517,8 @@ def top_coin(trading_pairs: list):
                                                     telebot.TeleBot(telega_token).send_message(chat_id,
                                                                                                f"Ошибка продажи в минус, Нужен хелп!\n"
                                                                                                f"{e}")
-                                                    time.sleep(1)
-                                                    break
+                                                    time.sleep(500)
+
 
                                             data_token: Dataset = last_data(i[0], "15m", "1440")
                                             time.sleep(4)

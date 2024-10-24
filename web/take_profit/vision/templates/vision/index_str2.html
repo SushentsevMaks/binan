@@ -21,12 +21,12 @@
         </div>
         {% for key, value in percent_change_for_day.items %}
         {% if value.0 >= 0 %}
-        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+        <div style="height: 15px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
             <h2><a class="change-color-link" style="color: #0ecb81;" href="{% url 'day' key %}">{{key}} => {{value.0}}% Дневная прибыль {{value.1}}$ (Всего сделок: {{value.2}})</a></h2>
 
         </div>
         {% elif value.0 < 0 %}
-        <div style="height: 30px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
+        <div style="height: 15px; margin-left: 50px; margin-bottom: 20px; color: #eaecef">
             <h2><a class="change-color-link" style="color: #f6465d" href="{% url 'day' key %}">{{key}} => {{value.0}}% Дневная прибыль {{value.1}}$ (Всего сделок: {{value.2}})</a></h2>
         </div>
         {% endif %}

@@ -110,45 +110,142 @@ def top_coin(trading_pairs: list):
             time_frames = [0, 4, 8, 12, 16, 20]
 
             if time.localtime(time.time()).tm_min == 59 and time.localtime(time.time()).tm_hour in time_frames:
-
                 data_token: Dataset = last_data(name_cript_check, "4h", "17280")
-                volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-4:]]) / len(
-                    data_token.volume[-4:]) / 80
-                res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-                res_2: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-                res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
-                res_4: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
-                res_5: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
-                price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
+                volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[:-1]]) / len(
+                    data_token.volume[:-1]) / 80
+                res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+                res_2: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
+                res_3: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
+                res_4: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
+                res_5: float = round(data_token.close_price[-6] / data_token.open_price[-6] * 100 - 100, 2)
+                res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
+                price_change_percent_24h: float = round(
+                    ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
+                price_change_percent_7d: float = round(
+                    ((max(data_token.high_price) / data_token.close_price[-1]) * 100) - 100, 2)
                 high_close = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2),
                                       zip(data_token.high_price[:-1], data_token.close_price[:-1])))
                 high_close_change = round(sum(high_close) / len(high_close), 2)
                 """Отношение свечи падения к нижнему хвосту"""
+                res_k_low = round(abs(res) / res_before * 100, 2)
+                '''процент падения за последние 2ч. Отрицательные значение == был рост'''
+                loss_price_for_two_hours: float = round(
+                    100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
-                if res < -0.5 and res_2 < -0.5 and res_3 < -0.5 and res_4 < -0.5 and res + res_2 + res_3 + res_4 + res_5 < -10 and volume_per_5h > 6500:
-                    res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-4:]) * 100 - 100, 2)
-                    res_k_low = round(abs(res+res_2+res_3+res_4) / res_before * 100, 2)
-                    telebot.TeleBot(telega_token).send_message(chat_id,f"{name_cript_check} {res+res_2+res_3+res_4+res_5} {volume_per_5h} {res_k_low} res5")
+                try:
+                    if res < -1.5 and res_2 < -1.5 and res_3 < -1.5 and res_4 < -1.5 and res_5 < -1.5 and res + res_2 + res_3 + res_4 + res_5 < -10:
+                        res_before: float = round(
+                            data_token.close_price[-1] / min(data_token.low_price[-5:]) * 100 - 100, 2)
+                        res_k_low = round(abs(res + res_2 + res_3 + res_4 + res_5) / res_before * 100, 2)
+                        telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                            f"размер свеч {res + res_2 + res_3 + res_4 + res_5}\n"
+                                                                            f"хвостик {res_k_low}\n"
+                                                                            f"объемы {volume_per_5h}\n"
+                                                                            f" res5")
+                        sell_pr = 101.15
 
-                elif res < -0.5 and res_2 < -0.5 and res_3 < -0.5 and res_4 < -0.5 and res + res_2 + res_3 + res_4 < -9 and volume_per_5h > 6500:
-                    res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-4:]) * 100 - 100, 2)
-                    res_k_low = round(abs(res+res_2+res_3+res_4) / res_before * 100, 2)
-                    telebot.TeleBot(telega_token).send_message(chat_id,f"{name_cript_check} {res+res_2+res_3+res_4} {volume_per_5h} {res_k_low} res4")
+                        """Волатильность по фреймам"""
+                        high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                               zip(data_token.open_price, data_token.high_price)))
+                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
 
-                elif res < -0.5 and res_2 < -0.5 and res_3 < -0.5 and res + res_2 + res_3 < -8 and volume_per_5h > 6500:
-                    res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-3:]) * 100 - 100, 2)
-                    res_k_low = round(abs(res+res_2+res_3) / res_before * 100, 2)
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check} {res+res_2+res_3} {volume_per_5h} {res_k_low} res3")
+                        if name_cript_check not in [i['name_cript'] for i in
+                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                            equal(name_cript_check, res + res_2 + res_3 + res_4 + res_5, res_before,
+                                  price_change_percent_24h, awerage_high_frame, price_change_percent_7d, res_k_low)
 
-                elif res < -0.5 and res_2 < -0.5 and res + res_2 < -6 and volume_per_5h > 6500:
-                    res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-2:]) * 100 - 100, 2)
-                    res_k_low = round(abs(res+res_2) / res_before * 100, 2)
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check} {res+res_2} {volume_per_5h} {res_k_low} res2")
+                    elif res < -2 and res_2 < -2 and res_3 < -2 and res_4 < -2 and res + res_2 + res_3 + res_4 < -10:
+                        res_before: float = round(
+                            data_token.close_price[-1] / min(data_token.low_price[-4:]) * 100 - 100, 2)
+                        res_k_low = round(abs(res + res_2 + res_3 + res_4) / res_before * 100, 2)
+                        telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                            f"размер свеч {res + res_2 + res_3 + res_4}\n"
+                                                                            f"хвостик {res_k_low}\n"
+                                                                            f"объемы {volume_per_5h}\n"
+                                                                            f" res4")
+                        sell_pr = 101.15
 
-                elif -4.1 > res > -20 and volume_per_5h > 6500:
-                    res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
-                    res_k_low = round(abs(res) / res_before * 100, 2)
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check} {res} {volume_per_5h} {res_k_low} res")
+                        """Волатильность по фреймам"""
+                        high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                               zip(data_token.open_price, data_token.high_price)))
+                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                        if name_cript_check not in [i['name_cript'] for i in
+                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                            equal(name_cript_check, res + res_2 + res_3 + res_4, res_before, price_change_percent_24h,
+                                  awerage_high_frame, price_change_percent_7d, res_k_low)
+
+                    elif res < -2 and res_2 < -2 and res_3 < -2 and res + res_2 + res_3 < -9:
+                        res_before: float = round(
+                            data_token.close_price[-1] / min(data_token.low_price[-3:]) * 100 - 100, 2)
+                        res_k_low = round(abs(res + res_2 + res_3) / res_before * 100, 2)
+                        telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                            f"размер свеч{res + res_2 + res_3}\n"
+                                                                            f"хвостик {res_k_low}\n"
+                                                                            f"объемы {volume_per_5h}\n"
+                                                                            f" res3")
+                        sell_pr = 101.15
+
+                        """Волатильность по фреймам"""
+                        high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                               zip(data_token.open_price, data_token.high_price)))
+                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                        if name_cript_check not in [i['name_cript'] for i in
+                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                            equal(name_cript_check, res + res_2 + res_3, res_before, price_change_percent_24h,
+                                  awerage_high_frame, price_change_percent_7d, res_k_low)
+
+
+                    elif res < -2 and res_2 < -2 and res + res_2 < -6:
+                        res_before: float = round(
+                            data_token.close_price[-1] / min(data_token.low_price[-2:]) * 100 - 100, 2)
+                        res_k_low = round(abs(res + res_2) / res_before * 100, 2)
+                        telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                            f"размер свеч {res + res_2}\n"
+                                                                            f"хвостик {res_k_low}\n"
+                                                                            f"объемы {volume_per_5h}\n"
+                                                                            f" res2")
+                        sell_pr = 101.15
+
+                        """Волатильность по фреймам"""
+                        high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                               zip(data_token.open_price, data_token.high_price)))
+                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                        if name_cript_check not in [i['name_cript'] for i in
+                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                            equal(name_cript_check, res + res_2, res_before, price_change_percent_24h,
+                                  awerage_high_frame, price_change_percent_7d, res_k_low)
+
+
+                    elif -4.1 > res > -20:
+                        res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
+                        res_k_low = round(abs(res) / res_before * 100, 2)
+                        telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                            f"размер свечи {res}\n"
+                                                                            f"хвостик {res_k_low}\n"
+                                                                            f"объемы {volume_per_5h}\n"
+                                                                            f" res")
+
+                        if -4.1 > res > -8.5:
+                            sell_pr = 101.15
+
+                        if -8.5 > res > -20:
+                            sell_pr = 101.5
+
+                        """Волатильность по фреймам"""
+                        high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                               zip(data_token.open_price, data_token.high_price)))
+                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                        if name_cript_check not in [i['name_cript'] for i in
+                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                            equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame,
+                                  price_change_percent_7d, res_k_low)
+                except Exception as e:
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"ERROR отбора: {e}\n"
+                                                                        f"{name_cript_check}\n")
 
 
 

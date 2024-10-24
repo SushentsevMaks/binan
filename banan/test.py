@@ -6,7 +6,7 @@ from binance.exceptions import BinanceAPIException
 import keys
 import pandas as pd
 import telebot
-from sql_request import sql_req_str2, equal, sql_del
+from sql_request import sql_req_str2, equal, sql_del, get_crypto
 from threading import Thread
 from typing import NamedTuple
 from tradingview_ta import TA_Handler, Interval, Exchange
@@ -17,123 +17,65 @@ client = Client(keys.api_key, keys.api_secret)
 # futures_exchange_info = client.futures_exchange_info()
 # trading_pairs = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
 
-one = ['1INCHUSDT', 'AAVEUSDT', 'ACHUSDT', 'ACMUSDT', 'ADAUSDT', 'MANTAUSDT']
+one = ['NEOUSDT', 'LTCUSDT', 'QTUMUSDT', 'ADAUSDT', 'XRPUSDT', 'EOSUSDT', 'IOTAUSDT', 'XLMUSDT', 'ONTUSDT', 'TRXUSDT', 'ETCUSDT', 'ICXUSDT']
 
-onegop = ['AERGOUSDT', 'AGIXUSDT', 'AGLDUSDT', 'ALCXUSDT', 'ALGOUSDT']
+onedop = ['NULSUSDT', 'VETUSDT', 'LINKUSDT', 'ONGUSDT', 'HOTUSDT', 'ZILUSDT', 'ZRXUSDT', 'FETUSDT', 'BATUSDT', 'ZECUSDT', 'IOSTUSDT', 'CELRUSDT']
 
-onedop = ['ALICEUSDT', 'ALPACAUSDT', 'ALPHAUSDT', 'ALPINEUSDT', 'AMBUSDT']
+two = ['DASHUSDT', 'THETAUSDT', 'ENJUSDT', 'MATICUSDT', 'ATOMUSDT', 'TFUELUSDT', 'ONEUSDT', 'FTMUSDT', 'ALGOUSDT', 'DOGEUSDT', 'DUSKUSDT', 'ANKRUSDT']
 
-onemop = ['AMPUSDT', 'ANKRUSDT', 'APEUSDT', 'API3USDT', 'AIUSDT']
+twodop = ['WINUSDT', 'COSUSDT', 'MTLUSDT', 'DENTUSDT', 'KEYUSDT', 'WANUSDT', 'FUNUSDT', 'CVCUSDT', 'CHZUSDT', 'BANDUSDT', 'XTZUSDT', 'RENUSDT']
 
-two = ['APTUSDT', 'ARBUSDT', 'ARDRUSDT', 'ARKMUSDT', 'ARPAUSDT', 'XAIUSDT']
+three = ['RVNUSDT', 'HBARUSDT', 'NKNUSDT', 'STXUSDT', 'KAVAUSDT', 'ARPAUSDT', 'IOTXUSDT', 'RLCUSDT', 'CTXCUSDT', 'BCHUSDT', 'TROYUSDT', 'VITEUSDT']
 
-twogop = ['ARUSDT', 'ASRUSDT', 'ATMUSDT', 'ATOMUSDT', 'AUCTIONUSDT']
+threedop = ['FTTUSDT', 'OGNUSDT', 'WRXUSDT', 'LSKUSDT', 'BNTUSDT', 'LTOUSDT', 'MBLUSDT', 'COTIUSDT', 'STPTUSDT', 'DATAUSDT', 'SOLUSDT', 'CTSIUSDT']
 
-twodop = ['AUDIOUSDT', 'AVAXUSDT', 'AXSUSDT', 'BADGERUSDT', 'BAKEUSDT', "PEPEUSDT"]
+four = ['HIVEUSDT', 'CHRUSDT', 'ARDRUSDT', 'MDTUSDT', 'STMXUSDT', 'KNCUSDT', 'LRCUSDT', 'COMPUSDT', 'SCUSDT', 'ZENUSDT', 'SNXUSDT', 'VTHOUSDT']
 
-twomop = ['BALUSDT', 'BANDUSDT', 'BARUSDT', 'BATUSDT', 'ARKUSDT']
+fourdop = ['DGBUSDT', 'SXPUSDT', 'MKRUSDT', 'DCRUSDT', 'STORJUSDT', 'MANAUSDT', 'YFIUSDT', 'BALUSDT', 'BLZUSDT', 'IRISUSDT', 'KMDUSDT', 'JSTUSDT']
 
-three = ["BEAMXUSDT", 'BCHUSDT', 'BELUSDT', 'BETAUSDT', 'BICOUSDT', 'NFPUSDT']
+five = ['CRVUSDT', 'SANDUSDT', 'NMRUSDT', 'DOTUSDT', 'LUNAUSDT', 'RSRUSDT', 'TRBUSDT', 'SUSHIUSDT', 'KSMUSDT', 'EGLDUSDT', 'DIAUSDT', 'RUNEUSDT']
 
-threegop = ['BIFIUSDT', 'BLZUSDT', 'BNXUSDT', 'BONDUSDT', 'YGGUSDT']
+fivedop = ['FIOUSDT', 'UMAUSDT', 'BELUSDT', 'WINGUSDT', 'UNIUSDT', 'OXTUSDT', 'SUNUSDT', 'AVAXUSDT', 'FLMUSDT', 'ORNUSDT', 'UTKUSDT', 'XVSUSDT']
 
-threedop = ['ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT', 'BURGERUSDT', 'C98USDT', 'CAKEUSDT']
+six = ['ALPHAUSDT', 'AAVEUSDT', 'NEARUSDT', 'FILUSDT', 'INJUSDT', 'AUDIOUSDT', 'CTKUSDT', 'AKROUSDT', 'AXSUSDT', 'HARDUSDT', 'STRAXUSDT', 'UNFIUSDT']
 
-threemop = ['CELRUSDT', 'CFXUSDT', 'CHESSUSDT', 'CHRUSDT', 'CHZUSDT']
+sixdop = ['ROSEUSDT', 'AVAUSDT', 'SKLUSDT', 'GRTUSDT', 'JUVUSDT', 'PSGUSDT', '1INCHUSDT', 'OGUSDT', 'ATMUSDT', 'ASRUSDT', 'CELOUSDT']
 
-four = ['CITYUSDT', 'CKBUSDT', 'CLVUSDT', 'COMPUSDT', 'COTIUSDT']
+seven = ['RIFUSDT', 'TRUUSDT', 'CKBUSDT', 'TWTUSDT', 'FIROUSDT', 'LITUSDT', 'SFPUSDT', 'DODOUSDT', 'CAKEUSDT', 'ACMUSDT', 'BADGERUSDT', 'FISUSDT']
 
-fourgop = ['CRVUSDT', 'CTSIUSDT', 'CTXCUSDT', 'CVCUSDT', 'DYMUSDT']
+sevendop = ['OMUSDT', 'PONDUSDT', 'DEGOUSDT', 'ALICEUSDT', 'LINAUSDT', 'PERPUSDT', 'SUPERUSDT', 'CFXUSDT', 'TKOUSDT', 'PUNDIXUSDT', 'TLMUSDT', 'BARUSDT']
 
-fourdop = ['CVPUSDT', 'CVXUSDT', 'CYBERUSDT', 'DARUSDT', 'DASHUSDT', 'DATAUSDT']
+eight = ['FORTHUSDT', 'BAKEUSDT', 'BURGERUSDT', 'SLPUSDT', 'SHIBUSDT', 'ICPUSDT', 'ARUSDT', 'MASKUSDT', 'LPTUSDT', 'XVGUSDT', 'ATAUSDT', 'GTCUSDT']
 
-fourmop = ['DCRUSDT', 'DEGOUSDT', 'DENTUSDT', 'DEXEUSDT', 'DFUSDT']
+eightdop = ['ERNUSDT', 'KLAYUSDT', 'PHAUSDT', 'MLNUSDT', 'DEXEUSDT', 'C98USDT', 'CLVUSDT', 'QNTUSDT', 'FLOWUSDT', 'MINAUSDT', 'RAYUSDT', 'FARMUSDT']
 
-five = ['DIAUSDT', 'DODOUSDT', 'DOGEUSDT', 'DOTUSDT', 'DREPUSDT', 'ALTUSDT']
+nine = ['ALPACAUSDT', 'QUICKUSDT', 'MBOXUSDT', 'REQUSDT', 'GHSTUSDT', 'WAXPUSDT', 'GNOUSDT', 'XECUSDT', 'ELFUSDT', 'DYDXUSDT', 'IDEXUSDT']
 
-fivegop = ['DUSKUSDT', 'DYDXUSDT', 'EDUUSDT', 'EGLDUSDT', 'ELFUSDT']
+ninedop = ['VIDTUSDT', 'GALAUSDT', 'ILVUSDT', 'YGGUSDT', 'SYSUSDT', 'DFUSDT', 'FIDAUSDT', 'FRONTUSDT', 'AGLDUSDT', 'RADUSDT', 'BETAUSDT']
 
-fivedop = ['ENJUSDT', 'ENSUSDT', 'EPXUSDT', 'ETCUSDT', 'RONINUSDT']
+ten = ['RAREUSDT', 'LAZIOUSDT', 'CHESSUSDT', 'ADXUSDT', 'AUCTIONUSDT', 'DARUSDT', 'BNXUSDT', 'MOVRUSDT', 'CITYUSDT', 'ENSUSDT', 'KP3RUSDT', 'QIUSDT']
 
-fivemop = ['FARMUSDT', 'FETUSDT', 'FIDAUSDT', 'GFTUSDT', 'PYTHUSDT']
+tendop = ['PORTOUSDT', 'POWRUSDT', 'VGXUSDT', 'JASMYUSDT', 'AMPUSDT', 'PYRUSDT', 'ALCXUSDT', 'SANTOSUSDT', 'BICOUSDT', 'FLUXUSDT', 'FXSUSDT', 'VOXELUSDT']
 
-six = ["FTTUSDT", 'FILUSDT', 'FIOUSDT', 'FIROUSDT', 'FISUSDT']
+eleven = ['HIGHUSDT', 'CVXUSDT', 'PEOPLEUSDT', 'OOKIUSDT', 'SPELLUSDT', 'JOEUSDT', "DOGSUSDT", 'ACHUSDT', 'IMXUSDT', 'GLMRUSDT', 'LOKAUSDT', 'SCRTUSDT', 'API3USDT']
 
-sixgop = ['FLOKIUSDT', 'FLUXUSDT', 'FORTHUSDT', 'FORUSDT', 'FRONTUSDT']
+elevendop = ['BTTCUSDT', 'ACAUSDT', 'XNOUSDT', 'WOOUSDT', 'ALPINEUSDT', 'TUSDT', 'ASTRUSDT', 'GMTUSDT', 'KDAUSDT', 'APEUSDT', 'BSWUSDT', 'BIFIUSDT', 'TONUSDT']
 
-sixdop = ['FTMUSDT', 'FUNUSDT', 'FXSUSDT', 'GALAUSDT', 'GALUSDT']
+twelve = ['STEEMUSDT', 'NEXOUSDT', 'REIUSDT', 'LDOUSDT', 'EPXUSDT', 'OPUSDT', 'RENDERUSDT', 'LEVERUSDT', 'STGUSDT', 'LUNCUSDT', 'GMXUSDT', 'POLYXUSDT', 'APTUSDT', 'BANANAUSDT']
 
-sixmop = ['GLMRUSDT', 'GLMUSDT', 'GMTUSDT', 'GMXUSDT', 'GASUSDT']
+twelvedop = ['OSMOUSDT', 'HFTUSDT', 'PHBUSDT', 'HOOKUSDT', 'MAGICUSDT', 'HIFIUSDT', 'GUSDT', 'RPLUSDT', 'PROSUSDT', 'GNSUSDT', 'SYNUSDT', 'VIBUSDT', 'SSVUSDT', 'ZROUSDT']
 
-seven = ['GNSUSDT', 'GRTUSDT', 'HARDUSDT', 'HBARUSDT', 'HFTUSDT']
+thirteenth = ['LQTYUSDT', 'AMBUSDT', 'USTCUSDT', 'GASUSDT', 'GLMUSDT', 'PROMUSDT', 'LISTAUSDT', 'QKCUSDT', 'UFTUSDT', 'IDUSDT', 'ARBUSDT', 'LOOMUSDT', 'OAXUSDT', 'ZKUSDT']
 
-sevengop = ['HIGHUSDT', 'HIVEUSDT', 'HOOKUSDT', 'HOTUSDT', 'ICPUSDT']
+thirteenthdop = ['RDNTUSDT', 'WBTCUSDT', 'EDUUSDT', 'SUIUSDT', 'AERGOUSDT', 'PEPEUSDT', 'IOUSDT', 'FLOKIUSDT', 'ASTUSDT', 'SNTUSDT', 'COMBOUSDT', 'MAVUSDT', 'PENDLEUSDT', 'NOTUSDT']
 
-sevendop = ['ICXUSDT', 'IDEXUSDT', 'IDUSDT', 'ILVUSDT', 'IMXUSDT']
+fourteenth = ['ARKMUSDT', 'WBETHUSDT', 'WLDUSDT', 'SEIUSDT', 'CYBERUSDT', 'ARKUSDT', 'BBUSDT', 'CREAMUSDT', 'GFTUSDT', 'IQUSDT', 'NTRNUSDT', 'TIAUSDT', 'MEMEUSDT', 'REZUSDT']
 
-sevenmop = ['INJUSDT', 'IOTAUSDT', 'IOTXUSDT', 'IRISUSDT', 'STMXUSDT']
+fourteenthdop = ['ORDIUSDT', 'BEAMXUSDT', 'PIVXUSDT', 'VICUSDT', 'BLURUSDT', 'VANRYUSDT', 'OMNIUSDT', 'JTOUSDT', '1000SATSUSDT', 'BONKUSDT', 'ACEUSDT', 'NFPUSDT', 'AIUSDT', 'TAOUSDT']
 
-eight = ['JASMYUSDT', 'JOEUSDT', 'JSTUSDT', 'JUVUSDT', 'KAVAUSDT']
+fifteenth = ['XAIUSDT', 'MANTAUSDT', 'ALTUSDT', 'JUPUSDT', 'PYTHUSDT', 'RONINUSDT', 'SAGAUSDT', 'DYMUSDT', 'PIXELUSDT', 'STRKUSDT', 'PORTALUSDT', 'PDAUSDT', 'AXLUSDT', 'TNSRUSDT']
 
-eightgop = ['KEYUSDT', 'KLAYUSDT', 'KMDUSDT', 'KP3RUSDT', 'KSMUSDT']
-
-eightdop = ['LAZIOUSDT', 'LDOUSDT', 'LEVERUSDT', 'LINAUSDT', 'LINKUSDT']
-
-eightmop = ['LITUSDT', 'LOKAUSDT', 'LOOMUSDT', 'LQTYUSDT', 'LRCUSDT']
-
-nine = ['LSKUSDT', 'LTCUSDT', 'LUNAUSDT', 'LUNCUSDT', 'MAGICUSDT', 'MANAUSDT']
-
-ninegop = ['MASKUSDT', 'MATICUSDT', 'MAVUSDT', 'MBLUSDT', 'MBOXUSDT', "COMBOUSDT"]
-
-ninedop = ['MDTUSDT', 'MINAUSDT', 'MKRUSDT', 'MLNUSDT', 'MOBUSDT', 'IQUSDT']
-
-ninemop = ['MOVRUSDT', 'MTLUSDT', 'NEARUSDT', 'MEMEUSDT', 'PIVXUSDT']
-
-ten = ['NEOUSDT', 'NKNUSDT', 'NMRUSDT', 'NULSUSDT', 'OAXUSDT', 'OCEANUSDT']
-
-tengop = ['OGNUSDT', 'OGUSDT', 'OMGUSDT', 'OMUSDT', 'ONEUSDT', 'ORDIUSDT']
-
-tendop = ['ONGUSDT', 'ONTUSDT', 'OOKIUSDT', 'OPUSDT', 'ORNUSDT', 'VICUSDT']
-
-tenmop = ['OSMOUSDT', 'OXTUSDT', 'PENDLEUSDT', 'PEOPLEUSDT', 'NTRNUSDT', 'BLURUSDT']
-
-eleven = ['PERPUSDT', 'PHAUSDT', 'PHBUSDT', 'PNTUSDT', "VANRYUSDT"]
-
-elevengop = ['POLSUSDT', 'POLYXUSDT', 'PORTOUSDT', 'POWRUSDT', 'PROMUSDT', 'AEURUSDT']
-
-elevendop = ['PROSUSDT', 'PSGUSDT', 'PUNDIXUSDT', 'PYRUSDT', 'RIFUSDT', 'JTOUSDT']
-
-elevenmop = ['QKCUSDT', 'QTUMUSDT', 'QUICKUSDT', 'RADUSDT', 'RLCUSDT', '1000SATSUSDT']
-
-twelve = ['RAYUSDT', 'RDNTUSDT', 'REEFUSDT', 'REIUSDT', 'RENUSDT', 'REQUSDT']
-
-twelvegop = ['RNDRUSDT', 'ROSEUSDT', 'RPLUSDT', 'RSRUSDT', 'RUNEUSDT', "BONKUSDT"]
-
-twelvedop = ['RVNUSDT', 'SANDUSDT', 'SANTOSUSDT', 'SCRTUSDT', 'SCUSDT', "ACEUSDT"]
-
-twelvemop = ['SEIUSDT', 'SFPUSDT', 'SHIBUSDT', 'SKLUSDT', 'SLPUSDT', "PIXELUSDT"]
-
-thirteenth = ['SNTUSDT', 'SNXUSDT', 'SOLUSDT', 'SPELLUSDT', 'SSVUSDT', 'STEEMUSDT']
-
-thirteenthgop = ['STORJUSDT', 'STPTUSDT', 'STRAXUSDT', 'STXUSDT', 'SUIUSDT', "STRKUSDT"]
-
-thirteenthdop = ['SUPERUSDT', 'SUSHIUSDT', 'SXPUSDT', 'SYNUSDT', 'SYSUSDT', "HIFIUSDT"]
-
-thirteenthmop = ['TFUELUSDT', 'THETAUSDT', 'TKOUSDT', 'TLMUSDT', 'TIAUSDT', 'YFIUSDT']
-
-fourteenth = ['TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'STGUSDT']
-
-fourteenthgop = ['TWTUSDT', 'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'QIUSDT']
-
-fourteenthdop = ['UNIUSDT', 'USTCUSDT', 'VETUSDT', 'VGXUSDT', 'XVGUSDT', "CREAMUSDT"]
-
-fourteenthmop = ['VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT', "PORTALUSDT"]
-
-fifteenth = ['WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'JUPUSDT', "PDAUSDT"]
-
-fifteenthgop = ['WLDUSDT', 'WNXMUSDT', 'WOOUSDT', "NTRNUSDT", 'WRXUSDT']
-
-fifteenthdop = ['XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XRPUSDT', "AXLUSDT"]
+fifteenthdop = ['WIFUSDT', 'METISUSDT', 'AEVOUSDT', 'BOMEUSDT', 'ETHFIUSDT', 'ENAUSDT', 'WUSDT']
 
 izg = []
 
@@ -167,33 +109,144 @@ def top_coin(trading_pairs: list):
 
             time_frames = [0, 4, 8, 12, 16, 20]
 
-            data_token: Dataset = last_data(name_cript_check, "4h", "4000")
-            volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-4:]]) / len(
-                data_token.volume[-4:]) / 80
-            res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-            res_2: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-            res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
+            data_token: Dataset = last_data(name_cript_check, "4h", "17280")
+            volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[:-1]]) / len(
+                data_token.volume[:-1]) / 80
+            res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            res_2: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
+            res_3: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
+            res_4: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
+            res_5: float = round(data_token.close_price[-6] / data_token.open_price[-6] * 100 - 100, 2)
             res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
             price_change_percent_24h: float = round(
                 ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
+            price_change_percent_7d: float = round(
+                ((max(data_token.high_price) / data_token.close_price[-1]) * 100) - 100, 2)
             high_close = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2),
                                   zip(data_token.high_price[:-1], data_token.close_price[:-1])))
             high_close_change = round(sum(high_close) / len(high_close), 2)
             """Отношение свечи падения к нижнему хвосту"""
             res_k_low = round(abs(res) / res_before * 100, 2)
-            if -4.1 > res > -20:
-                print(name_cript_check, res, volume_per_5h, "res")
-            elif res < -0.5 and res_2 < -0.5 and res + res_2 < -4:
-                print(name_cript_check, res + res_2, volume_per_5h, "res2")
-            elif res < -0.5 and res_2 < -0.5 and res_3 < -0.5 and res + res_2 + res_3 < -4:
-                print(name_cript_check, res + res_2 + res_3, volume_per_5h, "res3")
+            '''процент падения за последние 2ч. Отрицательные значение == был рост'''
+            loss_price_for_two_hours: float = round(
+                100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
+
+            try:
+                if res < -1.5 and res_2 < -1.5 and res_3 < -1.5 and res_4 < -1.5 and res_5 < -1.5 and res + res_2 + res_3 + res_4 + res_5 < -10:
+                    res_before: float = round(
+                        data_token.close_price[-1] / min(data_token.low_price[-5:]) * 100 - 100, 2)
+                    res_k_low = round(abs(res + res_2 + res_3 + res_4 + res_5) / res_before * 100, 2)
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                        f"размер свеч {res + res_2 + res_3 + res_4 + res_5}\n"
+                                                                        f"хвостик {res_k_low}\n"
+                                                                        f"объемы {volume_per_5h}\n"
+                                                                        f" res5")
+                    sell_pr = 101.15
+
+                    """Волатильность по фреймам"""
+                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                           zip(data_token.open_price, data_token.high_price)))
+                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                    if name_cript_check not in [i['name_cript'] for i in
+                                                get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                        equal(name_cript_check, res + res_2 + res_3 + res_4 + res_5, res_before,
+                              price_change_percent_24h, awerage_high_frame, price_change_percent_7d, res_k_low)
+
+                elif res < -2 and res_2 < -2 and res_3 < -2 and res_4 < -2 and res + res_2 + res_3 + res_4 < -10:
+                    res_before: float = round(
+                        data_token.close_price[-1] / min(data_token.low_price[-4:]) * 100 - 100, 2)
+                    res_k_low = round(abs(res + res_2 + res_3 + res_4) / res_before * 100, 2)
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                        f"размер свеч {res + res_2 + res_3 + res_4}\n"
+                                                                        f"хвостик {res_k_low}\n"
+                                                                        f"объемы {volume_per_5h}\n"
+                                                                        f" res4")
+                    sell_pr = 101.15
+
+                    """Волатильность по фреймам"""
+                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                           zip(data_token.open_price, data_token.high_price)))
+                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                    if name_cript_check not in [i['name_cript'] for i in
+                                                get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                        equal(name_cript_check, res + res_2 + res_3 + res_4, res_before, price_change_percent_24h,
+                              awerage_high_frame, price_change_percent_7d, res_k_low)
+
+                elif res < -2 and res_2 < -2 and res_3 < -2 and res + res_2 + res_3 < -9:
+                    res_before: float = round(
+                        data_token.close_price[-1] / min(data_token.low_price[-3:]) * 100 - 100, 2)
+                    res_k_low = round(abs(res + res_2 + res_3) / res_before * 100, 2)
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                        f"размер свеч{res + res_2 + res_3}\n"
+                                                                        f"хвостик {res_k_low}\n"
+                                                                        f"объемы {volume_per_5h}\n"
+                                                                        f" res3")
+                    sell_pr = 101.15
+
+                    """Волатильность по фреймам"""
+                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                           zip(data_token.open_price, data_token.high_price)))
+                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                    if name_cript_check not in [i['name_cript'] for i in
+                                                get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                        equal(name_cript_check, res + res_2 + res_3, res_before, price_change_percent_24h,
+                              awerage_high_frame, price_change_percent_7d, res_k_low)
 
 
-                # telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                #                                                     f"----------------------------------------\n"
-                #                                                     f"----------------------------------------\n"
-                #                                                     f"ПРОВЕРОЧНЫЙ СКРИПТ\n")
-                # time.sleep(1)
+                elif res < -2 and res_2 < -2 and res + res_2 < -6:
+                    res_before: float = round(
+                        data_token.close_price[-1] / min(data_token.low_price[-2:]) * 100 - 100, 2)
+                    res_k_low = round(abs(res + res_2) / res_before * 100, 2)
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                        f"размер свеч {res + res_2}\n"
+                                                                        f"хвостик {res_k_low}\n"
+                                                                        f"объемы {volume_per_5h}\n"
+                                                                        f" res2")
+                    sell_pr = 101.15
+
+                    """Волатильность по фреймам"""
+                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                           zip(data_token.open_price, data_token.high_price)))
+                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                    if name_cript_check not in [i['name_cript'] for i in
+                                                get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                        equal(name_cript_check, res + res_2, res_before, price_change_percent_24h,
+                              awerage_high_frame, price_change_percent_7d, res_k_low)
+
+
+                elif -4.1 > res > -20:
+                    res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
+                    res_k_low = round(abs(res) / res_before * 100, 2)
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"{name_cript_check}\n"
+                                                                        f"размер свечи {res}\n"
+                                                                        f"хвостик {res_k_low}\n"
+                                                                        f"объемы {volume_per_5h}\n"
+                                                                        f" res")
+
+                    if -4.1 > res > -8.5:
+                        sell_pr = 101.15
+
+                    if -8.5 > res > -20:
+                        sell_pr = 101.5
+
+                    """Волатильность по фреймам"""
+                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
+                                           zip(data_token.open_price, data_token.high_price)))
+                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                    if name_cript_check not in [i['name_cript'] for i in
+                                                get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                        equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame,
+                              price_change_percent_7d, res_k_low)
+            except Exception as e:
+                telebot.TeleBot(telega_token).send_message(chat_id, f"ERROR отбора: {e}\n"
+                                                                    f"{name_cript_check}\n")
+
+
         except:
             pass
 
@@ -252,24 +305,26 @@ def get_recommend(i, interval):
 
 '''Старт программы'''
 
-threads = [Thread(target=top_coin, args=([threegop])),
-           Thread(target=top_coin, args=([fourgop])), Thread(target=top_coin, args=([fivegop])),
-           Thread(target=top_coin, args=([sixgop])),
-           Thread(target=top_coin, args=([sevengop])), Thread(target=top_coin, args=([eightgop])),
-           Thread(target=top_coin, args=([ninegop])),
-           Thread(target=top_coin, args=([tengop])), Thread(target=top_coin, args=([elevengop])),
-           Thread(target=top_coin, args=([twelvegop])),
-           Thread(target=top_coin, args=([thirteenthgop])), Thread(target=top_coin, args=([fourteenthgop])),
-           Thread(target=top_coin, args=([fifteenthgop])),
-           Thread(target=top_coin, args=([onemop])), Thread(target=top_coin, args=([twomop])),
-           Thread(target=top_coin, args=([threemop])),
-           Thread(target=top_coin, args=([fourmop])), Thread(target=top_coin, args=([fivemop])),
-           Thread(target=top_coin, args=([sixmop])),
-           Thread(target=top_coin, args=([sevenmop])), Thread(target=top_coin, args=([eightmop])),
-           Thread(target=top_coin, args=([ninemop])),
-           Thread(target=top_coin, args=([tenmop])), Thread(target=top_coin, args=([elevenmop])),
-           Thread(target=top_coin, args=([twelvemop])),
-           Thread(target=top_coin, args=([thirteenthmop])), Thread(target=top_coin, args=([fourteenthmop]))]
+threads = [Thread(target=top_coin, args=([one])), Thread(target=top_coin, args=([two])),
+               Thread(target=top_coin, args=([three])),
+               Thread(target=top_coin, args=([four])), Thread(target=top_coin, args=([five])),
+               Thread(target=top_coin, args=([six])),
+               Thread(target=top_coin, args=([seven])), Thread(target=top_coin, args=([eight])),
+               Thread(target=top_coin, args=([nine])),
+               Thread(target=top_coin, args=([ten])), Thread(target=top_coin, args=([eleven])),
+               Thread(target=top_coin, args=([twelve])),
+               Thread(target=top_coin, args=([thirteenth])), Thread(target=top_coin, args=([fourteenth])),
+               Thread(target=top_coin, args=([fifteenth])),
+               Thread(target=top_coin, args=([onedop])), Thread(target=top_coin, args=([twodop])),
+               Thread(target=top_coin, args=([threedop])),
+               Thread(target=top_coin, args=([fourdop])), Thread(target=top_coin, args=([fivedop])),
+               Thread(target=top_coin, args=([sixdop])),
+               Thread(target=top_coin, args=([sevendop])), Thread(target=top_coin, args=([eightdop])),
+               Thread(target=top_coin, args=([ninedop])),
+               Thread(target=top_coin, args=([tendop])), Thread(target=top_coin, args=([elevendop])),
+               Thread(target=top_coin, args=([twelvedop])),
+               Thread(target=top_coin, args=([thirteenthdop])), Thread(target=top_coin, args=([fourteenthdop])),
+               Thread(target=top_coin, args=([fifteenthdop]))]
 
 start_threads = [i.start() for i in threads]
 

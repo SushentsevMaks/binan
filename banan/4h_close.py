@@ -107,9 +107,12 @@ def top_coin(trading_pairs: list):
                 res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
                 res_4: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
                 res_5: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
-                res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
                 price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
                 price_change_percent_7d: float = round(((max(data_token.high_price) / data_token.close_price[-1]) * 100) - 100, 2)
+                res_sum5 = round(sum(list(map(lambda x: x[0] / x[1] * 100 - 100, list(zip(data_token.high_price[-5:], data_token.low_price[-5:]))))), 2)
+
+                pattern_ravenstva_svechei = abs(res) - abs(res_2)
+                percent_raznici_svechei = abs(pattern_ravenstva_svechei) / abs(res_2) * 100
 
                 '''процент падения за последние 2ч. Отрицательные значение == был рост'''
                 loss_price_for_two_hours: float = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
@@ -120,14 +123,20 @@ def top_coin(trading_pairs: list):
                         or (res < -2 and res_2 < -0.8 and res_3 < -0.8 and res + res_2 + res_3 < -8)\
                         or (res < -2 and res_2 < -2 and res + res_2 < -6):
 
-                    if res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res_5 < -0.8 and res + res_2 + res_3 + res_4 + res_5 < -10:
+                    if res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res_5 < -0.8 and res + res_2 + res_3 + res_4 + res_5 < -15:
                         res_before: float = round(
                             data_token.close_price[-1] / min(data_token.low_price[-5:]) * 100 - 100, 2)
                         if res_before == 0:
                             res_k_low = 10000
                         else:
                             res_k_low = round(abs(res + res_2 + res_3 + res_4 + res_5) / res_before * 100, 2)
-                        sell_pr = 101.15
+
+                        if res_sum5 < 30:
+                            sell_pr = 101
+                        elif res_sum5 > 50:
+                            sell_pr = 101.5
+                        else:
+                            sell_pr = 101.15
 
                         """Волатильность по фреймам"""
                         high_frames = list(
@@ -147,9 +156,9 @@ def top_coin(trading_pairs: list):
                                                     get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
                             equal(name_cript_check, res + res_2 + res_3 + res_4 + res_5, res_before,
                                   price_change_percent_24h,
-                                  awerage_high_frame, price_change_percent_7d, res_k_low)
+                                  awerage_high_frame, price_change_percent_7d, res_sum5)
 
-                    elif res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res + res_2 + res_3 + res_4 < -9:
+                    elif res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res + res_2 + res_3 + res_4 < -12:
                         res_before: float = round(
                             data_token.close_price[-1] / min(data_token.low_price[-4:]) * 100 - 100, 2)
                         if res_before == 0:
@@ -157,7 +166,12 @@ def top_coin(trading_pairs: list):
                         else:
                             res_k_low = round(abs(res + res_2 + res_3 + res_4) / res_before * 100, 2)
 
-                        sell_pr = 101.15
+                        if res_sum5 < 30:
+                            sell_pr = 101
+                        elif res_sum5 > 50:
+                            sell_pr = 101.5
+                        else:
+                            sell_pr = 101.15
 
                         """Волатильность по фреймам"""
                         high_frames = list(
@@ -176,16 +190,21 @@ def top_coin(trading_pairs: list):
                         if name_cript_check not in [i['name_cript'] for i in
                                                     get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
                             equal(name_cript_check, res + res_2 + res_3 + res_4, res_before, price_change_percent_24h,
-                                  awerage_high_frame, price_change_percent_7d, res_k_low)
+                                  awerage_high_frame, price_change_percent_7d, res_sum5)
 
-                    elif res < -2 and res_2 < -0.8 and res_3 < -0.8 and res + res_2 + res_3 < -9:
+                    elif res < -2 and res_2 < -0.8 and res_3 < -0.8 and res + res_2 + res_3 < -10:
                         res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-3:]) * 100 - 100, 2)
                         if res_before == 0:
                             res_k_low = 10000
                         else:
                             res_k_low = round(abs(res + res_2 + res_3) / res_before * 100, 2)
 
-                        sell_pr = 101.15
+                        if res_sum5 < 30:
+                            sell_pr = 101
+                        elif res_sum5 > 50:
+                            sell_pr = 101.5
+                        else:
+                            sell_pr = 101.15
 
                         """Волатильность по фреймам"""
                         high_frames = list(
@@ -205,16 +224,21 @@ def top_coin(trading_pairs: list):
                                                     get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
                             equal(name_cript_check, res + res_2 + res_3, res_before, price_change_percent_24h,
                                   awerage_high_frame,
-                                  price_change_percent_7d, res_k_low)
+                                  price_change_percent_7d, res_sum5)
 
-                    elif res < -2 and res_2 < -2 and res + res_2 < -6:
+                    elif res < -2 and res_2 < -2 and res + res_2 < -8:
                         res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-2:]) * 100 - 100, 2)
                         if res_before == 0:
                             res_k_low = 10000
                         else:
                             res_k_low = round(abs(res + res_2) / res_before * 100, 2)
 
-                        sell_pr = 101.15
+                        if res_sum5 < 30:
+                            sell_pr = 101
+                        elif res_sum5 > 50:
+                            sell_pr = 101.5
+                        else:
+                            sell_pr = 101.15
 
                         """Волатильность по фреймам"""
                         high_frames = list(
@@ -234,20 +258,21 @@ def top_coin(trading_pairs: list):
                                                     get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
                             equal(name_cript_check, res + res_2, res_before, price_change_percent_24h,
                                   awerage_high_frame,
-                                  price_change_percent_7d, res_k_low)
+                                  price_change_percent_7d, res_sum5)
 
-                    elif -4.1 > res > -20:
+                    elif -4.2 > res and percent_raznici_svechei > 15:
                         res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
                         if res_before == 0:
                             res_k_low = 10000
                         else:
                             res_k_low = round(abs(res) / res_before * 100, 2)
 
-                        if -4.1 > res > -10:
-                            sell_pr = 101.15
-
-                        if -10 > res > -20:
+                        if res_sum5 < 30:
+                            sell_pr = 101
+                        elif res_sum5 > 50:
                             sell_pr = 101.5
+                        else:
+                            sell_pr = 101.15
 
                         """Волатильность по фреймам"""
                         high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2), zip(data_token.open_price, data_token.high_price)))
@@ -264,13 +289,7 @@ def top_coin(trading_pairs: list):
                         if name_cript_check not in [i['name_cript'] for i in
                                                     get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
                             equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame,
-                                  price_change_percent_7d, res_k_low)
-
-                    '''Если такой крипты в базе еще нет, то добавляем в базу '''
-                    if name_cript_check not in [i['name_cript'] for i in get_crypto()] and volume_per_5h > 6500 and res_k_low > 200:
-                        #smotr_15_frame: Dataset = last_data(name_cript_check, "15m", "60")
-                        #res_15_frame: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-                        equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame, price_change_percent_7d, res_k_low)
+                                  price_change_percent_7d, res_sum5)
 
                     start_time_check = time.time()
                     '''Заглушка для ожидания конца таймфрейма 15 мин (58 сек не менять!)'''
@@ -286,25 +305,16 @@ def top_coin(trading_pairs: list):
                         reit_bd_cript.append([j['name_cript'], j["res"], j["price_change_percent_24h"], j["awerage_high_frame"], j["high_close_change"], j["res_k_low"]])
 
                     """Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
-                    reit_timeframe_change = [i[0] for i in sorted(reit_bd_cript, key=lambda x: x[1])]
-                    reit_day_change = [i[0] for i in sorted(reit_bd_cript, key=lambda x: x[2])]
-                    reit_awerage_high_frame = [i[0] for i in sorted(reit_bd_cript, key=lambda x: -x[3])]
-                    reit_change_7d = [i[0] for i in sorted(reit_bd_cript, key=lambda x: -x[4])]
+
+                    reit_awerage_high_frame = [i[0] for i in sorted(reit_bd_cript, key=lambda x: -x[5])]
 
                     """Формируем список крипт со значениями"""
-                    itog = []
-                    for i in reit_timeframe_change:
-                        for j in reit_bd_cript:
-                            if i == j[0]:
-                                itog.append([i, reit_timeframe_change.index(i), reit_day_change.index(i), reit_awerage_high_frame.index(i), j[4], reit_change_7d.index(i), j[1]])
 
                     """Определяем топ крипту и оставшийся массив для доп закупа"""
-                    # top = sorted(reit_bd_cript, key=lambda x: -x[4])[0][0]
-                    # all_work_crypt = sorted(reit_bd_cript, key=lambda x: -x[4])
-                    top = sorted([[i[0], i[1] + i[2] + i[5], i[6]] for i in itog], key=lambda x: x[1])[0][0]
-                    all_work_crypt = sorted([[i[0], i[1] + i[2] + i[5], i[6]] for i in itog], key=lambda x: x[1])
-                    # top = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: (-x[2], x[1]))[0][0]
-                    # all_work_crypt = sorted([[i[0], i[1] + i[2], i[3]] for i in itog], key=lambda x: (-x[2], [1]))[1:]
+
+                    top = reit_awerage_high_frame[0]
+                    all_work_crypt = reit_awerage_high_frame
+
 
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     '''''''''''''''''''''''''''Основная логика'''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -314,9 +324,9 @@ def top_coin(trading_pairs: list):
                     """Алгоритм закупа"""
                     if name_cript_check == top:
                         telebot.TeleBot(telega_token).send_message(chat_id, f"ВЫБОР ПАЛ НА {name_cript_check}\n"
-                                                                            f"Список крипт из базы по рейтингу - {sorted(reit_bd_cript, key=lambda x: -x[3])}\n"
+                                                                            f"Список крипт из базы по рейтингу - {sorted(reit_bd_cript, key=lambda x: -x[5])}\n"
                                                                             f"------------------------\n"
-                                                                            f"РЕЙТИНГ - {sorted([[i[0], i[1] + i[2] + i[5]] for i in itog], key=lambda x: x[1])}\n"
+                                                                            f"РЕЙТИНГ - {reit_awerage_high_frame}\n"
                                                                             f"------------------------\n"
                                                                             f"Количество триггеров - {len(bd_cript)}\n")
 
@@ -369,35 +379,25 @@ def top_coin(trading_pairs: list):
                                     order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=sell_qty, price=x)
 
                                 except BinanceAPIException as e:
-                                    telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR 1: {e}\n"
-                                                                                        f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                        f"Количество продаваемого - {sell_qty}, Цена - {x}\n"
-                                                                                        f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                    time.sleep(10)
+                                    time.sleep(2)
 
                                     try:
                                         x = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
                                         order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=sell_qty, price=x)
                                     except BinanceAPIException as e:
-                                        telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
-                                                                                            f"Количество продаваемого - {sell_qty}, Цена - {x}\n"
-                                                                                            f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                        time.sleep(10)
+                                        time.sleep(2)
 
                                         try:
                                             x = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
                                             order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=int(sell_qty), price=x)
                                         except BinanceAPIException as e:
-                                            telebot.TeleBot(telega_token).send_message(chat_id, f"SELL ERROR: {e}\n"
-                                                                                                f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
-                                                                                                f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                            time.sleep(10)
+                                            time.sleep(2)
 
                                             try:
                                                 x = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
                                                 order_sell = client.order_limit_sell(symbol=name_cript_check, quantity=int(sell_qty), price=x)
                                             except BinanceAPIException as e:
-                                                telebot.TeleBot(telega_token).send_message(chat_id, f"ВСЕ РАВНО ФЕЙЛ: {e}\n"
+                                                telebot.TeleBot(telega_token).send_message(chat_id, f"ФЕЙЛ ПРОДАЖИ: {e}\n"
                                                                                                     f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
                                                                                                     f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
                                                 time.sleep(600)
@@ -476,7 +476,7 @@ def top_coin(trading_pairs: list):
                                 for i in all_work_crypt[1:round(len(all_work_crypt))]:
 
                                     last_time = time.time()
-                                    data_token: Dataset = last_data(i[0], "4h", "1440")
+                                    data_token: Dataset = last_data(i, "4h", "1440")
                                     volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[:-1]]) / len(data_token.volume[:-1]) / 80
                                     res_now: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
                                     res_past: float = round(data_token.high_price[-1] / data_token.close_price[-2] * 100 - 100, 2)
@@ -544,12 +544,7 @@ def top_coin(trading_pairs: list):
                                                                                          price=y)
 
                                                 except BinanceAPIException as e:
-                                                    telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                               f"ERROR 1 {e}\n"
-                                                                                               f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                               f"Количество продаваемого - {sell_qty}, Цена - {y}\n"
-                                                                                               f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                    time.sleep(10)
+                                                    time.sleep(2)
 
                                                     try:
                                                         y = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
@@ -557,12 +552,7 @@ def top_coin(trading_pairs: list):
                                                                                              quantity=sell_qty,
                                                                                              price=y)
                                                     except BinanceAPIException as e:
-                                                        telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                                   f"ERROR 2 {e}\n"
-                                                                                                   f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                                   f"Количество продаваемого - {sell_qty}, Цена - {y}\n"
-                                                                                                   f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                        time.sleep(10)
+                                                        time.sleep(2)
 
                                                         try:
                                                             y = Decimal(str(round((buyprice / 100) * sell_pr, max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
@@ -570,12 +560,7 @@ def top_coin(trading_pairs: list):
                                                                                                  quantity=int(sell_qty),
                                                                                                  price=y)
                                                         except BinanceAPIException as e:
-                                                            telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                                       f"ERROR 3 {e}\n"
-                                                                                                       f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
-                                                                                                       f"Количество продаваемого - {int(sell_qty)}, Цена - {y}\n"
-                                                                                                       f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
-                                                            time.sleep(10)
+                                                            time.sleep(2)
 
                                                             try:
                                                                 y = round((buyprice / 100) * sell_pr, max([len(str(i).split(".")[1]) for i in data_token[0][-5:]]))
@@ -583,7 +568,7 @@ def top_coin(trading_pairs: list):
 
                                                             except BinanceAPIException as e:
                                                                 telebot.TeleBot(telega_token).send_message(chat_id,
-                                                                                                           f"ВСЕ РАВНО ФЕЙЛ: {e}\n"
+                                                                                                           f"ФЕЙЛ ПРОДАЖИ: {e}\n"
                                                                                                            f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
                                                                                                            f"Количество продаваемого - {int(sell_qty)}, Цена - {y}\n"
                                                                                                            f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
@@ -648,6 +633,8 @@ def top_coin(trading_pairs: list):
                                             sql_req_str2(i[0], price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res_now)
 
                                         time.sleep(1)
+
+                                time.sleep(1200)
 
 
                         telebot.TeleBot(telega_token).send_message(chat_id,f"Доп. алг закончился, готов к новому циклу")

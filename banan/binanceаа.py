@@ -316,13 +316,13 @@ def top_coin(trading_pairs: list):
         try:
             # print(name_cript_check)
             # print(last_data(name_cript_check, "3m", "300"))
-            data_token: Dataset = last_data(name_cript_check, "4h", "4000")
+            data_token: Dataset = last_data(name_cript_check, "4h", "7000")
             volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-4:]]) / len(
                 data_token.volume[-4:]) / 80
             res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+            res_before: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
             res_2: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
             res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
-            res_before: float = round(data_token.close_price[-2] / data_token.low_price[-2] * 100 - 100, 2)
             price_change_percent_24h: float = round(
                 ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
             high_close = list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2),
@@ -331,6 +331,12 @@ def top_coin(trading_pairs: list):
 
             res_sum5 = round(sum(list(map(lambda x: x[0] / x[1] * 100 - 100, list(zip(data_token.high_price[-5:], data_token.low_price[-5:]))))), 2)
             print(name_cript_check, res_sum5)
+            print(res, res_before)
+            x = abs(res) - abs(res_before)
+            print(x)
+            print(abs(x) / abs(res) / 100)
+
+
             """Отношение свечи падения к нижнему хвосту"""
             if res_before == 0:
                 res_k_low = 10000
@@ -345,9 +351,10 @@ def top_coin(trading_pairs: list):
         except Exception as e:
             pass
 
-m = ['UNFIUSDT', 'CHESSUSDT', 'CATIUSDT', 'RDNTUSDT', 'ERNUSDT', 'FIOUSDT', 'XAIUSDT', 'SLPUSDT', 'CTXCUSDT']
+m = ["OOKIUSDT"]
 
-top_coin(m)
+#top_coin(m)
+
 
 
 

@@ -120,179 +120,37 @@ def top_coin(trading_pairs: list):
                 '''процент падения за последние 2ч. Отрицательные значение == был рост'''
                 loss_price_for_two_hours: float = round(100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
-                if ((-4.2 > res > -20)
-                        or (res < -2.3 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res_5 < -0.8 and res + res_2 + res_3 + res_4 + res_5 < -15))\
-                        or (res < -2.3 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res + res_2 + res_3 + res_4 < -12)\
-                        or (res < -2.3 and res_2 < -0.8 and res_3 < -0.8 and res + res_2 + res_3 < -10)\
-                        or (res < -2.3 and res_2 < -2 and res + res_2 < -8):
+                if -4.2 > res > -20 and percent_raznici_svechei > 15:
 
-                    if res < -2.3 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res_5 < -0.8 and res + res_2 + res_3 + res_4 + res_5 < -15:
-                        res_before: float = round(
-                            data_token.close_price[-1] / min(data_token.low_price[-5:]) * 100 - 100, 2)
-                        if res_before == 0:
-                            res_k_low = 10000
-                        else:
-                            res_k_low = round(abs(res + res_2 + res_3 + res_4 + res_5) / res_before * 100, 2)
+                    res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
+                    if res_before == 0:
+                        res_k_low = 10000
+                    else:
+                        res_k_low = round(abs(res) / res_before * 100, 2)
 
-                        if res_sum5 < 30:
-                            sell_pr = 101
-                        elif res_sum5 > 50:
-                            sell_pr = 101.5
-                        else:
-                            sell_pr = 101.15
+                    if res_sum5 < 30:
+                        sell_pr = 101
+                    elif res_sum5 > 50:
+                        sell_pr = 101.5
+                    else:
+                        sell_pr = 101.15
 
-                        """Волатильность по фреймам"""
-                        high_frames = list(
-                            map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                                zip(data_token.open_price, data_token.high_price)))
-                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+                    """Волатильность по фреймам"""
+                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2), zip(data_token.open_price, data_token.high_price)))
+                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
 
-                        telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                            f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                            f"Объемы {int(volume_per_5h)}\n"
-                                                                            f"Цена упала на {round(res + res_2 + res_3 + res_4 + res_5, 2)}%\n"
-                                                                            f"Свечной хвостик {res_k_low}%\n"
-                                                                            f"Изменение цены за сутки {price_change_percent_24h}%\n")
+                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
+                                                                        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
+                                                                        f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
+                                                                        f"Объемы {int(volume_per_5h)}\n"
+                                                                        f"Цена упала на {res}%\n"
+                                                                        f"Свечной хвостик {res_k_low}%\n"
+                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
 
-                        if name_cript_check not in [i['name_cript'] for i in
-                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
-                            equal(name_cript_check, round(res + res_2 + res_3 + res_4 + res_5, 2), res_before,
-                                  price_change_percent_24h,
-                                  awerage_high_frame, price_change_percent_7d, res_sum5)
-
-                    elif res < -2.3 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res + res_2 + res_3 + res_4 < -12:
-                        res_before: float = round(
-                            data_token.close_price[-1] / min(data_token.low_price[-4:]) * 100 - 100, 2)
-                        if res_before == 0:
-                            res_k_low = 10000
-                        else:
-                            res_k_low = round(abs(res + res_2 + res_3 + res_4) / res_before * 100, 2)
-
-                        if res_sum5 < 30:
-                            sell_pr = 101
-                        elif res_sum5 > 50:
-                            sell_pr = 101.5
-                        else:
-                            sell_pr = 101.15
-
-                        """Волатильность по фреймам"""
-                        high_frames = list(
-                            map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                                zip(data_token.open_price, data_token.high_price)))
-                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                        telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                            f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                            f"Объемы {int(volume_per_5h)}\n"
-                                                                            f"Цена упала на {round(res + res_2 + res_3 + res_4, 2)}%\n"
-                                                                            f"Свечной хвостик {res_k_low}%\n"
-                                                                            f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-                        if name_cript_check not in [i['name_cript'] for i in
-                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
-                            equal(name_cript_check, round(res + res_2 + res_3 + res_4, 2), res_before, price_change_percent_24h,
-                                  awerage_high_frame, price_change_percent_7d, res_sum5)
-
-                    elif res < -2.3 and res_2 < -0.8 and res_3 < -0.8 and res + res_2 + res_3 < -10:
-                        res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-3:]) * 100 - 100, 2)
-                        if res_before == 0:
-                            res_k_low = 10000
-                        else:
-                            res_k_low = round(abs(res + res_2 + res_3) / res_before * 100, 2)
-
-                        if res_sum5 < 30:
-                            sell_pr = 101
-                        elif res_sum5 > 50:
-                            sell_pr = 101.5
-                        else:
-                            sell_pr = 101.15
-
-                        """Волатильность по фреймам"""
-                        high_frames = list(
-                            map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                                zip(data_token.open_price, data_token.high_price)))
-                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                        telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                            f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                            f"Объемы {int(volume_per_5h)}\n"
-                                                                            f"Цена упала на {round(res + res_2 + res_3, 2)}%\n"
-                                                                            f"Свечной хвостик {res_k_low}%\n"
-                                                                            f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-                        if name_cript_check not in [i['name_cript'] for i in
-                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
-                            equal(name_cript_check, round(res + res_2 + res_3, 2), res_before, price_change_percent_24h,
-                                  awerage_high_frame,
-                                  price_change_percent_7d, res_sum5)
-
-                    elif res < -2.3 and res_2 < -2 and res + res_2 < -8:
-                        res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-2:]) * 100 - 100, 2)
-                        if res_before == 0:
-                            res_k_low = 10000
-                        else:
-                            res_k_low = round(abs(res + res_2) / res_before * 100, 2)
-
-                        if res_sum5 < 30:
-                            sell_pr = 101
-                        elif res_sum5 > 50:
-                            sell_pr = 101.5
-                        else:
-                            sell_pr = 101.15
-
-                        """Волатильность по фреймам"""
-                        high_frames = list(
-                            map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                                zip(data_token.open_price, data_token.high_price)))
-                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                        telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                            f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                            f"Объемы {int(volume_per_5h)}\n"
-                                                                            f"Цена упала на {round(res + res_2, 2)}%\n"
-                                                                            f"Свечной хвостик {res_k_low}%\n"
-                                                                            f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-                        if name_cript_check not in [i['name_cript'] for i in
-                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
-                            equal(name_cript_check, round(res + res_2, 2), res_before, price_change_percent_24h,
-                                  awerage_high_frame,
-                                  price_change_percent_7d, res_sum5)
-
-                    elif -4.2 > res and percent_raznici_svechei > 15:
-                        res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
-                        if res_before == 0:
-                            res_k_low = 10000
-                        else:
-                            res_k_low = round(abs(res) / res_before * 100, 2)
-
-                        if res_sum5 < 30:
-                            sell_pr = 101
-                        elif res_sum5 > 50:
-                            sell_pr = 101.5
-                        else:
-                            sell_pr = 101.15
-
-                        """Волатильность по фреймам"""
-                        high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2), zip(data_token.open_price, data_token.high_price)))
-                        awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                        telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                            f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                            f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                            f"Объемы {int(volume_per_5h)}\n"
-                                                                            f"Цена упала на {res}%\n"
-                                                                            f"Свечной хвостик {res_k_low}%\n"
-                                                                            f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-                        if name_cript_check not in [i['name_cript'] for i in
-                                                    get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
-                            equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame,
-                                  price_change_percent_7d, res_sum5)
+                    if name_cript_check not in [i['name_cript'] for i in
+                                                get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
+                        equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame,
+                              price_change_percent_7d, res_sum5)
 
                     start_time_check = time.time()
                     '''Заглушка для ожидания конца таймфрейма 15 мин (58 сек не менять!)'''
@@ -310,8 +168,6 @@ def top_coin(trading_pairs: list):
                     """Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
 
                     reit_awerage_high_frame = [i[0] for i in sorted(reit_bd_cript, key=lambda x: -x[5])]
-
-                    """Формируем список крипт со значениями"""
 
                     """Определяем топ крипту и оставшийся массив для доп закупа"""
 
@@ -333,14 +189,18 @@ def top_coin(trading_pairs: list):
                                                                             f"------------------------\n"
                                                                             f"Количество триггеров - {len(bd_cript)}\n")
 
-                        buy_qty = round(20 / data_token.close_price[-1], 1)
+                        if len(bd_cript) < 3 and sorted(reit_bd_cript, key=lambda x: -x[5])[0][5] < 60:
+                            sell_pr = 101
+
+
+                        buy_qty = round(25 / data_token.close_price[-1], 1)
 
                         try:
                             order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET',
                                                                 quantity=buy_qty)
                         except BinanceAPIException as e:
                             if e.message == "Filter failure: LOT_SIZE":
-                                buy_qty = int(round(20 / data_token.close_price[-1], 1))
+                                buy_qty = int(round(25 / data_token.close_price[-1], 1))
                                 try:
                                     order_buy = client.create_order(symbol=name_cript_check, side='BUY', type='MARKET',
                                                                         quantity=buy_qty)
@@ -445,7 +305,8 @@ def top_coin(trading_pairs: list):
                                     telebot.TeleBot(telega_token).send_message(chat_id,f"Ошибка продажи в минус, Нужен хелп!\n"
                                                                                        f"{e}\n"
                                                                                        f"sell_qty {sell_qty}\n"
-                                                                                       f"balance {balance}")
+                                                                                       f"balance {balance}\n"
+                                                                                       f'price {float(orders[0]["cummulativeQuoteQty"])} {float(orders[0]["origQty"])}')
                                     time.sleep(500)
 
 
@@ -491,7 +352,7 @@ def top_coin(trading_pairs: list):
                                     if res_now < 0 and res_past < 0.6 and last_time - start_time < 12000 and i not in new_alg_crypto_work_end:
                                         start_time_dop_alg = time.time()
 
-                                        buy_qty = round(20 / data_token.close_price[-1], 1)
+                                        buy_qty = round(25 / data_token.close_price[-1], 1)
                                         telebot.TeleBot(telega_token).send_message(chat_id, f"!!!!!!!!!!!!!ДОП АЛГОРИТМ!!!!!!!!!!!!!\n"
                                                                                             f"РАБОТАЕМ С {i}\n"
                                                                                             f"Изменение цены сейчас относительно начала фрейма: {res_now}%\n"
@@ -502,7 +363,7 @@ def top_coin(trading_pairs: list):
                                             order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                                         except BinanceAPIException as e:
                                             if e.message == "Filter failure: LOT_SIZE":
-                                                buy_qty = int(round(20 / data_token.close_price[-1], 1))
+                                                buy_qty = int(round(25 / data_token.close_price[-1], 1))
                                                 try:
                                                     order_buy = client.create_order(symbol=i, side='BUY', type='MARKET', quantity=buy_qty)
                                                 except:
@@ -718,6 +579,7 @@ while True:
     start_threads = [i.start() for i in threads]
 
     stop_threads = [i.join() for i in threads]
+
 
 
 

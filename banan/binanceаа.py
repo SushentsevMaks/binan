@@ -7,7 +7,7 @@ import pymysql
 import requests
 from binance.client import Client, AsyncClient
 from binance.exceptions import BinanceAPIException
-from historical_binance import BinanceDataDownloader, BinanceDataProvider
+
 
 import keys
 import pandas as pd
@@ -17,6 +17,7 @@ from tradingview_ta import TA_Handler, Interval, Exchange
 import re
 
 from binan.banan.sql_request import get_crypto, equal, sql_del
+
 
 telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 import asyncio
@@ -63,7 +64,7 @@ ten = ['RAREUSDT', 'LAZIOUSDT', 'CHESSUSDT', 'ADXUSDT', 'AUCTIONUSDT', 'DARUSDT'
 
 tendop = ['PORTOUSDT', 'POWRUSDT', 'JASMYUSDT', 'AMPUSDT', 'PYRUSDT', 'ALCXUSDT', 'SANTOSUSDT', 'BICOUSDT', 'FLUXUSDT', 'FXSUSDT', 'VOXELUSDT']
 
-eleven = ['HIGHUSDT', 'CVXUSDT', 'PEOPLEUSDT', 'OOKIUSDT', 'SPELLUSDT', 'JOEUSDT', "DOGSUSDT", 'ACHUSDT', 'IMXUSDT', 'GLMRUSDT', 'LOKAUSDT', 'SCRTUSDT', 'API3USDT']
+eleven = ['HIGHUSDT', 'CVXUSDT', 'PEOPLEUSDT', 'SPELLUSDT', 'JOEUSDT', "DOGSUSDT", 'ACHUSDT', 'IMXUSDT', 'GLMRUSDT', 'LOKAUSDT', 'SCRTUSDT', 'API3USDT']
 
 elevendop = ['1MBABYDOGEUSDT', 'BTTCUSDT', 'ACAUSDT', 'XNOUSDT', 'WOOUSDT', 'ALPINEUSDT', 'TUSDT', 'ASTRUSDT', 'GMTUSDT', 'KDAUSDT', 'APEUSDT', 'BSWUSDT', 'BIFIUSDT', 'TONUSDT']
 
@@ -186,7 +187,7 @@ def top_coin(trading_pairs: list):
             res_sum5 = round(sum(list(map(lambda x: x[0] / x[1] * 100 - 100,
                                           list(zip(data_token.high_price[-5:], data_token.low_price[-5:]))))), 2)
 
-            pattern_ravenstva_svechei = abs(res) - abs(res_2)
+            pattern_ravenstva_svechei = abs(res) - res_2
             try:
                 percent_raznici_svechei = abs(pattern_ravenstva_svechei) / abs(res_2) * 100
             except:
@@ -196,168 +197,40 @@ def top_coin(trading_pairs: list):
             loss_price_for_two_hours: float = round(
                 100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
 
-            if ((-4.1 > res > -20)
-                or (
-                        res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res_5 < -0.8 and res + res_2 + res_3 + res_4 + res_5 < -10)) \
-                    or (
-                    res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res + res_2 + res_3 + res_4 < -9) \
-                    or (res < -2 and res_2 < -0.8 and res_3 < -0.8 and res + res_2 + res_3 < -8) \
-                    or (res < -2 and res_2 < -2 and res + res_2 < -6):
+            if -4.2 > res > -20 and percent_raznici_svechei > 15:
 
-                if res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res_5 < -0.8 and res + res_2 + res_3 + res_4 + res_5 < -15:
-                    res_before: float = round(
-                        data_token.close_price[-1] / min(data_token.low_price[-5:]) * 100 - 100, 2)
-                    if res_before == 0:
-                        res_k_low = 10000
-                    else:
-                        res_k_low = round(abs(res + res_2 + res_3 + res_4 + res_5) / res_before * 100, 2)
+                res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
+                if res_before == 0:
+                    res_k_low = 10000
+                else:
+                    res_k_low = round(abs(res) / res_before * 100, 2)
 
-                    if res_sum5 < 30:
-                        sell_pr = 101
-                    elif res_sum5 > 50:
-                        sell_pr = 101.5
-                    else:
-                        sell_pr = 101.15
+                if res_sum5 < 30:
+                    sell_pr = 101
+                elif res_sum5 > 50:
+                    sell_pr = 101.5
+                else:
+                    sell_pr = 101.15
 
-                    """Волатильность по фреймам"""
-                    high_frames = list(
-                        map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                            zip(data_token.open_price, data_token.high_price)))
-                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+                """Волатильность по фреймам"""
+                high_frames = list(
+                    map(lambda x: round(x[1] / x[0] * 100 - 100, 2), zip(data_token.open_price, data_token.high_price)))
+                awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
 
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                        f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                        f"Объемы {int(volume_per_5h)}\n"
-                                                                        f"Цена упала на {res + res_2 + res_3 + res_4 + res_5}%\n"
-                                                                        f"Свечной хвостик {res_k_low}%\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-
-                elif res < -2 and res_2 < -0.8 and res_3 < -0.8 and res_4 < -0.8 and res + res_2 + res_3 + res_4 < -12:
-                    res_before: float = round(
-                        data_token.close_price[-1] / min(data_token.low_price[-4:]) * 100 - 100, 2)
-                    if res_before == 0:
-                        res_k_low = 10000
-                    else:
-                        res_k_low = round(abs(res + res_2 + res_3 + res_4) / res_before * 100, 2)
-
-                    if res_sum5 < 30:
-                        sell_pr = 101
-                    elif res_sum5 > 50:
-                        sell_pr = 101.5
-                    else:
-                        sell_pr = 101.15
-
-                    """Волатильность по фреймам"""
-                    high_frames = list(
-                        map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                            zip(data_token.open_price, data_token.high_price)))
-                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                        f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                        f"Объемы {int(volume_per_5h)}\n"
-                                                                        f"Цена упала на {res + res_2 + res_3 + res_4}%\n"
-                                                                        f"Свечной хвостик {res_k_low}%\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-
-                elif res < -2 and res_2 < -0.8 and res_3 < -0.8 and res + res_2 + res_3 < -10:
-                    res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-3:]) * 100 - 100,
-                                              2)
-                    if res_before == 0:
-                        res_k_low = 10000
-                    else:
-                        res_k_low = round(abs(res + res_2 + res_3) / res_before * 100, 2)
-
-                    if res_sum5 < 30:
-                        sell_pr = 101
-                    elif res_sum5 > 50:
-                        sell_pr = 101.5
-                    else:
-                        sell_pr = 101.15
-
-                    """Волатильность по фреймам"""
-                    high_frames = list(
-                        map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                            zip(data_token.open_price, data_token.high_price)))
-                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                        f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                        f"Объемы {int(volume_per_5h)}\n"
-                                                                        f"Цена упала на {res + res_2 + res_3}%\n"
-                                                                        f"Свечной хвостик {res_k_low}%\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-
-                elif res < -2 and res_2 < -2 and res + res_2 < -8:
-                    res_before: float = round(data_token.close_price[-1] / min(data_token.low_price[-2:]) * 100 - 100,
-                                              2)
-                    if res_before == 0:
-                        res_k_low = 10000
-                    else:
-                        res_k_low = round(abs(res + res_2) / res_before * 100, 2)
-
-                    if res_sum5 < 30:
-                        sell_pr = 101
-                    elif res_sum5 > 50:
-                        sell_pr = 101.5
-                    else:
-                        sell_pr = 101.15
-
-                    """Волатильность по фреймам"""
-                    high_frames = list(
-                        map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                            zip(data_token.open_price, data_token.high_price)))
-                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                        f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                        f"Объемы {int(volume_per_5h)}\n"
-                                                                        f"Цена упала на {res + res_2}%\n"
-                                                                        f"Свечной хвостик {res_k_low}%\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
-
-
-                elif -4.2 > res and percent_raznici_svechei > 15:
-                    res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
-                    if res_before == 0:
-                        res_k_low = 10000
-                    else:
-                        res_k_low = round(abs(res) / res_before * 100, 2)
-
-                    if res_sum5 < 30:
-                        sell_pr = 101
-                    elif res_sum5 > 50:
-                        sell_pr = 101.5
-                    else:
-                        sell_pr = 101.15
-
-                    """Волатильность по фреймам"""
-                    high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2),
-                                           zip(data_token.open_price, data_token.high_price)))
-                    awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                    telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                        f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                        f"Объемы {int(volume_per_5h)}\n"
-                                                                        f"Цена упала на {res}%\n"
-                                                                        f"Свечной хвостик {res_k_low}%\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
+                telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
+                                                                    f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
+                                                                    f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
+                                                                    f"Объемы {int(volume_per_5h)}\n"
+                                                                    f"Цена упала на {res}%\n"
+                                                                    f"Свечной хвостик {res_k_low}%\n"
+                                                                    f"Изменение цены за сутки {price_change_percent_24h}%\n")
         except Exception as e:
             pass
 
 
 
-dd = [['PROSUSDT', -17.14, 29.11, 50.0, 24.61, 106.93], ['SCRUSDT', -4.55, -10.45, 44.0, 28.42, 22.12]]
 
-print(sorted(dd, key=lambda x: -x[5])[0][5])
+top_coin(all_cripts_workss)
 
 
 #print([[i] for i in sorted(did, key=lambda x: x[1]) if i[1] < 3000 and i[2] < 2])

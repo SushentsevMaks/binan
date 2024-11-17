@@ -111,7 +111,7 @@ def top_coin(trading_pairs: list):
                 price_change_percent_7d: float = round(((max(data_token.high_price) / data_token.close_price[-1]) * 100) - 100, 2)
                 res_sum5 = round(sum(list(map(lambda x: x[0] / x[1] * 100 - 100, list(zip(data_token.high_price[-5:], data_token.low_price[-5:]))))), 2)
 
-                pattern_ravenstva_svechei = abs(res) - abs(res_2)
+                pattern_ravenstva_svechei = abs(res) - res_2
                 try:
                     percent_raznici_svechei = abs(pattern_ravenstva_svechei) / abs(res_2) * 100
                 except:

@@ -21,7 +21,7 @@ one = ['NEOUSDT', 'LTCUSDT', 'QTUMUSDT', 'ADAUSDT', 'XRPUSDT', 'EOSUSDT', 'IOTAU
 
 onedop = ['NULSUSDT', 'VETUSDT', 'LINKUSDT', 'ONGUSDT', 'HOTUSDT', 'ZILUSDT', 'ZRXUSDT', 'FETUSDT', 'BATUSDT', 'ZECUSDT', 'IOSTUSDT', 'CELRUSDT']
 
-two = ['DASHUSDT', 'THETAUSDT', 'ENJUSDT', 'MATICUSDT', 'ATOMUSDT', 'TFUELUSDT', 'ONEUSDT', 'FTMUSDT', 'ALGOUSDT', 'DOGEUSDT', 'DUSKUSDT', 'ANKRUSDT']
+two = ['DASHUSDT', 'THETAUSDT', 'ENJUSDT', 'ATOMUSDT', 'TFUELUSDT', 'ONEUSDT', 'FTMUSDT', 'ALGOUSDT', 'DOGEUSDT', 'DUSKUSDT', 'ANKRUSDT']
 
 twodop = ['WINUSDT', 'COSUSDT', 'MTLUSDT', 'DENTUSDT', 'KEYUSDT', 'WANUSDT', 'FUNUSDT', 'CVCUSDT', 'CHZUSDT', 'BANDUSDT', 'XTZUSDT', 'RENUSDT']
 
@@ -33,49 +33,49 @@ four = ['HIVEUSDT', 'CHRUSDT', 'ARDRUSDT', 'MDTUSDT', 'STMXUSDT', 'KNCUSDT', 'LR
 
 fourdop = ['DGBUSDT', 'SXPUSDT', 'MKRUSDT', 'DCRUSDT', 'STORJUSDT', 'MANAUSDT', 'YFIUSDT', 'BALUSDT', 'BLZUSDT', 'IRISUSDT', 'KMDUSDT', 'JSTUSDT']
 
-five = ['CRVUSDT', 'SANDUSDT', 'NMRUSDT', 'DOTUSDT', 'LUNAUSDT', 'RSRUSDT', 'TRBUSDT', 'SUSHIUSDT', 'KSMUSDT', 'EGLDUSDT', 'DIAUSDT', 'RUNEUSDT']
+five = ['CATIUSDT', 'CRVUSDT', 'SANDUSDT', 'NMRUSDT', 'DOTUSDT', 'LUNAUSDT', 'RSRUSDT', 'TRBUSDT', 'SUSHIUSDT', 'KSMUSDT', 'EGLDUSDT', 'DIAUSDT', 'RUNEUSDT']
 
 fivedop = ['FIOUSDT', 'UMAUSDT', 'BELUSDT', 'WINGUSDT', 'UNIUSDT', 'OXTUSDT', 'SUNUSDT', 'AVAXUSDT', 'FLMUSDT', 'ORNUSDT', 'UTKUSDT', 'XVSUSDT']
 
 six = ['ALPHAUSDT', 'AAVEUSDT', 'NEARUSDT', 'FILUSDT', 'INJUSDT', 'AUDIOUSDT', 'CTKUSDT', 'AKROUSDT', 'AXSUSDT', 'HARDUSDT', 'STRAXUSDT', 'UNFIUSDT']
 
-sixdop = ['ROSEUSDT', 'AVAUSDT', 'SKLUSDT', 'GRTUSDT', 'JUVUSDT', 'PSGUSDT', '1INCHUSDT', 'OGUSDT', 'ATMUSDT', 'ASRUSDT', 'CELOUSDT']
+sixdop = ['EIGENUSDT', 'ROSEUSDT', 'AVAUSDT', 'SKLUSDT', 'GRTUSDT', 'JUVUSDT', 'PSGUSDT', '1INCHUSDT', 'OGUSDT', 'ATMUSDT', 'ASRUSDT', 'CELOUSDT']
 
 seven = ['RIFUSDT', 'TRUUSDT', 'CKBUSDT', 'TWTUSDT', 'FIROUSDT', 'LITUSDT', 'SFPUSDT', 'DODOUSDT', 'CAKEUSDT', 'ACMUSDT', 'BADGERUSDT', 'FISUSDT']
 
-sevendop = ['OMUSDT', 'PONDUSDT', 'DEGOUSDT', 'ALICEUSDT', 'LINAUSDT', 'PERPUSDT', 'SUPERUSDT', 'CFXUSDT', 'TKOUSDT', 'PUNDIXUSDT', 'TLMUSDT', 'BARUSDT']
+sevendop = ['TURBOUSDT', 'SCRUSDT', 'OMUSDT', 'PONDUSDT', 'DEGOUSDT', 'ALICEUSDT', 'LINAUSDT', 'PERPUSDT', 'SUPERUSDT', 'CFXUSDT', 'TKOUSDT', 'PUNDIXUSDT', 'TLMUSDT', 'BARUSDT']
 
-eight = ['FORTHUSDT', 'BAKEUSDT', 'BURGERUSDT', 'SLPUSDT', 'SHIBUSDT', 'ICPUSDT', 'ARUSDT', 'MASKUSDT', 'LPTUSDT', 'XVGUSDT', 'ATAUSDT', 'GTCUSDT']
+eight = ['BNSOLUSDT', 'FORTHUSDT', 'BAKEUSDT', 'BURGERUSDT', 'SLPUSDT', 'SHIBUSDT', 'ICPUSDT', 'ARUSDT', 'MASKUSDT', 'LPTUSDT', 'XVGUSDT', 'ATAUSDT', 'GTCUSDT']
 
 eightdop = ['ERNUSDT', 'KLAYUSDT', 'PHAUSDT', 'MLNUSDT', 'DEXEUSDT', 'C98USDT', 'CLVUSDT', 'QNTUSDT', 'FLOWUSDT', 'MINAUSDT', 'RAYUSDT', 'FARMUSDT']
 
 nine = ['ALPACAUSDT', 'QUICKUSDT', 'MBOXUSDT', 'REQUSDT', 'GHSTUSDT', 'WAXPUSDT', 'GNOUSDT', 'XECUSDT', 'ELFUSDT', 'DYDXUSDT', 'IDEXUSDT']
 
-ninedop = ['VIDTUSDT', 'GALAUSDT', 'ILVUSDT', 'YGGUSDT', 'SYSUSDT', 'DFUSDT', 'FIDAUSDT', 'FRONTUSDT', 'AGLDUSDT', 'RADUSDT', 'BETAUSDT']
+ninedop = ['VIDTUSDT', 'GALAUSDT', 'ILVUSDT', 'YGGUSDT', 'SYSUSDT', 'DFUSDT', 'FIDAUSDT', 'AGLDUSDT', 'RADUSDT', 'BETAUSDT']
 
-ten = ['RAREUSDT', 'LAZIOUSDT', 'CHESSUSDT', 'ADXUSDT', 'AUCTIONUSDT', 'DARUSDT', 'BNXUSDT', 'MOVRUSDT', 'CITYUSDT', 'ENSUSDT', 'KP3RUSDT', 'QIUSDT']
+ten = ['RAREUSDT', 'LAZIOUSDT', 'CHESSUSDT', 'ADXUSDT', 'AUCTIONUSDT', 'DARUSDT', 'BNXUSDT', 'MOVRUSDT', 'CITYUSDT', 'ENSUSDT', 'QIUSDT']
 
-tendop = ['PORTOUSDT', 'POWRUSDT', 'VGXUSDT', 'JASMYUSDT', 'AMPUSDT', 'PYRUSDT', 'ALCXUSDT', 'SANTOSUSDT', 'BICOUSDT', 'FLUXUSDT', 'FXSUSDT', 'VOXELUSDT']
+tendop = ['PORTOUSDT', 'POWRUSDT', 'JASMYUSDT', 'AMPUSDT', 'PYRUSDT', 'ALCXUSDT', 'SANTOSUSDT', 'BICOUSDT', 'FLUXUSDT', 'FXSUSDT', 'VOXELUSDT']
 
-eleven = ['HIGHUSDT', 'CVXUSDT', 'PEOPLEUSDT', 'OOKIUSDT', 'SPELLUSDT', 'JOEUSDT', "DOGSUSDT", 'ACHUSDT', 'IMXUSDT', 'GLMRUSDT', 'LOKAUSDT', 'SCRTUSDT', 'API3USDT']
+eleven = ['HIGHUSDT', 'CVXUSDT', 'PEOPLEUSDT', 'SPELLUSDT', 'JOEUSDT', "DOGSUSDT", 'ACHUSDT', 'IMXUSDT', 'GLMRUSDT', 'LOKAUSDT', 'SCRTUSDT', 'API3USDT']
 
-elevendop = ['BTTCUSDT', 'ACAUSDT', 'XNOUSDT', 'WOOUSDT', 'ALPINEUSDT', 'TUSDT', 'ASTRUSDT', 'GMTUSDT', 'KDAUSDT', 'APEUSDT', 'BSWUSDT', 'BIFIUSDT', 'TONUSDT']
+elevendop = ['1MBABYDOGEUSDT', 'BTTCUSDT', 'ACAUSDT', 'XNOUSDT', 'WOOUSDT', 'ALPINEUSDT', 'TUSDT', 'ASTRUSDT', 'GMTUSDT', 'KDAUSDT', 'APEUSDT', 'BSWUSDT', 'BIFIUSDT', 'TONUSDT']
 
-twelve = ['STEEMUSDT', 'NEXOUSDT', 'REIUSDT', 'LDOUSDT', 'EPXUSDT', 'OPUSDT', 'RENDERUSDT', 'LEVERUSDT', 'STGUSDT', 'LUNCUSDT', 'GMXUSDT', 'POLYXUSDT', 'APTUSDT', 'BANANAUSDT']
+twelve = ['STEEMUSDT', 'NEXOUSDT', 'REIUSDT', 'LDOUSDT', 'OPUSDT', 'RENDERUSDT', 'LEVERUSDT', 'STGUSDT', 'LUNCUSDT', 'GMXUSDT', 'POLYXUSDT', 'APTUSDT', 'BANANAUSDT']
 
 twelvedop = ['OSMOUSDT', 'HFTUSDT', 'PHBUSDT', 'HOOKUSDT', 'MAGICUSDT', 'HIFIUSDT', 'GUSDT', 'RPLUSDT', 'PROSUSDT', 'GNSUSDT', 'SYNUSDT', 'VIBUSDT', 'SSVUSDT', 'ZROUSDT']
 
-thirteenth = ['LQTYUSDT', 'AMBUSDT', 'USTCUSDT', 'GASUSDT', 'GLMUSDT', 'PROMUSDT', 'LISTAUSDT', 'QKCUSDT', 'UFTUSDT', 'IDUSDT', 'ARBUSDT', 'LOOMUSDT', 'OAXUSDT', 'ZKUSDT']
+thirteenth = ['LUMIAUSDT', 'LQTYUSDT', 'AMBUSDT', 'USTCUSDT', 'GASUSDT', 'BOMEUSDT', 'GLMUSDT', 'PROMUSDT', 'LISTAUSDT', 'QKCUSDT', 'UFTUSDT', 'IDUSDT', 'ARBUSDT', 'OAXUSDT', 'ZKUSDT']
 
 thirteenthdop = ['RDNTUSDT', 'WBTCUSDT', 'EDUUSDT', 'SUIUSDT', 'AERGOUSDT', 'PEPEUSDT', 'IOUSDT', 'FLOKIUSDT', 'ASTUSDT', 'SNTUSDT', 'COMBOUSDT', 'MAVUSDT', 'PENDLEUSDT', 'NOTUSDT']
 
-fourteenth = ['ARKMUSDT', 'WBETHUSDT', 'WLDUSDT', 'SEIUSDT', 'CYBERUSDT', 'ARKUSDT', 'BBUSDT', 'CREAMUSDT', 'GFTUSDT', 'IQUSDT', 'NTRNUSDT', 'TIAUSDT', 'MEMEUSDT', 'REZUSDT']
+fourteenth = ['ARKMUSDT', 'WBETHUSDT', 'WLDUSDT', 'SEIUSDT', 'CYBERUSDT', 'ARKUSDT', 'BBUSDT', 'CREAMUSDT', "HMSTRUSDT", 'GFTUSDT', 'IQUSDT', 'NTRNUSDT', 'TIAUSDT', 'MEMEUSDT', 'REZUSDT']
 
 fourteenthdop = ['ORDIUSDT', 'BEAMXUSDT', 'PIVXUSDT', 'VICUSDT', 'BLURUSDT', 'VANRYUSDT', 'OMNIUSDT', 'JTOUSDT', '1000SATSUSDT', 'BONKUSDT', 'ACEUSDT', 'NFPUSDT', 'AIUSDT', 'TAOUSDT']
 
 fifteenth = ['XAIUSDT', 'MANTAUSDT', 'ALTUSDT', 'JUPUSDT', 'PYTHUSDT', 'RONINUSDT', 'SAGAUSDT', 'DYMUSDT', 'PIXELUSDT', 'STRKUSDT', 'PORTALUSDT', 'PDAUSDT', 'AXLUSDT', 'TNSRUSDT']
 
-fifteenthdop = ['WIFUSDT', 'METISUSDT', 'AEVOUSDT', 'BOMEUSDT', 'ETHFIUSDT', 'ENAUSDT', 'WUSDT']
+fifteenthdop = ['WIFUSDT', 'METISUSDT', 'AEVOUSDT', 'ETHFIUSDT', 'ENAUSDT', 'WUSDT', 'NEIROUSDT']
 
 izg = []
 
@@ -87,38 +87,33 @@ chat_id = -695765690
 
 keks = {}
 
-rab = []
-
 def top_coin(trading_pairs: list):
-    for i in rab:
-        if time.time() - i[1] > 7200:
-            rab.remove(i)
     for name_cript_check in trading_pairs:
         try:
+            # print(name_cript_check)
+            # print(last_data(name_cript_check, "3m", "300"))
+            '''4 ЧАСОВИК'''
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-            data_token: Dataset = last_data(name_cript_check, "15m", "1440")
-            volume_per_1d: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[:-7]]) / len(data_token.volume[:-7])
+            data_token: Dataset = last_data(name_cript_check, "15m", "17280")
+            volume_per_5h: float = sum([i for i in data_token.volume[-50:-2]]) / len(
+                data_token.volume[-50:-2])
+
             res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
-            res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
-            price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
+            res_2: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
+            res_4: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
+            res_5: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
 
-            if data_token.volume[-1]*data_token.close_price[-1] > volume_per_1d*15 and name_cript_check in [i[0] for i in rab]:
+            if data_token.volume[-1] > volume_per_5h * 15 and res > 3:
+                telebot.TeleBot(telega_token).send_message(chat_id, f"KYKY\n"
+                                                                    f"{name_cript_check}\n"
+                                                                    f"data_token.volume[-1] {int(data_token.volume[-1])}\n"
+                                                                    f"volume_per_5h {int(volume_per_5h)}\n"
+                                                                    f"Разница в {round(int(data_token.volume[-1]) / int(volume_per_5h), 2)} раз\n")
 
-                telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 15минутка - {name_cript_check}\n"
-                                                                        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                        f"Объемы были {volume_per_1d} - стали {data_token.volume[-1]*data_token.close_price[-1]}\n"
-                                                                        f"ОЖИДАЕМ ПУМП!!!!!!!!!!!!!\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
-                rab.append([name_cript_check, time.time()])
-
-            elif res > 4 and data_token.volume[-1]*data_token.close_price[-1] > volume_per_1d*15 and name_cript_check in [i[0] for i in rab]:
-
-                telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 15минутка - {name_cript_check}\n"
-                                                                    f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                    f"Объемы были {volume_per_1d} - стали {data_token.volume[-1] * data_token.close_price[-1]}\n"
-                                                                    f"РАСТЕМ!!!!!!!!!!!!!\n"
-                                                                    f"Изменение цены за сутки {price_change_percent_24h}%\n")
-                rab.append([name_cript_check, time.time()])
         except:
             pass
 
@@ -178,32 +173,18 @@ def get_recommend(i, interval):
 while True:
     start_time_check = time.time()
     '''Заглушка для ожидания конца таймфрейма 15 мин'''
-    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 40:
+
+    bib = [[all_cripts_workss[i]] for i in range(0, len(all_cripts_workss))]
+
+    while time.localtime(start_time_check).tm_min % 15 != 14 or time.localtime(start_time_check).tm_sec < 30:
         start_time_check = time.time()
         time.sleep(1)
 
     '''Старт программы'''
-    threads = [Thread(target=top_coin, args=([one])), Thread(target=top_coin, args=([two])),
-               Thread(target=top_coin, args=([three])),
-               Thread(target=top_coin, args=([four])), Thread(target=top_coin, args=([five])),
-               Thread(target=top_coin, args=([six])),
-               Thread(target=top_coin, args=([seven])), Thread(target=top_coin, args=([eight])),
-               Thread(target=top_coin, args=([nine])),
-               Thread(target=top_coin, args=([ten])), Thread(target=top_coin, args=([eleven])),
-               Thread(target=top_coin, args=([twelve])),
-               Thread(target=top_coin, args=([thirteenth])), Thread(target=top_coin, args=([fourteenth])),
-               Thread(target=top_coin, args=([fifteenth])),
-               Thread(target=top_coin, args=([onedop])), Thread(target=top_coin, args=([twodop])),
-               Thread(target=top_coin, args=([threedop])),
-               Thread(target=top_coin, args=([fourdop])), Thread(target=top_coin, args=([fivedop])),
-               Thread(target=top_coin, args=([sixdop])),
-               Thread(target=top_coin, args=([sevendop])), Thread(target=top_coin, args=([eightdop])),
-               Thread(target=top_coin, args=([ninedop])),
-               Thread(target=top_coin, args=([tendop])), Thread(target=top_coin, args=([elevendop])),
-               Thread(target=top_coin, args=([twelvedop])),
-               Thread(target=top_coin, args=([thirteenthdop])), Thread(target=top_coin, args=([fourteenthdop])),
-               Thread(target=top_coin, args=([fifteenthdop]))]
+    threads = [Thread(target=top_coin, args=([i])) for i in bib]
 
     start_threads = [i.start() for i in threads]
 
     stop_threads = [i.join() for i in threads]
+
+    time.sleep(60)

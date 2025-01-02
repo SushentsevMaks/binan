@@ -172,65 +172,34 @@ def top_coin(trading_pairs: list):
     j = []
     for name_cript_check in trading_pairs:
         try:
-            data_token: Dataset = last_data(name_cript_check, "4h", "17280")
-            volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-6:]]) / len(
-                data_token.volume[-6:]) / 80
-            res: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
-            res_2: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
-            res_3: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
-            res_4: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
-            res_5: float = round(data_token.close_price[-6] / data_token.open_price[-6] * 100 - 100, 2)
-            price_change_percent_24h: float = round(
-                ((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
-            price_change_percent_7d: float = round(
-                ((max(data_token.high_price) / data_token.close_price[-1]) * 100) - 100, 2)
-            res_sum5 = round(sum(list(map(lambda x: x[0] / x[1] * 100 - 100,
-                                          list(zip(data_token.high_price[-5:], data_token.low_price[-5:]))))), 2)
+            data_token: Dataset = last_data(name_cript_check, "15m", "17280")
+            volume_per_5h: float = sum([i for i in data_token.volume[-80:-2]]) / len(
+                data_token.volume[-80:-2])
 
-            pattern_ravenstva_svechei = abs(res) - res_2
-            try:
-                percent_raznici_svechei = abs(pattern_ravenstva_svechei) / abs(res_2) * 100
-            except:
-                percent_raznici_svechei = 80
+            res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
+            res_2: float = round(data_token.close_price[-2] / data_token.open_price[-2] * 100 - 100, 2)
+            res_3: float = round(data_token.close_price[-3] / data_token.open_price[-3] * 100 - 100, 2)
+            res_4: float = round(data_token.close_price[-4] / data_token.open_price[-4] * 100 - 100, 2)
+            res_5: float = round(data_token.close_price[-5] / data_token.open_price[-5] * 100 - 100, 2)
 
-            '''процент падения за последние 2ч. Отрицательные значение == был рост'''
-            loss_price_for_two_hours: float = round(
-                100 - data_token.close_price[-2] / max([i for i in data_token.open_price[-9:]]) * 100, 2)
-
-            if -4.2 > res > -20 and percent_raznici_svechei > 15:
-
-                res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
-                if res_before == 0:
-                    res_k_low = 10000
-                else:
-                    res_k_low = round(abs(res) / res_before * 100, 2)
-
-                if res_sum5 < 30:
-                    sell_pr = 101
-                elif res_sum5 > 50:
-                    sell_pr = 101.5
-                else:
-                    sell_pr = 101.15
-
-                """Волатильность по фреймам"""
-                high_frames = list(
-                    map(lambda x: round(x[1] / x[0] * 100 - 100, 2), zip(data_token.open_price, data_token.high_price)))
-                awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
-
-                telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
-                                                                    f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
-                                                                    f"Рост по фреймам - {len([i for i in high_frames if i > sell_pr - 100])}\n"
-                                                                    f"Объемы {int(volume_per_5h)}\n"
-                                                                    f"Цена упала на {res}%\n"
-                                                                    f"Свечной хвостик {res_k_low}%\n"
-                                                                    f"Изменение цены за сутки {price_change_percent_24h}%\n")
+            if data_token.volume[-1] > volume_per_5h * 20:
+                telebot.TeleBot(telega_token).send_message(chat_id, f"KYKY\n"
+                                                                    f"{name_cript_check}\n"
+                                                                    f"data_token.volume[-1] {int(data_token.volume[-1])}\n"
+                                                                    f"volume_per_5h {int(volume_per_5h)}\n"
+                                                                    f"Во сколько раз разница {round(int(data_token.volume[-1]) / int(volume_per_5h), 2)}\n")
         except Exception as e:
             pass
 
 
+data_token: Dataset = last_data("FIROUSDT", "4h", "28800")
+a = list(zip(data_token.close_price, data_token.open_price))
+b = min(list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), a)))
+
+print(b > -30)
 
 
-top_coin(all_cripts_workss)
+#equal("PPUSDT", 4, 5, 4, 4, 2, 1)
 
 
 #print([[i] for i in sorted(did, key=lambda x: x[1]) if i[1] < 3000 and i[2] < 2])

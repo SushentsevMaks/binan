@@ -152,7 +152,7 @@ def top_coin(trading_pairs: list):
 
                     if name_cript_check not in [i['name_cript'] for i in get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
                         equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame,
-                              price_change_percent_7d, res_sum5)
+                              sell_pr, res_sum5)
         except:
             pass
 
@@ -172,8 +172,7 @@ def last_data(symbol: str, interval: str, lookback: str) -> Dataset:
     frame = frame.set_index('Time')
     frame.index = pd.to_datetime(frame.index, unit='ms')
     frame = frame.astype(float)
-    # frame.to_csv('file1.csv')
-    # print(frame["Volume"].sum())
+
     return Dataset(high_price=[i.High for i in frame.itertuples()], volume=[i.Volume for i in frame.itertuples()],
                    close_price=[i.Close for i in frame.itertuples()], open_price=[i.Open for i in frame.itertuples()],
                    low_price=[i.Low for i in frame.itertuples()])
@@ -191,9 +190,7 @@ def btc_anal(data: last_data) -> bool:
         message = f"БИТОК ПАДАЕТ НА {abs(price_change_percent_5min)}%"
         bot.send_message(chat_id, message)
         return False
-    # print(data)
-    # print(sum(data[0][:-1])/len(data[0][:-1]))
-    # print(data[0][-1])
+
     return True
 
 

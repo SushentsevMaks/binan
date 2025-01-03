@@ -191,13 +191,31 @@ def top_coin(trading_pairs: list):
         except Exception as e:
             pass
 
+buyprice= 0.2173
+bd_cript = get_crypto()
+'''Проверка на наилучший объект и работа с ним дальше'''
+reit_bd_cript = []
 
-data_token: Dataset = last_data("FIROUSDT", "4h", "28800")
-a = list(zip(data_token.close_price, data_token.open_price))
-b = min(list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), a)))
+for j in bd_cript:
+    reit_bd_cript.append \
+        ([j['name_cript'], j["res"], j["price_change_percent_24h"], j["awerage_high_frame"], j["high_close_change"], j["res_k_low"]])
 
-print(b > -30)
+"""Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
 
+reit_awerage_high_frame = [i[0] for i in sorted(reit_bd_cript, key=lambda x: -x[5])]
+
+"""Определяем топ крипту и оставшийся массив для доп закупа"""
+
+top = reit_awerage_high_frame[0]
+all_work_crypt = sorted(reit_bd_cript, key=lambda x: -x[5])
+for i in all_work_crypt[1:round(len(all_work_crypt))]:
+    sell_pr = i[4]
+    data_token: Dataset = last_data(i[0], "4h", "1440")
+    y = Decimal(str(round((buyprice / 100) * sell_pr,
+                          max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
+    print(i)
+    print(sell_pr)
+    print(y)
 
 #equal("PPUSDT", 4, 5, 4, 4, 2, 1)
 

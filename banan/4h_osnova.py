@@ -153,6 +153,8 @@ def osnova():
                                 except BinanceAPIException as e:
                                     telebot.TeleBot(telega_token).send_message(chat_id, f"ФЕЙЛ ПРОДАЖИ: {e}\n"
                                                                                         f"Количество продаваемого - {int(sell_qty)}, Цена - {x}\n"
+                                                                                        f"buyprice - {buyprice}, sell_pr - {sell_pr}\n"
+                                                                                        f"f{[str(i).split('.')[1] for i in data_token[0][-5:]]}\n"
                                                                                         f"Монеты в кошельке - {float(sell_qty)}, Количество открытых ордеров - {len(all_orders[all_orders.isin(['NEW']).any(axis=1)])}")
                                     time.sleep(600)
 

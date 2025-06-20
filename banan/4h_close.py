@@ -75,13 +75,12 @@ fourteenthdop = ['ORDIUSDT', 'BEAMXUSDT', 'PIVXUSDT', 'VICUSDT', 'BLURUSDT', 'VA
 
 fifteenth = ['XAIUSDT', 'MANTAUSDT', 'ALTUSDT', 'JUPUSDT', 'PYTHUSDT', 'RONINUSDT', 'SAGAUSDT', 'DYMUSDT', 'PIXELUSDT', 'STRKUSDT', 'PORTALUSDT', 'PDAUSDT', 'AXLUSDT', 'TNSRUSDT']
 
-fifteenthdop = ['WIFUSDT', 'METISUSDT', 'AEVOUSDT', 'ETHFIUSDT', 'ENAUSDT', 'WUSDT', 'NEIROUSDT']
+fifteenthdop = ['WIFUSDT', 'METISUSDT', 'AEVOUSDT', 'ETHFIUSDT', 'ENAUSDT', 'WUSDT', 'NEIROUSDT', 'PROMUSDT', 'COOKIEUSDT', 'BIOUSDT', 'HYPEUSDT', 'SOPHUSDT', 'AUSDT', 'HUMAUSDT']
 
 izg = []
 
-all_cripts_workss = one + two + three + four + five + six + seven + eight + nine + ten + eleven + twelve + thirteenth + fourteenth + fifteenth + izg + \
-    onedop + twodop + threedop + fourdop + fivedop + sixdop + sevendop + eightdop + ninedop + tendop + elevendop + twelvedop + \
-    thirteenthdop + fourteenthdop + fifteenthdop
+all_cripts_workss = ['LTCUSDT', 'QTUMUSDT', 'ADAUSDT', 'XRPUSDT', 'EOSUSDT', 'XLMUSDT', 'ONTUSDT', 'TRXUSDT', 'ETCUSDT', 'DASHUSDT', 'THETAUSDT', 'ATOMUSDT', 'TFUELUSDT', 'FTMUSDT', 'RVNUSDT', 'HBARUSDT', 'KAVAUSDT', 'ARPAUSDT', 'CTXCUSDT', 'BCHUSDT', 'CHRUSDT', 'MDTUSDT', 'STMXUSDT', 'KNCUSDT', 'LRCUSDT', 'ZENUSDT', 'CATIUSDT', 'CRVUSDT', 'DOTUSDT', 'RSRUSDT', 'TRBUSDT', 'EGLDUSDT', 'DIAUSDT', 'ALPHAUSDT', 'AAVEUSDT', 'NEARUSDT', 'FILUSDT', 'AXSUSDT', 'STRAXUSDT', 'UNFIUSDT', 'RIFUSDT', 'CKBUSDT', 'TWTUSDT', 'FIROUSDT', 'LITUSDT', 'SFPUSDT', 'CAKEUSDT', 'BADGERUSDT', 'FORTHUSDT', 'ICPUSDT', 'MASKUSDT', 'XVGUSDT', 'ALPACAUSDT', 'QUICKUSDT', 'MBOXUSDT', 'REQUSDT', 'GHSTUSDT', 'WAXPUSDT', 'GNOUSDT', 'XECUSDT', 'ELFUSDT', 'IDEXUSDT', 'RAREUSDT', 'LAZIOUSDT', 'DARUSDT', 'BNXUSDT', 'CITYUSDT', 'ENSUSDT', 'QIUSDT', 'CVXUSDT', 'SPELLUSDT', 'IMXUSDT', 'GLMRUSDT', 'STEEMUSDT', 'NEXOUSDT', 'OPUSDT', 'RENDERUSDT', 'LEVERUSDT', 'LUNCUSDT', 'GMXUSDT', 'BANANAUSDT', 'USTCUSDT', 'GASUSDT', 'GLMUSDT', 'PROMUSDT', 'QKCUSDT', 'ARBUSDT', 'ZKUSDT', 'WBETHUSDT', 'ARKUSDT', 'CREAMUSDT', 'REZUSDT', 'JUPUSDT', 'RONINUSDT', 'STRKUSDT', 'PDAUSDT', 'AXLUSDT', 'NULSUSDT', 'ONGUSDT', 'ZILUSDT', 'FETUSDT', 'BATUSDT', 'ZECUSDT', 'COSUSDT', 'MTLUSDT', 'DENTUSDT', 'WANUSDT', 'CHZUSDT', 'BANDUSDT', 'XTZUSDT', 'RENUSDT', 'FTTUSDT', 'LSKUSDT', 'BNTUSDT', 'MBLUSDT', 'COTIUSDT', 'STPTUSDT', 'DATAUSDT', 'SOLUSDT', 'CTSIUSDT', 'DGBUSDT', 'SXPUSDT', 'MKRUSDT', 'DCRUSDT', 'STORJUSDT', 'MANAUSDT', 'YFIUSDT', 'BALUSDT', 'BLZUSDT', 'IRISUSDT', 'KMDUSDT', 'JSTUSDT', 'FIOUSDT', 'UMAUSDT', 'BELUSDT', 'OXTUSDT', 'SUNUSDT', 'AVAXUSDT', 'ORNUSDT', 'UTKUSDT', 'AVAUSDT', 'SKLUSDT', 'PSGUSDT', '1INCHUSDT', 'OGUSDT', 'ASRUSDT', 'CELOUSDT', 'TURBOUSDT', 'SCRUSDT', 'OMUSDT', 'PONDUSDT', 'DEGOUSDT', 'CFXUSDT', 'TKOUSDT', 'PUNDIXUSDT', 'TLMUSDT', 'BARUSDT', 'ERNUSDT', 'KLAYUSDT', 'MLNUSDT', 'DEXEUSDT', 'CLVUSDT', 'QNTUSDT', 'FLOWUSDT', 'MINAUSDT', 'VIDTUSDT', 'GALAUSDT', 'SYSUSDT', 'DFUSDT', 'AGLDUSDT', 'PORTOUSDT', 'POWRUSDT', 'JASMYUSDT', 'PYRUSDT', 'SANTOSUSDT', 'BTTCUSDT', 'XNOUSDT', 'ALPINEUSDT', 'TUSDT', 'ASTRUSDT', 'KDAUSDT', 'APEUSDT', 'BIFIUSDT', 'OSMOUSDT', 'GUSDT', 'PROSUSDT', 'SSVUSDT', 'WBTCUSDT', 'EDUUSDT', 'AERGOUSDT', 'IOUSDT', 'SNTUSDT', 'MAVUSDT', 'PENDLEUSDT', 'NOTUSDT', 'VICUSDT', 'BLURUSDT', 'OMNIUSDT', '1000SATSUSDT', 'AIUSDT', 'METISUSDT', 'AEVOUSDT', 'ETHFIUSDT', 'ENAUSDT', 'PROMUSDT', 'COOKIEUSDT', 'HYPEUSDT', 'SOPHUSDT', 'AUSDT']
+
 
 chat_id = -695765690
 
@@ -100,7 +99,7 @@ def top_coin(trading_pairs: list):
 
             if time.localtime(time.time()).tm_min == 59 and time.localtime(time.time()).tm_hour in time_frames:
 
-                data_token: Dataset = last_data(name_cript_check, "4h", "28800")
+                data_token: Dataset = last_data(name_cript_check, "4h", "48000")
                 volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-6:]]) / len(
                     data_token.volume[-6:]) / 80
                 res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
@@ -122,8 +121,7 @@ def top_coin(trading_pairs: list):
                 a = list(zip(data_token.close_price, data_token.open_price))
                 b = min(list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), a)))
 
-
-                if -4.2 > res > -20 and percent_raznici_svechei > 15 and res_sum5 > 20 and b > -30:
+                if -4.2 > res > -20 and percent_raznici_svechei > 15 and res_sum5 > 15 and b > -30:
 
                     res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
                     if res_before == 0:
@@ -131,16 +129,35 @@ def top_coin(trading_pairs: list):
                     else:
                         res_k_low = round(abs(res) / res_before * 100, 2)
 
-                    if res_sum5 < 30:
-                        sell_pr = 101
-                    elif res_sum5 > 50:
+                    if res_sum5 > 50:
                         sell_pr = 101.5
-                    else:
+                    elif 25 < res_sum5 < 50:
                         sell_pr = 101.15
+                    else:
+                        sell_pr = 100.75
 
                     """Волатильность по фреймам"""
                     high_frames = list(map(lambda x: round(x[1] / x[0] * 100 - 100, 2), zip(data_token.open_price, data_token.high_price)))
                     awerage_high_frame = len([i for i in high_frames if i > sell_pr - 100])
+
+                    MA_200 = (sum(data_token.close_price) / 200)
+                    data_token: Dataset = last_data(name_cript_check, "1d", "20160")
+                    x = data_token.close_price
+                    changes = []
+                    for i in range(1, len(x)):
+                        changes.append(x[i] - x[i - 1])
+
+                    up = [max(change, 0) for change in changes]
+                    down = [abs(min(change, 0)) for change in changes]
+
+                    ema_up = sum(up) / len(up)
+                    ema_down = sum(down) / len(down)
+
+                    rs = ema_up / ema_down
+                    rsi = 100 - (100 / (1 + rs))
+
+                    # if 30 > rsi and data_token.close_price[-1] > MA_200:
+                    #     print(name_cript_check, rsi, data_token.close_price[-1], MA_200)
 
                     telebot.TeleBot(telega_token).send_message(chat_id, f"RABOTAEM 4 ЧАСОВИК- {name_cript_check}\n"
                                                                         f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}\n"
@@ -148,7 +165,9 @@ def top_coin(trading_pairs: list):
                                                                         f"Объемы {int(volume_per_5h)}\n"
                                                                         f"Цена упала на {res}%\n"
                                                                         f"Свечной хвостик {res_k_low}%\n"
-                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n")
+                                                                        f"Изменение цены за сутки {price_change_percent_24h}%\n"
+                                                                        f"rsi = {rsi} (должна быть меньше 30)\n"
+                                                                        f"data_token.close_price[-1] = {data_token.close_price[-1]} должен быть > MA_200 = {MA_200}")
 
                     if name_cript_check not in [i['name_cript'] for i in get_crypto()] and volume_per_5h > 7500 and res_k_low > 200:
                         equal(name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame,
@@ -215,6 +234,8 @@ while True:
     while time.localtime(start_time_check).tm_min != 59 or time.localtime(start_time_check).tm_sec < 30:
         start_time_check = time.time()
         time.sleep(1)
+
+    sql_del()
 
     '''Старт программы'''
     threads = [Thread(target=top_coin, args=([i])) for i in bib]

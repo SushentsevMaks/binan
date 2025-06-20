@@ -138,8 +138,10 @@ chat_id = -695765690
 #
 # seven = ['TRBUSDT', 'TROYUSDT', 'TRUUSDT', 'TRXUSDT', 'TUSDT', 'TUSDUSDT', 'TVKUSDT', 'TWTUSDT', 'UFTUSDT', 'UMAUSDT', 'UNFIUSDT', 'UNIUSDT', 'USDCUSDT', 'USDPUSDT', 'USTCUSDT', 'UTKUSDT', 'VETUSDT', 'VGXUSDT', 'VIBUSDT', 'VIDTUSDT', 'VITEUSDT', 'VOXELUSDT', 'VTHOUSDT', 'WANUSDT', 'WAVESUSDT', 'WAXPUSDT', 'WBETHUSDT', 'WBTCUSDT', 'WINGUSDT', 'WINUSDT', 'WLDUSDT', 'WNXMUSDT', 'WOOUSDT', 'WRXUSDT', 'WTCUSDT', 'XECUSDT', 'XEMUSDT', 'XLMUSDT', 'XMRUSDT', 'XNOUSDT', 'XRPUSDT', 'XTZUSDT', 'XVGUSDT', 'XVSUSDT', 'YFIUSDT', 'YGGUSDT', 'ZECUSDT', 'ZENUSDT', 'ZILUSDT', 'ZRXUSDT']
 
-# futures_exchange_info = client.futures_exchange_info()
-# trading_pairs_fut = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
+futures_exchange_info = client.futures_exchange_info()
+trading_pairs_fut = [info['symbol'] for info in futures_exchange_info['symbols'] if info['symbol'][-4:] == "USDT"]
+
+print(trading_pairs_fut)
 
 
 # count = 0
@@ -191,31 +193,7 @@ def top_coin(trading_pairs: list):
         except Exception as e:
             pass
 
-buyprice= 0.2173
-bd_cript = get_crypto()
-'''Проверка на наилучший объект и работа с ним дальше'''
-reit_bd_cript = []
 
-for j in bd_cript:
-    reit_bd_cript.append \
-        ([j['name_cript'], j["res"], j["price_change_percent_24h"], j["awerage_high_frame"], j["high_close_change"], j["res_k_low"]])
-
-"""Алгоритм сортировки по рейтингу (падение за таймфрейм(4 часа) и изменение цены за сутки)"""
-
-reit_awerage_high_frame = [i[0] for i in sorted(reit_bd_cript, key=lambda x: -x[5])]
-
-"""Определяем топ крипту и оставшийся массив для доп закупа"""
-
-top = reit_awerage_high_frame[0]
-all_work_crypt = sorted(reit_bd_cript, key=lambda x: -x[5])
-for i in all_work_crypt[1:round(len(all_work_crypt))]:
-    sell_pr = i[4]
-    data_token: Dataset = last_data(i[0], "4h", "1440")
-    y = Decimal(str(round((buyprice / 100) * sell_pr,
-                          max([len(f'{i:.15f}'.rstrip("0").split(".")[1]) for i in data_token[0][-5:]]))))
-    print(i)
-    print(sell_pr)
-    print(y)
 
 #equal("PPUSDT", 4, 5, 4, 4, 2, 1)
 

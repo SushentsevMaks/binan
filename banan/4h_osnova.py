@@ -183,7 +183,7 @@ def osnova():
                         orders = client.get_all_orders(symbol=top, limit=1)
                         try:
                             price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
-                            telebot.TeleBot(telega_token).send_photo(chat_id, 'https://github.com/bibar228/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true', caption=
+                            telebot.TeleBot(telega_token).send_photo(chat_id, 'https://github.com/SushentsevMaks/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true', caption=
                             f"ВРЕМЯ ИСТЕКЛО - {top}\n"
                             f"Продажа по времени {price}\n"
                             f"Покупал за {buyprice}\n"
@@ -214,6 +214,36 @@ def osnova():
                                                                    f"Ошибыч продажи в минус\n"
                                                                    f"{e}")
                         time.sleep(5)
+
+                if buyprice * 0.95 > data_token.close_price[-1]:
+                    orders = client.get_open_orders(symbol=top)
+                    for order in orders:
+                        ordId = order["orderId"]
+                        client.cancel_order(symbol=top, orderId=ordId)
+
+                    try:
+                        balance = client.get_asset_balance(asset=top[:-4])
+                        sell_qty = float(balance["free"])
+                        order_sell = client.order_market_sell(symbol=top,
+                                                              quantity=sell_qty)
+                        orders = client.get_all_orders(symbol=top, limit=1)
+                        price = round(
+                            float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
+                        telebot.TeleBot(telega_token).send_photo(chat_id,
+                                                                 'https://github.com/SushentsevMaks/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true',
+                                                                 caption=
+                                                                 f"Продажа в минус за {price}\n"
+                                                                 f"Покупал за {buyprice}\n"
+                                                                 f"Разница {round(100 - 100 * (buyprice / price), 2)}%")
+                        open_position = False
+
+
+                    except Exception as e:
+                        telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                   f"Ошибка СТОП ЛОССА, Нужен хелп!\n"
+                                                                   f"{e}")
+                        time.sleep(1)
+                        break
 
 
                 data_token: Dataset = last_data(top, "15m", "1440")
@@ -382,7 +412,7 @@ def osnova():
                                         orders = client.get_all_orders(symbol=i[0], limit=1)
                                         price = round(float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
                                         telebot.TeleBot(telega_token).send_photo(chat_id,
-                                                                                 'https://github.com/bibar228/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true',
+                                                                                 'https://github.com/SushentsevMaks/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true',
                                                                                  caption=f"Продажа по времени {price}\n"
                                                                                          f"Покупал за {buyprice}\n"
                                                                                          f"Разница {round(100 - 100 * (buyprice / price), 2)}%")
@@ -394,6 +424,35 @@ def osnova():
                                                                                    f"{e}")
                                         time.sleep(500)
 
+                                if buyprice * 0.95 > data_token.close_price[-1]:
+                                    orders = client.get_open_orders(symbol=top)
+                                    for order in orders:
+                                        ordId = order["orderId"]
+                                        client.cancel_order(symbol=top, orderId=ordId)
+
+                                    try:
+                                        balance = client.get_asset_balance(asset=top[:-4])
+                                        sell_qty = float(balance["free"])
+                                        order_sell = client.order_market_sell(symbol=top,
+                                                                              quantity=sell_qty)
+                                        orders = client.get_all_orders(symbol=top, limit=1)
+                                        price = round(
+                                            float(orders[0]['cummulativeQuoteQty']) / float(orders[0]["origQty"]), 7)
+                                        telebot.TeleBot(telega_token).send_photo(chat_id,
+                                                                                 'https://github.com/SushentsevMaks/hhru-analize/blob/main/patrik_35715679_orig_.jpg?raw=true',
+                                                                                 caption=
+                                                                                 f"Продажа в минус за {price}\n"
+                                                                                 f"Покупал за {buyprice}\n"
+                                                                                 f"Разница {round(100 - 100 * (buyprice / price), 2)}%")
+                                        open_position = False
+
+
+                                    except Exception as e:
+                                        telebot.TeleBot(telega_token).send_message(chat_id,
+                                                                                   f"Ошибка СТОП ЛОССА, Нужен хелп!\n"
+                                                                                   f"{e}")
+                                        time.sleep(1)
+                                        break
 
                                 data_token: Dataset = last_data(i[0], "15m", "1440")
                                 time.sleep(4)
@@ -414,8 +473,6 @@ def osnova():
 
             telebot.TeleBot(telega_token).send_message(chat_id ,f"Доп. алг закончился, готов к новому циклу")
 
-            sql_del()
-
             time.sleep(60)
 
     except Exception as e:
@@ -433,6 +490,7 @@ while True:
     while time.localtime(start_time_check).tm_min != 59 or time.localtime(start_time_check).tm_sec < 57:
         start_time_check = time.time()
         time.sleep(1)
+
 
     osnova()
 

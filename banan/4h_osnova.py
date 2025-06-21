@@ -73,8 +73,6 @@ def osnova():
             price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
             sell_pr = sorted(reit_bd_cript, key=lambda x: -x[5])[0][4]
 
-            if len(bd_cript) < 3 and sorted(reit_bd_cript, key=lambda x: -x[5])[0][5] < 60:
-                sell_pr = 101
 
             telebot.TeleBot(telega_token).send_message(chat_id, f"ВЫБОР ПАЛ НА {top}\n"
                                                                 f"sell_pr = {sell_pr}\n"
@@ -85,14 +83,14 @@ def osnova():
                                                                 f"Количество триггеров - {len(bd_cript)}\n")
 
 
-            buy_qty = round(11 / data_token.close_price[-1], 1)
+            buy_qty = round(28 / data_token.close_price[-1], 1)
 
             try:
                 order_buy = client.create_order(symbol=top, side='BUY', type='MARKET',
                                                 quantity=buy_qty)
             except BinanceAPIException as e:
                 if e.message == "Filter failure: LOT_SIZE":
-                    buy_qty = int(round(11 / data_token.close_price[-1], 1))
+                    buy_qty = int(round(28 / data_token.close_price[-1], 1))
                     try:
                         order_buy = client.create_order(symbol=top, side='BUY', type='MARKET',
                                                         quantity=buy_qty)
@@ -297,7 +295,7 @@ def osnova():
                         if res_now < 0 and res_past < 0.6 and now_k_low > 1.5 and last_time - start_time < 12000 and i not in new_alg_crypto_work_end:
                             start_time_dop_alg = time.time()
 
-                            buy_qty = round(11 / data_token.close_price[-1], 1)
+                            buy_qty = round(28 / data_token.close_price[-1], 1)
                             telebot.TeleBot(telega_token).send_message(chat_id, f"!!!!!!!!!!!!!ДОП АЛГОРИТМ!!!!!!!!!!!!!\n"
                                                                                 f"now_k_low = {now_k_low}\n"
                                                                                 f"РАБОТАЕМ С {i[0]}\n"
@@ -309,7 +307,7 @@ def osnova():
                                 order_buy = client.create_order(symbol=i[0], side='BUY', type='MARKET', quantity=buy_qty)
                             except BinanceAPIException as e:
                                 if e.message == "Filter failure: LOT_SIZE":
-                                    buy_qty = int(round(11 / data_token.close_price[-1], 1))
+                                    buy_qty = int(round(28 / data_token.close_price[-1], 1))
                                     try:
                                         order_buy = client.create_order(symbol=i[0], side='BUY', type='MARKET', quantity=buy_qty)
                                     except:

@@ -5,7 +5,7 @@ import pandas as pd
 import pymysql
 import telebot
 import keys
-
+from binan.banan.sql_request import equal, sql_del
 
 telega_token = "5926919919:AAFCHFocMt_pdnlAgDo-13wLe4h_tHO0-GE"
 
@@ -77,28 +77,28 @@ all_cripts_workss = one + two + three + four + five + six + seven + eight + nine
 
 exchange = ccxt.binance()
 
-def equal(crypto: str, all_profit: float, profit_deal: float):
-    try:
-        values = (crypto, all_profit, profit_deal)
-
-        try:
-            connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
-                                             database='banans',
-                                             cursorclass=pymysql.cursors.DictCursor)
-            try:
-                with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO `check` (crypto, all_profit, profit_deal) " \
-                                   "VALUES (%s, %s, %s)"
-                    cursor.execute(insert_query, (values))
-                    connection.commit()
-            finally:
-                connection.close()
-
-        except Exception as e:
-            telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal connect k bd: {e}\n")
-
-    except Exception as e:
-        telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal: {e}\n")
+# def equal(crypto: str, all_profit: float, profit_deal: float):
+#     try:
+#         values = (crypto, all_profit, profit_deal)
+#
+#         try:
+#             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
+#                                              database='banans',
+#                                              cursorclass=pymysql.cursors.DictCursor)
+#             try:
+#                 with connection.cursor() as cursor:
+#                     insert_query = "INSERT INTO `check` (crypto, all_profit, profit_deal) " \
+#                                    "VALUES (%s, %s, %s)"
+#                     cursor.execute(insert_query, (values))
+#                     connection.commit()
+#             finally:
+#                 connection.close()
+#
+#         except Exception as e:
+#             telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal connect k bd: {e}\n")
+#
+#     except Exception as e:
+#         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal: {e}\n")
 
 x = []
 
@@ -174,5 +174,5 @@ z = ['NEOUSDT', 'LTCUSDT', 'QTUMUSDT', 'ADAUSDT', 'XRPUSDT', 'EOSUSDT', 'IOTAUSD
 
 y = ['LTCUSDT', 'QTUMUSDT', 'ADAUSDT', 'XRPUSDT', 'EOSUSDT', 'XLMUSDT', 'ONTUSDT', 'TRXUSDT', 'ETCUSDT', 'DASHUSDT', 'THETAUSDT', 'ATOMUSDT', 'TFUELUSDT', 'FTMUSDT', 'RVNUSDT', 'HBARUSDT', 'KAVAUSDT', 'ARPAUSDT', 'CTXCUSDT', 'BCHUSDT', 'CHRUSDT', 'MDTUSDT', 'STMXUSDT', 'KNCUSDT', 'LRCUSDT', 'ZENUSDT', 'CATIUSDT', 'CRVUSDT', 'DOTUSDT', 'RSRUSDT', 'TRBUSDT', 'EGLDUSDT', 'DIAUSDT', 'ALPHAUSDT', 'AAVEUSDT', 'NEARUSDT', 'FILUSDT', 'AXSUSDT', 'STRAXUSDT', 'UNFIUSDT', 'RIFUSDT', 'CKBUSDT', 'TWTUSDT', 'FIROUSDT', 'LITUSDT', 'SFPUSDT', 'CAKEUSDT', 'BADGERUSDT', 'FORTHUSDT', 'ICPUSDT', 'MASKUSDT', 'XVGUSDT', 'ALPACAUSDT', 'QUICKUSDT', 'MBOXUSDT', 'REQUSDT', 'GHSTUSDT', 'WAXPUSDT', 'GNOUSDT', 'XECUSDT', 'ELFUSDT', 'IDEXUSDT', 'RAREUSDT', 'LAZIOUSDT', 'DARUSDT', 'BNXUSDT', 'CITYUSDT', 'ENSUSDT', 'QIUSDT', 'CVXUSDT', 'SPELLUSDT', 'IMXUSDT', 'GLMRUSDT', 'STEEMUSDT', 'NEXOUSDT', 'OPUSDT', 'RENDERUSDT', 'LEVERUSDT', 'LUNCUSDT', 'GMXUSDT', 'BANANAUSDT', 'USTCUSDT', 'GASUSDT', 'GLMUSDT', 'PROMUSDT', 'QKCUSDT', 'ARBUSDT', 'ZKUSDT', 'WBETHUSDT', 'ARKUSDT', 'CREAMUSDT', 'REZUSDT', 'JUPUSDT', 'RONINUSDT', 'STRKUSDT', 'PDAUSDT', 'AXLUSDT', 'NULSUSDT', 'ONGUSDT', 'ZILUSDT', 'FETUSDT', 'BATUSDT', 'ZECUSDT', 'COSUSDT', 'MTLUSDT', 'DENTUSDT', 'WANUSDT', 'CHZUSDT', 'BANDUSDT', 'XTZUSDT', 'RENUSDT', 'FTTUSDT', 'LSKUSDT', 'BNTUSDT', 'MBLUSDT', 'COTIUSDT', 'STPTUSDT', 'DATAUSDT', 'SOLUSDT', 'CTSIUSDT', 'DGBUSDT', 'SXPUSDT', 'MKRUSDT', 'DCRUSDT', 'STORJUSDT', 'MANAUSDT', 'YFIUSDT', 'BALUSDT', 'BLZUSDT', 'IRISUSDT', 'KMDUSDT', 'JSTUSDT', 'FIOUSDT', 'UMAUSDT', 'BELUSDT', 'OXTUSDT', 'SUNUSDT', 'AVAXUSDT', 'ORNUSDT', 'UTKUSDT', 'AVAUSDT', 'SKLUSDT', 'PSGUSDT', '1INCHUSDT', 'OGUSDT', 'ASRUSDT', 'CELOUSDT', 'TURBOUSDT', 'SCRUSDT', 'OMUSDT', 'PONDUSDT', 'DEGOUSDT', 'CFXUSDT', 'TKOUSDT', 'PUNDIXUSDT', 'TLMUSDT', 'BARUSDT', 'ERNUSDT', 'KLAYUSDT', 'MLNUSDT', 'DEXEUSDT', 'CLVUSDT', 'QNTUSDT', 'FLOWUSDT', 'MINAUSDT', 'VIDTUSDT', 'GALAUSDT', 'SYSUSDT', 'DFUSDT', 'AGLDUSDT', 'PORTOUSDT', 'POWRUSDT', 'JASMYUSDT', 'PYRUSDT', 'SANTOSUSDT', 'BTTCUSDT', 'XNOUSDT', 'ALPINEUSDT', 'TUSDT', 'ASTRUSDT', 'KDAUSDT', 'APEUSDT', 'BIFIUSDT', 'OSMOUSDT', 'GUSDT', 'PROSUSDT', 'SSVUSDT', 'WBTCUSDT', 'EDUUSDT', 'AERGOUSDT', 'IOUSDT', 'SNTUSDT', 'MAVUSDT', 'PENDLEUSDT', 'NOTUSDT', 'VICUSDT', 'BLURUSDT', 'OMNIUSDT', '1000SATSUSDT', 'AIUSDT', 'METISUSDT', 'AEVOUSDT', 'ETHFIUSDT', 'ENAUSDT', 'PROMUSDT', 'COOKIEUSDT', 'HYPEUSDT', 'SOPHUSDT', 'AUSDT']
 
-print(len(z))
-print(len(y))
+equal("`vision_equals_6h`", "GDFG", 2, 2, 2, 2, 2, 2)
+sql_del("`vision_equals_6h`")

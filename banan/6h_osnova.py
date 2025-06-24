@@ -38,11 +38,11 @@ def last_data(symbol: str, interval: str, lookback: str) -> Dataset:
 
 def osnova():
     try:
-        time_frames = [0, 4, 8, 12, 16, 20]
+        time_frames = [4, 10, 16, 22]
 
         if time.localtime(time.time()).tm_min == 59 and time.localtime(time.time()).tm_hour in time_frames:
 
-            bd_cript = get_crypto("`vision_equals`")
+            bd_cript = get_crypto("`vision_equals_6h`")
             '''Проверка на наилучший объект и работа с ним дальше'''
             reit_bd_cript = []
 
@@ -67,13 +67,14 @@ def osnova():
 
             """Алгоритм закупа"""
 
-            data_token: Dataset = last_data(top, "4h", "17280")
+            data_token: Dataset = last_data(top, "6h", "17280")
             volume_per_5h: float = sum([int(i * data_token.high_price[-1]) for i in data_token.volume[-6:]]) / len(data_token.volume[-6:]) / 80
             res: float = round(data_token.close_price[-1] / data_token.open_price[-1] * 100 - 100, 2)
             price_change_percent_24h: float = round(((data_token.close_price[-1] / data_token.open_price[-6]) * 100) - 100, 2)
             sell_pr = sorted(reit_bd_cript, key=lambda x: -x[5])[0][4]
 
-            telebot.TeleBot(telega_token).send_message(chat_id, f"ВЫБОР ПАЛ НА {top}\n"
+
+            telebot.TeleBot(telega_token).send_message(chat_id, f"ВЫБОР ПАЛ НА {top} 6ч\n"
                                                                 f"sell_pr = {sell_pr}\n"
                                                                 f"Список крипт из базы по рейтингу - {sorted(reit_bd_cript, key=lambda x: -x[5])}\n"
                                                                 f"------------------------\n"
@@ -81,14 +82,15 @@ def osnova():
                                                                 f"------------------------\n"
                                                                 f"Количество триггеров - {len(bd_cript)}\n")
 
-            buy_qty = round(20 / data_token.close_price[-1], 1)
+
+            buy_qty = round(10 / data_token.close_price[-1], 1)
 
             try:
                 order_buy = client.create_order(symbol=top, side='BUY', type='MARKET',
                                                 quantity=buy_qty)
             except BinanceAPIException as e:
                 if e.message == "Filter failure: LOT_SIZE":
-                    buy_qty = int(round(20 / data_token.close_price[-1], 1))
+                    buy_qty = int(round(10 / data_token.close_price[-1], 1))
                     try:
                         order_buy = client.create_order(symbol=top, side='BUY', type='MARKET',
                                                         quantity=buy_qty)
@@ -249,10 +251,10 @@ def osnova():
 
             time.sleep(1)
             try:
-                sql_req_str2("`vision_orders_str2`", top, price_change_percent_24h, volume_per_5h, max_price, 1, res)
+                sql_req_str2("`vision_orders_str2_6h`", top, price_change_percent_24h, volume_per_5h, max_price, 1, res)
             except:
                 time.sleep(5)
-                sql_req_str2("`vision_orders_str2`", top, price_change_percent_24h, volume_per_5h, max_price, 1, res)
+                sql_req_str2("`vision_orders_str2_6h`", top, price_change_percent_24h, volume_per_5h, max_price, 1, res)
 
             new_alg_crypto_work_end = []
             """Заглушка до 25 минут, если первая продажа была быстрее"""
@@ -293,7 +295,7 @@ def osnova():
                         if res_now < 0 and res_past < 0.6 and now_k_low > 1.5 and last_time - start_time < 12000 and i not in new_alg_crypto_work_end:
                             start_time_dop_alg = time.time()
 
-                            buy_qty = round(20 / data_token.close_price[-1], 1)
+                            buy_qty = round(10 / data_token.close_price[-1], 1)
                             telebot.TeleBot(telega_token).send_message(chat_id, f"!!!!!!!!!!!!!ДОП АЛГОРИТМ!!!!!!!!!!!!!\n"
                                                                                 f"now_k_low = {now_k_low}\n"
                                                                                 f"РАБОТАЕМ С {i[0]}\n"
@@ -305,7 +307,7 @@ def osnova():
                                 order_buy = client.create_order(symbol=i[0], side='BUY', type='MARKET', quantity=buy_qty)
                             except BinanceAPIException as e:
                                 if e.message == "Filter failure: LOT_SIZE":
-                                    buy_qty = int(round(20 / data_token.close_price[-1], 1))
+                                    buy_qty = int(round(10 / data_token.close_price[-1], 1))
                                     try:
                                         order_buy = client.create_order(symbol=i[0], side='BUY', type='MARKET', quantity=buy_qty)
                                     except:
@@ -457,10 +459,10 @@ def osnova():
 
                             time.sleep(1)
                             try:
-                                sql_req_str2("`vision_orders_str2`", i[0], price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res_now)
+                                sql_req_str2("`vision_orders_str2_6h`", i[0], price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res_now)
                             except:
                                 time.sleep(5)
-                                sql_req_str2("`vision_orders_str2`", i[0], price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res_now)
+                                sql_req_str2("`vision_orders_str2_6h`", i[0], price_change_percent_24h, volume_per_5h, max_price, loss_price_for_two_hours, res_now)
 
                             time.sleep(1)
 

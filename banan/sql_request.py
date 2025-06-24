@@ -67,7 +67,7 @@ client = Client(keys.api_key, keys.api_secret)
 
 #sql_req("LUNCUSDT", 7.21, 1.87, 2.65, 0.92, -0.05, 16078)
 
-def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
+def sql_req_str2(name_table, i: str, price_change_percent_24h: float, volume_per_5h: float,
             max_price: float, loss_price_for_two_hours: float, res: float):
     try:
         orders = client.get_all_orders(symbol=i, limit=5)
@@ -107,7 +107,7 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
                                              cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO `vision_orders_str2` (time, update_time, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, " \
+                    insert_query = f"INSERT INTO {name_table} (time, update_time, duration_order, name_cript, price_buy, price_sell, count, all_volume, percent_profit, " \
                                    "volume_profit, link_cript, price_change_percent_24h, volume_per_5h, " \
                                    "max_profit, loss_price_for_two_hours, res) " \
                                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -126,7 +126,7 @@ def sql_req_str2(i: str, price_change_percent_24h: float, volume_per_5h: float,
 
 #sql_req_str2("SUPERUSDT", 22.18, 7640, 1.54, 2.52, -3.2, 0.0)
 
-def equal(name_cript_check: str, res: float, res_before: float, price_change_percent_24h: float, awerage_high_frame: float, high_close_change: float, res_k_low:float):
+def equal(name_table, name_cript_check: str, res: float, res_before: float, price_change_percent_24h: float, awerage_high_frame: float, high_close_change: float, res_k_low:float):
     try:
         values = (name_cript_check, res, res_before, price_change_percent_24h, awerage_high_frame, high_close_change, res_k_low)
 
@@ -136,7 +136,7 @@ def equal(name_cript_check: str, res: float, res_before: float, price_change_per
                                              cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO `vision_equals` (name_cript, res, res_before, price_change_percent_24h, awerage_high_frame, high_close_change, res_k_low) " \
+                    insert_query = f"INSERT INTO {name_table} (name_cript, res, res_before, price_change_percent_24h, awerage_high_frame, high_close_change, res_k_low) " \
                                    "VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     cursor.execute(insert_query, (values))
                     connection.commit()
@@ -149,14 +149,14 @@ def equal(name_cript_check: str, res: float, res_before: float, price_change_per
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR equal: {e}\n")
 
-def get_crypto() -> list:
+def get_crypto(name_table) -> list:
     try:
         connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
                                              database='banans',
                                              cursorclass=pymysql.cursors.DictCursor)
         try:
             with connection.cursor() as cursor:
-                cursor.execute("select * from `vision_equals`")
+                cursor.execute(f"select * from {name_table}")
                 result = cursor.fetchall()
         finally:
             connection.close()
@@ -166,14 +166,14 @@ def get_crypto() -> list:
     except Exception as e:
         telebot.TeleBot(telega_token).send_message(-695765690, f"SQL ERROR get top cripto connect: {e}\n")
 
-def sql_del():
+def sql_del(name_table):
     try:
         connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
                                      database='banans',
                                      cursorclass=pymysql.cursors.DictCursor)
         try:
             with connection.cursor() as cursor:
-                insert_query = "DELETE FROM `vision_equals`"
+                insert_query = f"DELETE FROM {name_table}"
                 cursor.execute(insert_query)
                 connection.commit()
         finally:

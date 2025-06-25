@@ -224,26 +224,30 @@ def get_recommend(i, interval):
 
 
 while True:
-    start_time_check = time.time()
-    '''Заглушка для ожидания конца таймфрейма 15 мин'''
-
-    bib = [[all_cripts_workss[i]] for i in range(0, len(all_cripts_workss))]
-
-    while time.localtime(start_time_check).tm_min != 59 or time.localtime(start_time_check).tm_sec < 30:
+    try:
         start_time_check = time.time()
-        time.sleep(1)
+        '''Заглушка для ожидания конца таймфрейма 15 мин'''
 
-    sql_del("`vision_equals`")
+        bib = [[all_cripts_workss[i]] for i in range(0, len(all_cripts_workss))]
 
-    '''Старт программы'''
-    threads = [Thread(target=top_coin, args=([i])) for i in bib]
+        while time.localtime(start_time_check).tm_min != 59 or time.localtime(start_time_check).tm_sec < 30:
+            start_time_check = time.time()
+            time.sleep(1)
 
-    start_threads = [i.start() for i in threads]
+        sql_del("`vision_equals`")
 
-    stop_threads = [i.join() for i in threads]
+        '''Старт программы'''
+        threads = [Thread(target=top_coin, args=([i])) for i in bib]
 
-    time.sleep(60)
+        start_threads = [i.start() for i in threads]
 
+        stop_threads = [i.join() for i in threads]
+
+        time.sleep(60)
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(chat_id,
+                                                   f"Ошибка общего скрипта 4ч close\n"
+                                                   f"{e}")
 
 
 

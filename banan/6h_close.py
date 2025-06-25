@@ -52,7 +52,7 @@ def top_coin(trading_pairs: list):
                 a = list(zip(data_token.close_price, data_token.open_price))
                 b = min(list(map(lambda x: round(x[0] / x[1] * 100 - 100, 2), a)))
 
-                if -4.2 > res > -20 and res_sum5 > 15 and b > -30:
+                if -4.2 > res > -27 and res_sum5 > 15 and b > -30:
 
                     res_before: float = round(data_token.close_price[-1] / data_token.low_price[-1] * 100 - 100, 2)
                     if res_before == 0:
@@ -137,25 +137,30 @@ def get_recommend(i, interval):
 
 
 while True:
-    start_time_check = time.time()
-    '''Заглушка для ожидания конца таймфрейма 15 мин'''
-
-    bib = [[all_cripts_workss[i]] for i in range(0, len(all_cripts_workss))]
-
-    while time.localtime(start_time_check).tm_min != 59 or time.localtime(start_time_check).tm_sec < 30:
+    try:
         start_time_check = time.time()
-        time.sleep(1)
+        '''Заглушка для ожидания конца таймфрейма 15 мин'''
 
-    sql_del("`vision_equals_6h`")
+        bib = [[all_cripts_workss[i]] for i in range(0, len(all_cripts_workss))]
 
-    '''Старт программы'''
-    threads = [Thread(target=top_coin, args=([i])) for i in bib]
+        while time.localtime(start_time_check).tm_min != 58 or time.localtime(start_time_check).tm_sec < 30:
+            start_time_check = time.time()
+            time.sleep(1)
 
-    start_threads = [i.start() for i in threads]
+        sql_del("`vision_equals_6h`")
 
-    stop_threads = [i.join() for i in threads]
+        '''Старт программы'''
+        threads = [Thread(target=top_coin, args=([i])) for i in bib]
 
-    time.sleep(60)
+        start_threads = [i.start() for i in threads]
+
+        stop_threads = [i.join() for i in threads]
+
+        time.sleep(60)
+    except Exception as e:
+        telebot.TeleBot(telega_token).send_message(chat_id,
+                                                   f"Ошибка общего скрипта 6ч клосе\n"
+                                                   f"{e}")
 
 
 

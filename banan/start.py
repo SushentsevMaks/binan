@@ -76,19 +76,19 @@ all_cripts_workss = one + two + three + four + five + six + seven + eight + nine
 
 exchange = ccxt.binance()
 
-def equal(crypto: str, all_profit: float, profit_deal: float):
+def equal(crypto: str, all_profit: float, profit_deal: float, count_deal: float, average_deal_percent: float):
     try:
-        values = (crypto, all_profit, profit_deal)
-
+        values = (crypto, all_profit, profit_deal, count_deal, average_deal_percent)
         try:
             connection = pymysql.connect(host='127.0.0.1', port=3306, user='banan_user', password='warlight123',
                                              database='banans',
                                              cursorclass=pymysql.cursors.DictCursor)
             try:
                 with connection.cursor() as cursor:
-                    insert_query = "INSERT INTO `check` (crypto, all_profit, profit_deal) " \
-                                   "VALUES (%s, %s, %s)"
-                    cursor.execute(insert_query, (values))
+                    insert_query = ("INSERT INTO `check` "
+                                    "(crypto, all_profit, profit_deal, count_deal, average_deal_percent) "
+                                    "VALUES (%s, %s, %s, %s, %s)")
+                    cursor.execute(insert_query, values)
                     connection.commit()
             finally:
                 connection.close()
@@ -104,7 +104,7 @@ x = []
 for crypto in all_cripts_workss:
     symbol = f'{crypto[:-4]}/USDT'
     timeframe = '4h'
-    limit = 1000  # количество свечей для загрузки (~4 года данных при H4)
+    limit = 2000
 
     try:
         ohlc = exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
@@ -118,37 +118,45 @@ for crypto in all_cripts_workss:
     # Рассчитываем процентное изменение закрытия за свечу
     df['change_percent'] = ((df['close'] - df['open']) / df['open']) * 100
 
-    # Условие входа: цена упала больше чем на 4.1%
-    df['buy_signal'] = df['change_percent'] <= -5.3
+    # Условие входа: цена упала больше чем на 5%
+    df['buy_signal'] = df['change_percent'] <= -5
 
     position = False
     buy_price = 0
     profit = []
-    holding_period = 0
 
     for i in range(1, len(df)):
         if df['buy_signal'].iloc[i] and not position:
             buy_price = df['close'].iloc[i]
             position = True
-            holding_period = 0
 
         elif position:
-            holding_period += 1
-
             current_close_return = (df['close'].iloc[i] - buy_price) / buy_price * 100
-
-            if holding_period >= 1:
-                profit.append(current_close_return-0.15)
-                position = False
+            profit.append(current_close_return - 0.15)
+            position = False
 
     total_profit = sum(profit)
-    win_rate = len([x for x in profit if x > 0]) / len(profit) * 100 if profit else 0
-    print(f"{crypto}")
+    deal_count = len(profit)
+    win_rate = len([x for x in profit if x > 0]) / deal_count * 100 if deal_count > 0 else 0
+    avg_profit = total_profit / deal_count if deal_count > 0 else 0
+
+    # === Отправка в БД по текущей монете ===
+    equal(
+        crypto=crypto,
+        all_profit=float(f"{total_profit:.2f}"),
+        profit_deal=float(f"{win_rate:.2f}"),
+        count_deal=float(deal_count),
+        average_deal_percent=float(f"{avg_profit:.2f}")
+    )
+
+    # === Вывод в консоль ===
+    print(f"\n{crypto}")
     print(f"Общая прибыль: {total_profit:.2f}%")
     print(f"Процент прибыльных сделок: {win_rate:.2f}%")
-    print(f"Всего сделок: {len(profit)}")
+    print(f"Всего сделок: {deal_count}")
+    print(f"Средняя прибыль на сделку: {avg_profit:.2f}%")
     x.append([crypto, float(f"{total_profit:.2f}")])
-    equal(crypto, float(f"{total_profit:.2f}"), float(f"{win_rate:.2f}"))
+    #equal(crypto, float(f"{total_profit:.2f}"), float(f"{win_rate:.2f}"))
     time.sleep(0.5)
 
 print(x)
